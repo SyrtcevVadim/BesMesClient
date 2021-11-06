@@ -19,6 +19,8 @@ public:
     static void sendError(QString errorString, ErrorType errorType = ErrorType::None);
     ///Выводит отладочную информацию
     static void sendDebug(QString debugString);
+    ///Установка всех зависимостей и получение потока на вывод логов
+    static void init();
 private:
     ///Поток вывода записей системы
     static QTextStream *out;
