@@ -43,6 +43,10 @@ void BesClient::connectToServer()
         return;
     }
     socket->connectToHost(serverUrl, serverPort);
+    if(!socket->waitForConnected())
+    {
+        qDebug() << "Ошибка подключения к серверу! Возможно, сервер отключён";
+    }
 }
 
 void BesClient::disconnectFromServer()
@@ -59,6 +63,7 @@ void BesClient::login(QString login, QString password)
         return;
     }
     *out<<QString("HELLO %1 %2\r\n").arg(login, password);
+    out->flush();
 }
 
 void BesClient::socketConnected()
@@ -75,8 +80,8 @@ void BesClient::socketDisconnected()
 
 void BesClient::readData()
 {
-    static QString data;
-    data.append(socket->readAll()); //собираем все пакты ответа в одну строку и выводим результат
+    static QString data="";
+    data+=socket->readAll(); //собираем все пакеты ответа в одну строку и выводим результат
     if(!data.endsWith("\r\n"))
     {
         return;
