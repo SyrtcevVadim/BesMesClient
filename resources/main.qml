@@ -16,6 +16,7 @@ ApplicationWindow  {
         target: BesClient
         onConnected: Core.changeServerStatus(true);
         onDisconnected: Core.changeServerStatus(false);
+        onMessageLogged: function(message) {Core.log(message)}
     }
 
     StackView{

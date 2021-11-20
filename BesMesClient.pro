@@ -8,7 +8,8 @@ CONFIG += c++11
 
 SOURCES += \
         src/besclient.cpp \
-        src/loggingsystem.cpp \
+        src/configreader.cpp \
+        src/logsystem.cpp \
         src\main.cpp
 
 RESOURCES += \
@@ -27,4 +28,5 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 HEADERS += \
     src/besclient.h \
-    src/loggingsystem.h
+    src/configreader.h \
+    src/logsystem.h

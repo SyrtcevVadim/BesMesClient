@@ -43,7 +43,8 @@ Page{
 
         TextField {
             id: emailTextField
-            placeholderText: qsTr("Text Field")
+            placeholderText: "Введите почту"
+            selectByMouse: true
         }
 
         Text{
@@ -57,7 +58,8 @@ Page{
         TextField {
             id: passTextField
             bottomInset: 0
-            placeholderText: qsTr("Text Field")
+            placeholderText: "Введите пароль"
+            selectByMouse: true
         }
     }
 

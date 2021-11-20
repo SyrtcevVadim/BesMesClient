@@ -1,31 +1,32 @@
 #include "besclient.h"
-
-BesClient::BesClient(QString serverAdress, int port)
-{
-    serverUrl = serverAdress;
-    serverPort = port;
-    socket = new QTcpSocket(this);
-    out = new QTextStream(socket);
-
-    connect(socket, SIGNAL(connected()),
-                this,   SLOT(socketConnected()));
-    connect(socket, SIGNAL(disconnected()),
-                this,   SLOT(socketDisconnected()));
-    connect(socket, SIGNAL(readyRead()),
-                this,   SLOT(readData()));
-}
+#include <QVariantMap>
 
 BesClient::BesClient()
 {
     socket = new QTcpSocket(this);
     out = new QTextStream(socket);
+    log = new LogSystem("latest.txt");
 
+    ConfigReader test("serverconfig.json");
+    QVariantMap configs = test.getConfigs();
+
+    setSignals();
+
+    serverUrl = configs["serverAddress"].toString();
+    serverPort = configs["serverPort"].toInt();
+    log->logToFile(QString("Установлены следующие настройки сервера: ip - %1, порт - %2").arg(serverUrl, serverPort));
+}
+
+void BesClient::setSignals()
+{
     connect(socket, SIGNAL(connected()),
             this,   SLOT(socketConnected()));
     connect(socket, SIGNAL(disconnected()),
             this,   SLOT(socketDisconnected()));
     connect(socket, SIGNAL(readyRead()),
             this,   SLOT(readData()));
+    connect(log , SIGNAL(messageLogged(QString)),
+            this , SLOT (messageLoggedResend(QString)));
 }
 
 void BesClient::setServer(QString serverAdress, int port)
@@ -42,10 +43,12 @@ void BesClient::connectToServer()
         qDebug() << "Не введены адрес и порт сервера";
         return;
     }
+    log->logToFile("Попытка подключения к серверу");
     socket->connectToHost(serverUrl, serverPort);
-    if(!socket->waitForConnected())
+    if(!socket->waitForConnected(2000))
     {
         qDebug() << "Ошибка подключения к серверу! Возможно, сервер отключён";
+        log->logToFile("Ошибка подключения к серверу! Возможно, сервер отключён");
     }
 }
 
@@ -62,7 +65,9 @@ void BesClient::login(QString login, QString password)
         qDebug() << "Невозможно отправить сообщение на сервер";
         return;
     }
-    *out<<QString("HELLO %1 %2\r\n").arg(login, password);
+    QString outString = QString("ПРИВЕТ %1 %2\r\n").arg(login, password);
+    log->logToFile(outString);
+    *out<<outString;
     out->flush();
 }
 
@@ -81,11 +86,17 @@ void BesClient::socketDisconnected()
 void BesClient::readData()
 {
     static QString data="";
-    data+=socket->readAll(); //собираем все пакеты ответа в одну строку и выводим результат
+    data+=out->readAll(); //собираем все пакеты ответа в одну строку и выводим результат
     if(!data.endsWith("\r\n"))
     {
         return;
     }
     qDebug() << data;
+    log->logToFile(data);
     data = "";
+}
+
+void BesClient::messageLoggedResend(QString message)
+{
+    emit messageLogged(message);
 }

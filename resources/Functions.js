@@ -10,12 +10,6 @@ function serverButtonClicked()
     mainStack.push(serverScreen);
 }
 
-function settingsChanged()
-{
-    BesClient.setServer(serverScreen.serverAdress, serverScreen.serverPort);
-    console.log("установлены настройки сервера: " + serverScreen.serverAdress + " " + serverScreen.serverPort);
-}
-
 function changeServerStatus(isConnected)
 {
     console.log("статус сервера - " + isConnected ? "Подключен" : "Отключен");
@@ -38,4 +32,9 @@ function login()
 {
     console.log("логинимся");
     BesClient.login(loginScreen.loginText, loginScreen.passwordText)
+}
+
+function log(message)
+{
+    serverScreen.logTextAreaText += message
 }

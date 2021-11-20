@@ -10,47 +10,10 @@ Page{
 
     signal connectButtonPressed;
     signal disconnectButtonPressed;
-
-    property alias serverAdress: adressField.text
-    property alias serverPort: portField.text
+    signal reloadButtonPressed;
 
     property alias serverStatus: serverStatusText.text
-
-    Grid {
-        id: grid
-        anchors.verticalCenter: parent.verticalCenter
-        spacing: 15
-        columns: 2
-        anchors.horizontalCenter: parent.horizontalCenter
-
-        Text {
-            id: text1
-            height: adressField.height
-            text: qsTr("Адрес сервера")
-            font.pixelSize: height * 0.5
-            verticalAlignment: Text.AlignVCenter
-        }
-
-        TextField {
-            id: adressField
-            placeholderText: qsTr("Text Field")
-            onTextChanged: function() {serverScreen.settingsChanged()}
-        }
-
-        Text {
-            id: text2
-            height: portField.height
-            text: qsTr("Порт")
-            font.pixelSize: height * 0.5
-            verticalAlignment: Text.AlignVCenter
-        }
-
-        TextField {
-            id: portField
-            placeholderText: qsTr("Text Field")
-            onTextChanged: function() {serverScreen.settingsChanged()}
-        }
-    }
+    property alias logTextAreaText: logText.text
 
     Button {
         id: button
@@ -58,40 +21,60 @@ Page{
         text: qsTr("<-")
         anchors.left: parent.left
         anchors.top: parent.top
-        anchors.leftMargin: 0
-        anchors.topMargin: 0
         onClicked: function (mouse) {serverScreen.backButtonClicked()}
     }
 
     Text {
-        id: text3
-        y: 111
+        id: pageNameText
+        x: 47
+        y: 62
         text: qsTr("Настройки сервера")
-        anchors.left: grid.left
-        anchors.bottom: grid.top
         font.pixelSize: 29
-        anchors.leftMargin: -72
-        anchors.bottomMargin: 28
+    }
+    Flickable {
+        id: flickabelTextArea
+        anchors.top: pageNameText.bottom
+        anchors.bottom: column.top
+        flickableDirection: Flickable.VerticalFlick
+
+        anchors.bottomMargin: 0
+        property int sidemargin: parent.width * 0.1
+        anchors.rightMargin: sidemargin
+        anchors.leftMargin: sidemargin
+        anchors.left: parent.left
+        anchors.right: parent.right
+        TextArea.flickable: TextArea {
+            id: logText
+            text: ""
+            readOnly: true
+            wrapMode: TextArea.Wrap
+            anchors.topMargin: -6
+            background: Rectangle {
+                border.width: 1
+                border.color: "black"
+            }
+        }
+        ScrollBar.vertical: ScrollBar { }
     }
 
     Column {
         id: column
-        y: 373
+        y: 403
         anchors.left: parent.left
         anchors.bottom: parent.bottom
-        anchors.leftMargin: 0
-        anchors.bottomMargin: 0
+        spacing: 5
 
         Text {
             id: serverStatusText
             text: qsTr("Отключен")
             anchors.left: parent.left
             font.pixelSize: 12
-            anchors.leftMargin: 0
         }
 
         Row {
             id: row
+            padding: 0
+            spacing: 10
 
             RoundButton {
                 id: connectButton
@@ -104,14 +87,17 @@ Page{
                 text: "Disconnect"
                 onClicked: function (mouse) {disconnectButtonPressed()}
             }
+
+            RoundButton {
+                id: reloadButton
+                text: "reload config"
+                onClicked: function (mouse) {reloadButtonPressed()}
+            }
         }
-
     }
-
 }
-
 /*##^##
 Designer {
-    D{i:0;autoSize:true;height:480;width:640}D{i:7}D{i:8}
+    D{i:0;autoSize:true;height:480;width:640}
 }
 ##^##*/
