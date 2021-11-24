@@ -6,6 +6,8 @@
 #include <QDebug>
 #include <QFile>
 #include <QDir>
+#include <QVector>
+#include <vector>
 
 class ConfigReader
 {
@@ -17,6 +19,8 @@ public:
     ~ConfigReader();
     ///Метод возвращает содержимое файла конфигурации в виде QMap<QString, QVariant> (aka QVariantMap)
     QVariantMap getConfigs();
+    ///Проверка выбранного файла на наличие указанных полей
+    bool checkConfig(QVector<QString> requiredFields);
 
 private:
     ///Путь к папке с файлами конфигурации

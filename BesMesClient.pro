@@ -28,5 +28,6 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 HEADERS += \
     src/besclient.h \
+    src/besclientdefaultconfigs.h \
     src/configreader.h \
     src/logsystem.h

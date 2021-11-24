@@ -2,6 +2,7 @@
 #define BESCLIENT_H
 #include "configreader.h"
 #include "logsystem.h"
+#include "besclientdefaultconfigs.h"
 
 #include <QObject>
 #include <QTcpSocket>

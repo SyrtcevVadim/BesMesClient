@@ -29,3 +29,22 @@ QVariantMap ConfigReader::getConfigs()
     configFile->close();
     return map;
 }
+
+bool ConfigReader::checkConfig(QVector<QString> requiredFields)
+{
+    configFile->open(QIODevice::ReadOnly | QIODevice::Text);
+    QByteArray jsonString = configFile->readAll();
+    QJsonDocument doc = QJsonDocument::fromJson(jsonString);
+    QJsonObject obj = doc.object();
+
+    for(QString a : requiredFields)
+    {
+        if(!obj.contains(a))
+        {
+            configFile->close();
+            return false;
+        }
+    }
+    configFile->close();
+    return true;
+}

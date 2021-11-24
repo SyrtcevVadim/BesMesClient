@@ -10,12 +10,21 @@ BesClient::BesClient()
     log = new LogSystem("latest.txt");
 
     ConfigReader test("serverconfig.json");
-    QVariantMap configs = test.getConfigs();
+    if(!test.checkConfig({"serverAddress", "serverPort"}))
+    {
+        log->logToFile("ERROR: Файл конфигурации настроек подключений к серверу нарушен.\n\r Будут исполбзованны стандартные настройки");
+        serverUrl = CLIENT_CONNECTION_SERVERADDRESS;
+        serverPort = CLIENT_CONNECTION_SERVERPORT;
+    }
+    else
+    {
+        QVariantMap configs = test.getConfigs();
+        serverUrl = configs["serverAddress"].toString();
+        serverPort = configs["serverPort"].toInt();
+    }
 
     setSignals();
 
-    serverUrl = configs["serverAddress"].toString();
-    serverPort = configs["serverPort"].toInt();
     log->logToFile(QString("Установлены следующие настройки сервера: ip - %1, порт - %2").arg(serverUrl, QString::number(serverPort)));
 
     socket->setPeerVerifyMode(QSslSocket::QueryPeer);
