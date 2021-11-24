@@ -62,17 +62,21 @@ void BesClient::setServer(QString serverAdress, int port)
 
 void BesClient::connectToServer()
 {
+    if(socket->isWritable())
+    {
+        log->logToFile("не надо коннектится второй раз");
+        return;
+    }
     qDebug() << "Попытка подключения";
     if(serverAddress == "")
     {
-        qDebug() << "Не введены адрес и порт сервера";
+        log->logToFile("Не введены адрес и порт сервера");
         return;
     }
     log->logToFile("Попытка подключения к серверу");
     socket->connectToHostEncrypted(serverAddress, serverPort);
     if(!socket->waitForEncrypted(2000))
     {
-        qDebug() << "Ошибка подключения к серверу! Возможно, сервер отключён";
         log->logToFile("Ошибка подключения к серверу! Возможно, сервер отключён");
     }
     qDebug()<<socket->isEncrypted();
