@@ -5,6 +5,7 @@
 
 #include <QObject>
 #include <QTcpSocket>
+#include <QSslSocket>
 #include <QDebug>
 
 class BesClient : public QObject
@@ -13,7 +14,7 @@ class BesClient : public QObject
 public:
     BesClient();
     ///изменение адреса и порта сервера
-    Q_INVOKABLE void setServer(QString serverAdress, int port);
+    Q_INVOKABLE void setServer(QString serverAdress, int port); //deprecated, мб понадобится
     ///выполнить подключение к серверу
     Q_INVOKABLE void connectToServer();     //имя connect занято, так что пишем длинное название
     ///отключится от сервера
@@ -32,7 +33,7 @@ signals:
     void messageLogged(QString messageLogged);
 
 private:
-    QTcpSocket *socket;
+    QSslSocket *socket;
     QTextStream *out;
     QString serverUrl;
     int serverPort;

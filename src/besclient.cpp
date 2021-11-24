@@ -1,9 +1,11 @@
 #include "besclient.h"
 #include <QVariantMap>
+#include <QSslError>
+
 
 BesClient::BesClient()
 {
-    socket = new QTcpSocket(this);
+    socket = new QSslSocket(this);
     out = new QTextStream(socket);
     log = new LogSystem("latest.txt");
 
@@ -14,12 +16,18 @@ BesClient::BesClient()
 
     serverUrl = configs["serverAddress"].toString();
     serverPort = configs["serverPort"].toInt();
-    log->logToFile(QString("Установлены следующие настройки сервера: ip - %1, порт - %2").arg(serverUrl, serverPort));
+    log->logToFile(QString("Установлены следующие настройки сервера: ip - %1, порт - %2").arg(serverUrl, QString::number(serverPort)));
+
+    socket->setPeerVerifyMode(QSslSocket::QueryPeer);
+    QFile sert("besmes.crt");
+    sert.open(QIODevice::ReadOnly);
+    //socket->addCaCertificate(QSslCertificate(&sert));
+    socket->ignoreSslErrors();
 }
 
 void BesClient::setSignals()
 {
-    connect(socket, SIGNAL(connected()),
+    connect(socket, SIGNAL(encrypted()),
             this,   SLOT(socketConnected()));
     connect(socket, SIGNAL(disconnected()),
             this,   SLOT(socketDisconnected()));
@@ -27,6 +35,13 @@ void BesClient::setSignals()
             this,   SLOT(readData()));
     connect(log , SIGNAL(messageLogged(QString)),
             this , SLOT (messageLoggedResend(QString)));
+    connect(socket, QOverload<const QList<QSslError> &> :: of(&QSslSocket::sslErrors),
+            [=](const QList<QSslError> &errors){
+        for(QSslError a : errors)
+        {
+            qDebug() << a;
+        }
+    });
 }
 
 void BesClient::setServer(QString serverAdress, int port)
@@ -44,12 +59,13 @@ void BesClient::connectToServer()
         return;
     }
     log->logToFile("Попытка подключения к серверу");
-    socket->connectToHost(serverUrl, serverPort);
-    if(!socket->waitForConnected(2000))
+    socket->connectToHostEncrypted(serverUrl, serverPort);
+    if(!socket->waitForEncrypted(2000))
     {
         qDebug() << "Ошибка подключения к серверу! Возможно, сервер отключён";
         log->logToFile("Ошибка подключения к серверу! Возможно, сервер отключён");
     }
+    qDebug()<<socket->isEncrypted();
 }
 
 void BesClient::disconnectFromServer()
