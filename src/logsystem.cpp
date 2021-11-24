@@ -1,6 +1,7 @@
 #include "logsystem.h"
 #include <QDebug>
 #include <QDateTime>
+#include <QLocale>
 
 LogSystem::LogSystem(const QString &logFileName, QObject *parent) : QObject(parent)
 {
@@ -11,16 +12,26 @@ LogSystem::LogSystem(const QString &logFileName, QObject *parent) : QObject(pare
         qDebug() << "!!!Файл логов не открыт";
     }
     logStream = new QTextStream(latestLogFile);
+    *logStream << locale.toString(QDate::currentDate()) << ":\n";
 }
 LogSystem::~LogSystem()
 {
     latestLogFile->close();
 }
 
-void LogSystem::logToFile(QString message)
+void LogSystem::logToFile(QString message, LogMessageType type)
 {
-    QDateTime now = QDateTime::currentDateTime();
-    QString outMessage = QString("%1:%2\r\n").arg(now.toString(), message);
+    QTime now = QTime::currentTime();
+    QString outMessage;
+    switch(type)
+    {
+        case LogMessageType::Message:
+            outMessage = QString("%1: %2\r\n").arg(locale.toString(now), message);
+            break;
+        case LogMessageType::Error:
+            outMessage = QString("ERROR at %1: %2\r\n").arg(locale.toString(now), message);
+            break;
+    }
     *logStream << outMessage;
     logStream->flush();
     qDebug() << outMessage;

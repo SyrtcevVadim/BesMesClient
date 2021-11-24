@@ -4,6 +4,11 @@ function loginButtonClicked()
     mainStack.push(loginScreen);
 }
 
+function regButtonClicked()
+{
+    mainStack.push(regScreen);
+}
+
 function serverButtonClicked()
 {
     console.log("serverButtonClicked");
@@ -32,6 +37,11 @@ function login()
 {
     console.log("логинимся");
     BesClient.login(loginScreen.loginText, loginScreen.passwordText)
+}
+
+function registration()
+{
+    BesClient.registration(regScreen.nameText, regScreen.surnameText, regScreen.emailText, regScreen.passwordText);
 }
 
 function log(message)

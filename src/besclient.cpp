@@ -1,4 +1,5 @@
 #include "besclient.h"
+#include "BesProtocol.h"
 #include <QVariantMap>
 #include <QSslError>
 
@@ -12,20 +13,20 @@ BesClient::BesClient()
     ConfigReader test("serverconfig.json");
     if(!test.checkConfig({"serverAddress", "serverPort"}))
     {
-        log->logToFile("ERROR: Файл конфигурации настроек подключений к серверу нарушен.\n\r Будут исполбзованны стандартные настройки");
-        serverUrl = CLIENT_CONNECTION_SERVERADDRESS;
+        log->logToFile("Файл конфигурации настроек подключений к серверу нарушен.\n\r Будут использованны стандартные настройки", LogSystem::LogMessageType::Error);
+        serverAddress = CLIENT_CONNECTION_SERVERADDRESS;
         serverPort = CLIENT_CONNECTION_SERVERPORT;
     }
     else
     {
         QVariantMap configs = test.getConfigs();
-        serverUrl = configs["serverAddress"].toString();
+        serverAddress = configs["serverAddress"].toString();
         serverPort = configs["serverPort"].toInt();
     }
 
     setSignals();
 
-    log->logToFile(QString("Установлены следующие настройки сервера: ip - %1, порт - %2").arg(serverUrl, QString::number(serverPort)));
+    log->logToFile(QString("Установлены следующие настройки сервера: ip - %1, порт - %2").arg(serverAddress, QString::number(serverPort)));
 
     socket->setPeerVerifyMode(QSslSocket::QueryPeer);
     QFile sert("besmes.crt");
@@ -46,7 +47,7 @@ void BesClient::setSignals()
             this , SLOT (messageLoggedResend(QString)));
     connect(socket, QOverload<const QList<QSslError> &> :: of(&QSslSocket::sslErrors),
             [=](const QList<QSslError> &errors){
-        for(QSslError a : errors)
+        for(const QSslError &a : errors)
         {
             qDebug() << a;
         }
@@ -55,20 +56,20 @@ void BesClient::setSignals()
 
 void BesClient::setServer(QString serverAdress, int port)
 {
-    serverUrl = serverAdress;
+    serverAddress = serverAdress;
     serverPort = port;
 }
 
 void BesClient::connectToServer()
 {
     qDebug() << "Попытка подключения";
-    if(serverUrl == "")
+    if(serverAddress == "")
     {
         qDebug() << "Не введены адрес и порт сервера";
         return;
     }
     log->logToFile("Попытка подключения к серверу");
-    socket->connectToHostEncrypted(serverUrl, serverPort);
+    socket->connectToHostEncrypted(serverAddress, serverPort);
     if(!socket->waitForEncrypted(2000))
     {
         qDebug() << "Ошибка подключения к серверу! Возможно, сервер отключён";
@@ -84,13 +85,28 @@ void BesClient::disconnectFromServer()
 
 void BesClient::login(QString login, QString password)
 {
-    qDebug()<< QString("Получены следующие данные для входа: %1 %2").arg(login, password);
+
+    log->logToFile(QString("Получены следующие данные для входа: %1 %2").arg(login, password));
     if(!socket->isWritable())
     {
         qDebug() << "Невозможно отправить сообщение на сервер";
         return;
     }
-    QString outString = QString("ПРИВЕТ %1 %2\r\n").arg(login, password);
+    QString outString = QString(LOGIN_COMMAND) + QString(" %1 %2\r\n").arg(login, password);
+    log->logToFile(outString);
+    *out<<outString;
+    out->flush();
+}
+
+void BesClient::registration(QString name, QString surname, QString email, QString password)
+{
+    log->logToFile(QString("Получены следующие данные для регистрации: %1 %2 %3 %4").arg(name, surname, email, password));
+    if(!socket->isWritable())
+    {
+        qDebug() << "Невозможно отправить сообщение на сервер";
+        return;
+    }
+    QString outString = QString(REGISTRATION_COMMAND) + QString(" %1 %2 %3 %4\r\n").arg(name, surname, email, password);
     log->logToFile(outString);
     *out<<outString;
     out->flush();
@@ -116,8 +132,11 @@ void BesClient::readData()
     {
         return;
     }
-    qDebug() << data;
     log->logToFile(data);
+
+
+
+
     data = "";
 }
 

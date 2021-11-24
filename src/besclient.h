@@ -22,6 +22,8 @@ public:
     Q_INVOKABLE void disconnectFromServer();
     ///выполнить процедуру входа в аккаунт
     Q_INVOKABLE void login(QString login, QString password);
+    ///выполнить процедуру регистрации
+    Q_INVOKABLE void registration(QString name, QString surname, QString email, QString password);
 
 signals:
     ///сигнал издается при подключении к серверу
@@ -29,16 +31,23 @@ signals:
     ///сигнал издается при отключении от сервера
     void disconnected();
     ///издается после процедуры входа в аккаунт
-    void auntificationCompleted(bool success);
+    void auntificationCompleted(int answerCode);
     ///сигнал логирующей системы, высылаемый после регистрации сообщения
     void messageLogged(QString messageLogged);
 
+    void registrationCompleted();
+
 private:
+    ///сокет подключения к серверу
     QSslSocket *socket;
+    ///текстовый поток ввода-вывода сокета
     QTextStream *out;
-    QString serverUrl;
+    ///
+    QString serverAddress;
     int serverPort;
     LogSystem *log;
+
+
 
     ///первоначальное связывание сигналов и слотов
     void setSignals();
