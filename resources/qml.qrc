@@ -5,5 +5,6 @@
         <file>Functions.js</file>
         <file>LoginScreen.qml</file>
         <file>ServerScreen.qml</file>
+        <file>RegistrationScreen.qml</file>
     </qresource>
 </RCC>

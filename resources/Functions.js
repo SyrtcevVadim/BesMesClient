@@ -4,16 +4,15 @@ function loginButtonClicked()
     mainStack.push(loginScreen);
 }
 
+function regButtonClicked()
+{
+    mainStack.push(regScreen);
+}
+
 function serverButtonClicked()
 {
     console.log("serverButtonClicked");
     mainStack.push(serverScreen);
-}
-
-function settingsChanged()
-{
-    BesClient.setServer(serverScreen.serverAdress, serverScreen.serverPort);
-    console.log("установлены настройки сервера: " + serverScreen.serverAdress + " " + serverScreen.serverPort);
 }
 
 function changeServerStatus(isConnected)
@@ -38,4 +37,14 @@ function login()
 {
     console.log("логинимся");
     BesClient.login(loginScreen.loginText, loginScreen.passwordText)
+}
+
+function registration()
+{
+    BesClient.registration(regScreen.nameText, regScreen.surnameText, regScreen.emailText, regScreen.passwordText);
+}
+
+function log(message)
+{
+    serverScreen.logTextAreaText += message
 }

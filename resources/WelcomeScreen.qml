@@ -7,6 +7,7 @@ import "Functions.js" as Core
 Page{
     id: welcomeScreen
 
+    signal regButtonClicked;
     signal loginButtonClicked;
     signal serverButtonClicked;
 
@@ -41,11 +42,19 @@ Page{
         }
 
         RoundButton {
+            id: regButton
+            width: parent.width
+            text: "Регистрация"
+            onClicked: function(mouse){welcomeScreen.regButtonClicked()}
+        }
+
+        RoundButton {
             id: serverButton
             width: parent.width
             text: "Настройки сервера"
             onClicked: function(mouse){welcomeScreen.serverButtonClicked()}
         }
+
 
     }
 }

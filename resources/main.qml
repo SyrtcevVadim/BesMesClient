@@ -14,8 +14,9 @@ ApplicationWindow  {
     id: mains
     Connections{
         target: BesClient
-        onConnected: Core.changeServerStatus(true);
-        onDisconnected: Core.changeServerStatus(false);
+        function onConnected() {Core.changeServerStatus(true)}
+        function onDisconnected() {Core.changeServerStatus(false)}
+        function onMessageLogged(message) {Core.log(message)}
     }
 
     StackView{
@@ -29,6 +30,7 @@ ApplicationWindow  {
         visible: false
         onLoginButtonClicked: Core.loginButtonClicked()
         onServerButtonClicked: Core.serverButtonClicked()
+        onRegButtonClicked: Core.regButtonClicked();
     }
     LoginScreen {
         id: loginScreen
@@ -36,6 +38,13 @@ ApplicationWindow  {
         onBackButtonClicked: mainStack.pop();
         onLoginButtonClicked: Core.login();
     }
+    RegistrationScreen{
+        id: regScreen
+        visible: false
+        onBackButtonClicked: mainStack.pop();
+        onRegButtonClicked: Core.registration();
+    }
+
     ServerScreen {
         id: serverScreen
         visible: false

@@ -1,6 +1,6 @@
 QT += quick
 
-CONFIG += c++11
+CONFIG += c++17
 
 # You can make your code fail to compile if it uses deprecated APIs.
 # In order to do so, uncomment the following line.
@@ -8,7 +8,8 @@ CONFIG += c++11
 
 SOURCES += \
         src/besclient.cpp \
-        src/loggingsystem.cpp \
+        src/configreader.cpp \
+        src/logsystem.cpp \
         src\main.cpp
 
 RESOURCES += \
@@ -26,5 +27,8 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 HEADERS += \
+    src/BesProtocol.h \
     src/besclient.h \
-    src/loggingsystem.h
+    src/besclientdefaultconfigs.h \
+    src/configreader.h \
+    src/logsystem.h

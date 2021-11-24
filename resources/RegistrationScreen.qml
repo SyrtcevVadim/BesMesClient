@@ -4,11 +4,13 @@ import QtQuick.Controls 2.15
 import QtQml 2.15
 
 Page{
-    id: loginScreen
+    id: registrationScreen
     signal backButtonClicked;
-    signal loginButtonClicked;
+    signal regButtonClicked;
 
-    property alias loginText: emailTextField.text
+    property alias nameText: nameTextField.text
+    property alias surnameText: surnameTextField.text
+    property alias emailText: emailTextField.text
     property alias passwordText: passTextField.text
 
     background: Rectangle{
@@ -16,7 +18,7 @@ Page{
         color: "white"
     }
     Text{
-        text: "Вход"
+        text: "Регистрация"
         anchors.left: grid.left
         anchors.bottom: grid.top
         font.pixelSize: 35
@@ -30,8 +32,35 @@ Page{
         anchors.verticalCenter: parent.verticalCenter
         spacing: 25
         anchors.horizontalCenter: parent.horizontalCenter
-        rows: 2
         columns: 2
+        Text{
+            id: nameText
+            text: "Имя"
+            height: passTextField.height
+            font.pixelSize: height * 0.5
+            verticalAlignment: Text.AlignVCenter
+        }
+
+        TextField {
+            id: nameTextField
+            bottomInset: 0
+            placeholderText: "Введите имя"
+            selectByMouse: true
+        }
+        Text{
+            id: surnameText
+            text: "Фамилия"
+            height: passTextField.height
+            font.pixelSize: height * 0.5
+            verticalAlignment: Text.AlignVCenter
+        }
+
+        TextField {
+            id: surnameTextField
+            bottomInset: 0
+            placeholderText: "Введите фамилие"
+            selectByMouse: true
+        }
 
         Text{
             id: emailText
@@ -66,12 +95,12 @@ Page{
     RoundButton {
         id: roundButton
         width: grid.width * 0.66
-        text: "Войти"
+        text: "Зарегистрироваться"
         anchors.top: grid.bottom
         font.pixelSize: 16
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.topMargin: 25
-        onClicked: function (mouse){loginButtonClicked()}
+        onClicked: function (mouse){regButtonClicked()}
     }
 
     Button {
@@ -88,6 +117,6 @@ Page{
 
 /*##^##
 Designer {
-    D{i:0;autoSize:true;height:480;width:640}D{i:9}
+    D{i:0;autoSize:true;height:480;width:640}
 }
 ##^##*/
