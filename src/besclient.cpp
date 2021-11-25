@@ -62,7 +62,7 @@ void BesClient::setServer(QString serverAdress, int port)
 
 void BesClient::connectToServer()
 {
-    if(socket->isWritable())
+    if(socket->isEncrypted())
     {
         log->logToFile("не надо коннектится второй раз");
         return;

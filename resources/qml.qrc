@@ -6,5 +6,6 @@
         <file>LoginScreen.qml</file>
         <file>ServerScreen.qml</file>
         <file>RegistrationScreen.qml</file>
+        <file>FormScreen.qml</file>
     </qresource>
 </RCC>

@@ -18,11 +18,15 @@ ApplicationWindow  {
         function onDisconnected() {Core.changeServerStatus(false)}
         function onMessageLogged(message) {Core.log(message)}
     }
+    FormScreen{
+        id: test
+        visible: false
+    }
 
     StackView{
         id: mainStack
         anchors.fill: parent
-        initialItem: welcomeScreen
+        initialItem: test
     }
 
     WelcomeScreen {
