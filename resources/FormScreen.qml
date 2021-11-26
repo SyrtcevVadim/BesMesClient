@@ -12,23 +12,39 @@ Page {
     }
     property variant namesArray: ["One", "Two", "Three"]
     property variant textFieldsArray: ["oneText", "twoText", "threeText"]
+    property alias finalButtonText: roundButton.text
+    property alias labelText: label.text
+
+    signal finalButtonClicked;
+    signal backButtonClicked;
     property int itemHeight: 40
 
     Component.onCompleted: {
-        setlistModels()
-    }
-    function setlistModels(){
-        for(var i = 0; i < namesArray.length; i++)
-        {
-            namesModel.append     ({"name": namesArray[i]});
-            textFieldsModel.append({"text": textFieldsArray[i]})
+        function setlistModels(){
+            for(var i = 0; i < namesArray.length; i++)
+            {
+                namesModel.append     ({"name": namesArray[i]});
+                textFieldsModel.append({"text": textFieldsArray[i]})
+            }
         }
+        setlistModels();
+    }
+
+    function getFieldsValues()
+    {
+        var array = [];
+        for(var i = 0; i < fieldsRepeater.count; i++)
+        {
+            array[i] = fieldsRepeater.itemAt(i).text;
+        }
+        return array;
     }
 
     Text{
+        id: label
         text: "Вход"
-        anchors.left: grid.left
-        anchors.bottom: grid.top
+        anchors.left: row.left
+        anchors.bottom: row.top
         font.pixelSize: 35
         anchors.leftMargin: -37
         anchors.bottomMargin: 24
@@ -42,7 +58,7 @@ Page {
     }
 
     Row{
-        id: grid
+        id: row
         anchors.verticalCenter: parent.verticalCenter
         spacing: 25
         anchors.horizontalCenter: parent.horizontalCenter
@@ -59,7 +75,7 @@ Page {
             }
         }
         Column{
-            spacing: 25
+            spacing: 10
             Repeater{
                 id: fieldsRepeater
                 model: textFieldsModel
@@ -74,23 +90,23 @@ Page {
 
     RoundButton {
         id: roundButton
-        width: grid.width * 0.66
+        width: row.width * 0.66
         text: "Войти"
-        anchors.top: grid.bottom
+        anchors.top: row.bottom
         font.pixelSize: 16
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.topMargin: 25
-        onClicked: function (mouse){loginButtonClicked()}
+        onClicked: function (mouse){formScreen.finalButtonClicked()}
     }
 
     Button {
-        id: button
+        id: backButton
         width: 40
-        text: qsTr("<-")
+        text: "<-"
         anchors.left: parent.left
         anchors.top: parent.top
         anchors.leftMargin: 0
         anchors.topMargin: 0
-        onClicked: function(mouse){loginScreen.backButtonClicked()}
+        onClicked: function(mouse){formScreen.backButtonClicked()}
     }
 }

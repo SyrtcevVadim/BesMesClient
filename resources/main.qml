@@ -18,43 +18,25 @@ ApplicationWindow  {
         function onDisconnected() {Core.changeServerStatus(false)}
         function onMessageLogged(message) {Core.log(message)}
     }
-    FormScreen{
-        id: test
-        visible: false
-    }
-
     StackView{
         id: mainStack
         anchors.fill: parent
-        initialItem: test
+        initialItem: welcomeScreen
     }
-
     WelcomeScreen {
         id: welcomeScreen
         visible: false
         onLoginButtonClicked: Core.loginButtonClicked()
-        onServerButtonClicked: Core.serverButtonClicked()
-        onRegButtonClicked: Core.regButtonClicked();
+        onServerButtonClicked: mainStack.push(serverScreen)
+        onRegButtonClicked: Core.registrationButtonClicked();
     }
-    LoginScreen {
-        id: loginScreen
-        visible: false
-        onBackButtonClicked: mainStack.pop();
-        onLoginButtonClicked: Core.login();
-    }
-    RegistrationScreen{
-        id: regScreen
-        visible: false
-        onBackButtonClicked: mainStack.pop();
-        onRegButtonClicked: Core.registration();
-    }
-
     ServerScreen {
         id: serverScreen
         visible: false
         onSettingsChanged: Core.settingsChanged()
         onBackButtonClicked: mainStack.pop()
-        onConnectButtonPressed: Core.connectToServer()
-        onDisconnectButtonPressed: Core.disconnectFromServer()
+        onConnectButtonPressed: BesClient.connectToServer()
+        onDisconnectButtonPressed: BesClient.disconnectFromServer()
+        onReloadButtonPressed: BesClient.reloadServerProperties()
     }
 }

@@ -15,7 +15,7 @@ class BesClient : public QObject
 public:
     BesClient();
     ///изменение адреса и порта сервера
-    Q_INVOKABLE void setServer(QString serverAdress, int port); //deprecated, мб понадобится
+    Q_INVOKABLE void reloadServerProperties(); //deprecated, мб понадобится
     ///выполнить подключение к серверу
     Q_INVOKABLE void connectToServer();     //имя connect занято, так что пишем длинное название
     ///отключится от сервера

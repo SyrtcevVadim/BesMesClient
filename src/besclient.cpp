@@ -13,7 +13,7 @@ BesClient::BesClient()
     ConfigReader test("serverconfig.json");
     if(!test.checkConfig({"serverAddress", "serverPort"}))
     {
-        log->logToFile("Файл конфигурации настроек подключений к серверу нарушен.\n\r Будут использованны стандартные настройки", LogSystem::LogMessageType::Error);
+        log->logToFile("Файл конфигурации настроек подключений к серверу нарушен. Будут использованы стандартные настройки", LogSystem::LogMessageType::Error);
         serverAddress = CLIENT_CONNECTION_SERVERADDRESS;
         serverPort = CLIENT_CONNECTION_SERVERPORT;
     }
@@ -54,10 +54,22 @@ void BesClient::setSignals()
     });
 }
 
-void BesClient::setServer(QString serverAdress, int port)
+void BesClient::reloadServerProperties()
 {
-    serverAddress = serverAdress;
-    serverPort = port;
+    ConfigReader test("serverconfig.json");
+    if(!test.checkConfig({"serverAddress", "serverPort"}))
+    {
+        log->logToFile("Файл конфигурации настроек подключений к серверу нарушен. Будут использованы стандартные настройки", LogSystem::LogMessageType::Error);
+        serverAddress = CLIENT_CONNECTION_SERVERADDRESS;
+        serverPort = CLIENT_CONNECTION_SERVERPORT;
+    }
+    else
+    {
+        QVariantMap configs = test.getConfigs();
+        serverAddress = configs["serverAddress"].toString();
+        serverPort = configs["serverPort"].toInt();
+    }
+    log->logToFile(QString("Установлены следующие настройки сервера: ip - %1, порт - %2").arg(serverAddress, QString::number(serverPort)));
 }
 
 void BesClient::connectToServer()
@@ -89,7 +101,11 @@ void BesClient::disconnectFromServer()
 
 void BesClient::login(QString login, QString password)
 {
-
+    if(!socket->isEncrypted())
+    {
+        log->logToFile("Подключение к серверу не установлено, отмена операции", LogSystem::LogMessageType::Error);
+        return;
+    }
     log->logToFile(QString("Получены следующие данные для входа: %1 %2").arg(login, password));
     if(!socket->isWritable())
     {
@@ -104,6 +120,11 @@ void BesClient::login(QString login, QString password)
 
 void BesClient::registration(QString name, QString surname, QString email, QString password)
 {
+    if(!socket->isEncrypted())
+    {
+        log->logToFile("Подключение к серверу не установлено, отмена операции", LogSystem::LogMessageType::Error);
+        return;
+    }
     log->logToFile(QString("Получены следующие данные для регистрации: %1 %2 %3 %4").arg(name, surname, email, password));
     if(!socket->isWritable())
     {

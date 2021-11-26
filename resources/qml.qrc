@@ -3,9 +3,7 @@
         <file>main.qml</file>
         <file>WelcomeScreen.qml</file>
         <file>Functions.js</file>
-        <file>LoginScreen.qml</file>
         <file>ServerScreen.qml</file>
-        <file>RegistrationScreen.qml</file>
         <file>FormScreen.qml</file>
     </qresource>
 </RCC>

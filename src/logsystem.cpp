@@ -26,10 +26,10 @@ void LogSystem::logToFile(QString message, LogMessageType type)
     switch(type)
     {
         case LogMessageType::Message:
-            outMessage = QString("%1: %2\r\n").arg(locale.toString(now), message);
+            outMessage = QString("%1: %2\n").arg(locale.toString(now), message);
             break;
         case LogMessageType::Error:
-            outMessage = QString("ERROR at %1: %2\r\n").arg(locale.toString(now), message);
+            outMessage = QString("ERROR at %1: %2\n").arg(locale.toString(now), message);
             break;
     }
     *logStream << outMessage;
