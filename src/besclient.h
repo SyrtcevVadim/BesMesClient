@@ -9,6 +9,14 @@
 #include <QSslSocket>
 #include <QDebug>
 
+enum class RequestTarget
+{
+    None,
+    Login,
+    Registration,
+    SendRegCode
+};
+
 class BesClient : public QObject
 {
     Q_OBJECT
@@ -31,7 +39,7 @@ signals:
     ///сигнал издается при отключении от сервера
     void disconnected();
     ///издается после процедуры входа в аккаунт
-    void auntificationCompleted(int answerCode);
+    void auntificationCompleted(bool success, int answerCode, QString answerText);
     ///сигнал логирующей системы, высылаемый после регистрации сообщения
     void messageLogged(QString messageLogged);
 
@@ -47,7 +55,7 @@ private:
     int serverPort;
     LogSystem *log;
 
-
+    RequestTarget target;
 
     ///первоначальное связывание сигналов и слотов
     void setSignals();

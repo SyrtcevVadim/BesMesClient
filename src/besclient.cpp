@@ -106,6 +106,7 @@ void BesClient::login(QString login, QString password)
         log->logToFile("Подключение к серверу не установлено, отмена операции", LogSystem::LogMessageType::Error);
         return;
     }
+    target = RequestTarget::Login;
     log->logToFile(QString("Получены следующие данные для входа: %1 %2").arg(login, password));
     if(!socket->isWritable())
     {
@@ -125,6 +126,7 @@ void BesClient::registration(QString name, QString surname, QString email, QStri
         log->logToFile("Подключение к серверу не установлено, отмена операции", LogSystem::LogMessageType::Error);
         return;
     }
+    target = RequestTarget::Registration;
     log->logToFile(QString("Получены следующие данные для регистрации: %1 %2 %3 %4").arg(name, surname, email, password));
     if(!socket->isWritable())
     {
@@ -158,6 +160,59 @@ void BesClient::readData()
         return;
     }
     log->logToFile(data);
+
+    QChar status = data[0];
+    int answerCode = data.split(' ')[1].toInt();
+    QString answerString = data.remove(0, data.indexOf(' ', 1));
+
+    if(status == '+')
+    {
+        switch(target)
+        {
+            case RequestTarget::Login:
+            {
+                log->logToFile("Успешная авторизация");
+                emit auntificationCompleted(true, answerCode, answerString); // код 0 - авторизация успешна
+                break;
+            }
+            case RequestTarget::Registration:
+            {
+                log->logToFile("Успешная регистрация, переход на экран ввода кода с почты");
+                //TODO вкинуть сигнал в qml
+                break;
+            }
+            case RequestTarget::SendRegCode:
+            {
+                log->logToFile("Код регистрации верный, переход на экран мессенджера");
+                //TODO вкинуть сигнал в qml
+                break;
+            }
+        }
+    }
+    else //обработчики ошибок
+    {
+        switch(target)
+        {
+            case RequestTarget::Login:
+            {
+                log->logToFile("Ошибка авторизации, код ошибки " + QString::number(answerCode), LogSystem::LogMessageType::Error);
+                emit auntificationCompleted(false, answerCode, answerString);
+                break;
+            }
+            case RequestTarget::Registration:
+            {
+                log->logToFile("Ошибка регистрации, код ошибки " + QString::number(answerCode), LogSystem::LogMessageType::Error);
+                //TODO вкинуть сигнал в qml
+                break;
+            }
+            case RequestTarget::SendRegCode:
+            {
+                log->logToFile("Ошибка проверки кода регистрации, код ошибки " + QString::number(answerCode), LogSystem::LogMessageType::Error);
+                //TODO вкинуть сигнал в qml
+                break;
+            }
+        }
+    }
 
 
 
