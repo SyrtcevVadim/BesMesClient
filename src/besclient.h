@@ -28,10 +28,14 @@ public:
     Q_INVOKABLE void connectToServer();     //имя connect занято, так что пишем длинное название
     ///отключится от сервера
     Q_INVOKABLE void disconnectFromServer();
+
+    //процедуры общения клиента с сервером
     ///выполнить процедуру входа в аккаунт
     Q_INVOKABLE void login(QString login, QString password);
     ///выполнить процедуру регистрации
     Q_INVOKABLE void registration(QString name, QString surname, QString email, QString password);
+    ///выполнить процедуру проверки кода регистрации
+    //Q_INVOKABLE void registrationCode(int registrationCode);
 
 signals:
     ///сигнал издается при подключении к серверу

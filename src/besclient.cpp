@@ -139,6 +139,11 @@ void BesClient::registration(QString name, QString surname, QString email, QStri
     out->flush();
 }
 
+void registrationCode(int registrationCode)
+{
+
+}
+
 void BesClient::socketConnected()
 {
     emit connected();
@@ -187,6 +192,8 @@ void BesClient::readData()
                 //TODO вкинуть сигнал в qml
                 break;
             }
+        default:
+        break;
         }
     }
     else //обработчики ошибок
@@ -211,6 +218,8 @@ void BesClient::readData()
                 //TODO вкинуть сигнал в qml
                 break;
             }
+            default:
+            break;
         }
     }
 

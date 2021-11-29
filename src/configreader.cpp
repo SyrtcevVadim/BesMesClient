@@ -32,19 +32,43 @@ QVariantMap ConfigReader::getConfigs()
 
 bool ConfigReader::checkConfig(QVector<QString> requiredFields)
 {
-    configFile->open(QIODevice::ReadOnly | QIODevice::Text);
+    configFile->open(QIODevice::ReadWrite | QIODevice::Text);
     QByteArray jsonString = configFile->readAll();
     QJsonDocument doc = QJsonDocument::fromJson(jsonString);
     QJsonObject obj = doc.object();
 
-    for(QString a : requiredFields)
+    bool isBroken = false;
+
+    for(const QString &a : requiredFields)
     {
         if(!obj.contains(a))
         {
-            configFile->close();
-            return false;
+            isBroken = true;
+        }
+        else if(obj.take(a).toString() == "")
+        {
+            isBroken = true;
         }
     }
-    configFile->close();
-    return true;
+
+    if(isBroken)
+    {
+        QJsonObject newObj;
+        for(const QString &a : requiredFields)
+        {
+            newObj.insert(a, "");
+        }
+        doc = QJsonDocument();
+        doc.setObject(newObj);
+        configFile->remove();
+        configFile->open(QIODevice::ReadWrite | QIODevice::Text);
+        configFile->write(doc.toJson());
+        configFile->close();
+        return false;
+    }
+    else
+    {
+        configFile->close();
+        return true;
+    }
 }
