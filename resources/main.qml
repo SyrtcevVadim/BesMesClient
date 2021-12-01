@@ -17,6 +17,8 @@ ApplicationWindow  {
         function onConnected() {Core.changeServerStatus(true)}
         function onDisconnected() {Core.changeServerStatus(false)}
         function onMessageLogged(message) {Core.log(message)}
+        function onAuntificationComplete(isSuccess, answerCode, description) {Core.auntificationCompleted(isSuccess, answerCode, description)}
+        function onRegistrationComplete (isSuccess, answerCode, description) {Core.registrationComplete  (isSuccess, answerCode, description)}
     }
     StackView{
         id: mainStack

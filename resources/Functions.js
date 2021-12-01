@@ -24,17 +24,17 @@ class ScreenCreator{ //почти независимый класс (класс 
     {
         if (this.component.status === Component.Ready)
         {
-            var sprite = this.component.createObject(this.parentId, {namesArray: this.namesArray,
+            var screen = this.component.createObject(this.parentId, {namesArray: this.namesArray,
                                                                     textFieldsArray: this.textFieldsArray,
                                                                     finalButtonText: this.finalButtonText,
                                                                     labelText: this.labelText,
                                                                     id: this.id});
-            if (sprite === null)
+            if (screen === null)
             {
                 // Error Handling
                 console.log("Error creating object");
             }
-            setPropertiesOfCreatedScreen(sprite, this.method);
+            setPropertiesOfCreatedScreen(screen, this.method);
         }
         else if (this.component.status === Component.Error)
         {
@@ -95,6 +95,12 @@ function proceedRegistrationProcedure()
     BesClient.registration(array[0], array[1], array[2], array[3]);
 }
 
+function proceedRegistrationCodeProcedure()
+{
+    var array = mainStack.currentItem.getFieldsValues();
+    BesClient.registrationCode(array[0]);
+}
+
 //обработка с++ событий
 function changeServerStatus(isConnected)
 {
@@ -105,4 +111,26 @@ function changeServerStatus(isConnected)
 function log(message) //вывод логов в экран разработчика
 {
     serverScreen.logTextAreaText += message
+}
+
+function auntificationCompleted(isSuccess, answerCode, description)
+{
+    //TODO: вывод результата авторизации пользователю
+}
+
+function registrationComplete (isSuccess, answerCode, description)
+{
+    if(isSuccess)
+    {
+        //TODO: сюда первым делом вкинуть маску на ввод только чисел
+        var screenCreator = new ScreenCreator("regCodeScreen", ["Код"],
+                                              ["Введите код"],
+                                              "Подтверждение почты", "Отправить",
+                                              "mains", proceedRegistrationCodeProcedure);
+        screenCreator.createObject();
+    }
+    else
+    {
+        //TODO: вывод ошибки пользователю
+    }
 }

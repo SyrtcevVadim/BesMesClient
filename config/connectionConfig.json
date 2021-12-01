@@ -1,0 +1,5 @@
+{
+    "loadLocalCertificateAsCa": true,
+    "localCertificatePath": "besmes.crt",
+    "ignoreSslErrors" : false
+}
