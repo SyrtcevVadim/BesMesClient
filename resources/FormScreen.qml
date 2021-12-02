@@ -17,7 +17,9 @@ Page {
 
     signal finalButtonClicked;
     signal backButtonClicked;
+
     property int itemHeight: 40
+    property int fontSize: itemHeight/3
 
     Component.onCompleted: {
         function setlistModels(){
@@ -79,7 +81,16 @@ Page {
             Repeater{
                 id: fieldsRepeater
                 model: textFieldsModel
+
                 delegate: TextField{
+                    background: Rectangle
+                    {
+                        radius: formScreen.itemHeight / 4
+                        border.width: 0
+                        color: "#edfcf5"
+                    }
+                    width : 200
+                    font.pixelSize: formScreen.fontSize
                     placeholderText: text
                     selectByMouse: true
                     height: formScreen.itemHeight
@@ -90,10 +101,16 @@ Page {
 
     RoundButton {
         id: roundButton
+        background: Rectangle
+        {
+            radius: formScreen.itemHeight / 4
+            color: "#73ffc5"
+        }
+        height: formScreen.itemHeight
         width: row.width * 0.66
         text: "Войти"
         anchors.top: row.bottom
-        font.pixelSize: 16
+        font.pixelSize: formScreen.fontSize
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.topMargin: 25
         onClicked: function (mouse){formScreen.finalButtonClicked()}

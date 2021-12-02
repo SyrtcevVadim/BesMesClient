@@ -11,18 +11,18 @@ BesClient::BesClient()
     log = new LogSystem("latest.txt");
 
     ConfigReader test("serverconfig.json");
-//    if(!test.checkConfig({"serverAddress", "serverPort"}))
-//    {
-//        log->logToFile("Файл конфигурации настроек подключений к серверу нарушен. Будут использованы стандартные настройки", LogSystem::LogMessageType::Error);
-//        serverAddress = CLIENT_CONNECTION_SERVERADDRESS;
-//        serverPort = CLIENT_CONNECTION_SERVERPORT;
-//    }
-//    else
-//    {
+    if(!test.checkConfig({"serverAddress", "serverPort"}))
+    {
+        log->logToFile("Файл конфигурации настроек подключений к серверу нарушен. Будут использованы стандартные настройки", LogSystem::LogMessageType::Error);
+        serverAddress = CLIENT_CONNECTION_SERVERADDRESS;
+        serverPort = CLIENT_CONNECTION_SERVERPORT;
+    }
+    else
+    {
         QVariantMap configs = test.getConfigs();
         serverAddress = configs["serverAddress"].toString();
         serverPort = configs["serverPort"].toInt();
-    //}
+    }
 
     setSignals();
 
@@ -259,10 +259,6 @@ void BesClient::readData()
             break;
         }
     }
-
-
-
-
     data = "";
 }
 

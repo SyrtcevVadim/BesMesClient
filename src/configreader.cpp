@@ -5,7 +5,10 @@
 ConfigReader::ConfigReader(QString configFileName, QDir configFileDirectory)
 {
     this->configFileDirectory = configFileDirectory;
-
+    if(!configFileDirectory.exists())
+    {
+        configFileDirectory.mkpath(".");
+    }
     configFile = new QFile(configFileDirectory.path() + '/' + configFileName);
 }
 
@@ -42,10 +45,6 @@ bool ConfigReader::checkConfig(QVector<QString> requiredFields)
     for(const QString &a : requiredFields)
     {
         if(!obj.contains(a))
-        {
-            isBroken = true;
-        }
-        else if(obj.take(a).toString() == "")
         {
             isBroken = true;
         }
