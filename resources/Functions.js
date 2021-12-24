@@ -1,48 +1,37 @@
 //необходимые рукописные компоненты
-class ScreenCreator{ //почти независимый класс (класс в js дада) для создания окон
-    //TODO: добавление возможности накинуть маски на поля
-    constructor(id, namesArray, textFieldsArray, finalButtonText, labelText, parentId, method)
+class ScreenCreator //"строитель" динамических элементов qml
+{
+    constructor(componentName)
     {
-        this.namesArray      = namesArray;
-        this.textFieldsArray = textFieldsArray;
-        this.finalButtonText = finalButtonText;
-        this.textFieldsArray = textFieldsArray;
-        this.labelText       = labelText;
-        this.parentId        = parentId;
-        this.id              = id;
-        this.method          = method;
+        this.object = Qt.createComponent(componentName);
+        this.parameters = {};
     }
-    createObject()
+
+    create(callback)
     {
-        this.component = Qt.createComponent("FormScreen.qml");
-            if (this.component.status === Component.Ready)
-                this.finishCreation();
-            else
-                this.component.statusChanged.connect(this.finishCreation);
-    }
-    finishCreation()
-    {
-        if (this.component.status === Component.Ready)
+        this.incubator = this.object.incubateObject(mains, this.parameters);
+        if(this.incubator.status !== Component.Ready)
         {
-            var screen = this.component.createObject(this.parentId, {namesArray: this.namesArray,
-                                                                    textFieldsArray: this.textFieldsArray,
-                                                                    finalButtonText: this.finalButtonText,
-                                                                    labelText: this.labelText,
-                                                                    id: this.id});
-            if (screen === null)
-            {
-                // Error Handling
-                console.log("Error creating object");
+            this.incubator.onStatusChanged = status => {
+                if(status === Component.Ready)
+                {
+                    callback(this.object);
+                }
             }
-            setPropertiesOfCreatedScreen(screen, this.method);
         }
-        else if (this.component.status === Component.Error)
+        else
         {
-            // Error Handling
-            console.log("Error loading component:", this.component.errorString());
+            callback(this.object);
         }
     }
+
+    getObject()
+    {
+        return this.object;
+    }
+
 }
+
 function setPropertiesOfCreatedScreen(item, method) //внешний метод для класса
 {
     mainStack.push(item);
@@ -56,7 +45,7 @@ function backToWelcomeScreenButtonClicked() //это хоть и обработ�
     var timer = new Timer();
     timer.interval = 500;
     timer.repeat = false;
-    timer.triggered.connect(function(){item.destroy(); timer.destroy()});
+    timer.triggered.connect(() => {item.destroy(); timer.destroy()});
     timer.start();
 }
 function Timer() { //конструктор объекта таймера
@@ -66,20 +55,38 @@ function Timer() { //конструктор объекта таймера
 //функции обработчики событий QML
 function loginButtonClicked()
 {
-    var screenCreator = new ScreenCreator("loginScreen", ["Почта", "Пароль"],
-                                          ["Введите почту", "Введите пароль"],
-                                          "Войти", "Вход",
-                                          "mains", proceedLoginProcedure);
-    screenCreator.createObject();
+    var screenCreator = new ScreenCreator("FormScreen.qml");
+    screenCreator.parameters = {
+        namesArray: ["Почта",
+                     "Пароль"],
+        textFieldsArray: ["Введите почту",
+                          "Введите пароль"],
+        finalButtonText: "Войти",
+        labelText: "Вход",
+        id: "loginScreen"
+    };
+    screenCreator.create(object => {
+        mainStack.push(object);
+        object.onBackButtonClicked. connect(backToWelcomeScreenButtonClicked);
+        object.onFinalButtonClicked.connect(proceedLoginProcedure);
+    });
 }
 
 function registrationButtonClicked()
 {
-    var screenCreator = new ScreenCreator("regScreen", ["Имя", "Фамилия", "Почта", "Пароль"],
-                                          ["Введите имя", "Введите фамилию", "Введите почту", "Введите пароль"],
-                                          "Зарегистрироваться", "Регистрация",
-                                          "mains", proceedRegistrationProcedure);
-    screenCreator.createObject();
+    var screenCreator = new ScreenCreator("FormScreen.qml");
+    screenCreator.parameters = {
+        namesArray: ["Имя", "Фамилия", "Почта", "Пароль"],
+        textFieldsArray: ["Введите имя", "Введите фамилию", "Введите почту", "Введите пароль"],
+        finalButtonText: "Зарегистрироваться",
+        labelText: "Регистрация",
+        id: "regScreen"
+    };
+    screenCreator.create(object => {
+        mainStack.push(object);
+        object.onBackButtonClicked. connect(backToWelcomeScreenButtonClicked);
+        object.onFinalButtonClicked.connect(proceedRegistrationProcedure);
+    });
 }
 
 //функции старта процедур BesClient'а
@@ -123,11 +130,19 @@ function registrationComplete (isSuccess, answerCode, description)
     if(isSuccess)
     {
         //TODO: сюда первым делом вкинуть маску на ввод только чисел
-        var screenCreator = new ScreenCreator("regCodeScreen", ["Код"],
-                                              ["Введите код"],
-                                              "Подтверждение почты", "Отправить",
-                                              "mains", proceedRegistrationCodeProcedure);
-        screenCreator.createObject();
+        var screenCreator = new ScreenCreator("FormScreen.qml");
+        screenCreator.parameters = {
+            namesArray: ["Код"],
+            textFieldsArray: ["Введите код"],
+            finalButtonText: "Отправить",
+            labelText: "Подтверждение почты",
+            id: "regCodeScreen"
+        };
+        screenCreator.create(object => {
+            mainStack.push(object);
+            object.onBackButtonClicked. connect(backToWelcomeScreenButtonClicked);
+            object.onFinalButtonClicked.connect(proceedRegistrationCodeProcedure);
+        });
     }
     else
     {
