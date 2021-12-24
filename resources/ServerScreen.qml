@@ -15,6 +15,7 @@ Page{
     property alias serverStatus: serverStatusText.text
     property alias logTextAreaText: logText.text
 
+
     Button {
         id: button
         width: 40

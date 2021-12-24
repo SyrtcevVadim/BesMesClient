@@ -7,21 +7,23 @@ class ScreenCreator //"строитель" динамических элемен
         this.parameters = {};
     }
 
-    create(callback)
+    create(parent, callback = null)
     {
-        this.incubator = this.object.incubateObject(mains, this.parameters);
+        this.incubator = this.object.incubateObject(parent, this.parameters);
         if(this.incubator.status !== Component.Ready)
         {
             this.incubator.onStatusChanged = status => {
                 if(status === Component.Ready)
                 {
-                    callback(this.object);
+                    if(callback !== null)
+                        callback(this.object);
                 }
             }
         }
         else
         {
-            callback(this.object);
+            if(callback !== null)
+                callback(this.object);
         }
     }
 
@@ -65,7 +67,7 @@ function loginButtonClicked()
         labelText: "Вход",
         id: "loginScreen"
     };
-    screenCreator.create(object => {
+    screenCreator.create(mains, object => {
         mainStack.push(object);
         object.onBackButtonClicked. connect(backToWelcomeScreenButtonClicked);
         object.onFinalButtonClicked.connect(proceedLoginProcedure);
@@ -82,7 +84,7 @@ function registrationButtonClicked()
         labelText: "Регистрация",
         id: "regScreen"
     };
-    screenCreator.create(object => {
+    screenCreator.create(mains, object => {
         mainStack.push(object);
         object.onBackButtonClicked. connect(backToWelcomeScreenButtonClicked);
         object.onFinalButtonClicked.connect(proceedRegistrationProcedure);
@@ -118,11 +120,19 @@ function changeServerStatus(isConnected)
 function log(message) //вывод логов в экран разработчика
 {
     serverScreen.logTextAreaText += message
+    var screenCreator = new ScreenCreator("Notification.qml");
+    screenCreator.parameters = {
+        headerText: "Header",
+        backgroundColor: "#808080",
+        textColor: "#ffffff",
+        bodyText: "Body"
+    };
+    screenCreator.create(serverScreen, null);
 }
 
 function auntificationCompleted(isSuccess, answerCode, description)
 {
-    //TODO: вывод результата авторизации пользователю
+
 }
 
 function registrationComplete (isSuccess, answerCode, description)
@@ -138,7 +148,7 @@ function registrationComplete (isSuccess, answerCode, description)
             labelText: "Подтверждение почты",
             id: "regCodeScreen"
         };
-        screenCreator.create(object => {
+        screenCreator.create(mains, object => {
             mainStack.push(object);
             object.onBackButtonClicked. connect(backToWelcomeScreenButtonClicked);
             object.onFinalButtonClicked.connect(proceedRegistrationCodeProcedure);
@@ -146,6 +156,6 @@ function registrationComplete (isSuccess, answerCode, description)
     }
     else
     {
-        //TODO: вывод ошибки пользователю
+
     }
 }

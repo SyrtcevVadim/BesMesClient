@@ -22,14 +22,11 @@ Page {
     property int fontSize: itemHeight/3
 
     Component.onCompleted: {
-        function setlistModels(){
-            for(var i = 0; i < namesArray.length; i++)
-            {
-                namesModel.append     ({"name": namesArray[i]});
-                textFieldsModel.append({"text": textFieldsArray[i]})
-            }
+        for(var i = 0; i < namesArray.length; i++)
+        {
+            namesModel.append     ({"name": namesArray[i]});
+            textFieldsModel.append({"text": textFieldsArray[i]})
         }
-        setlistModels();
     }
 
     function getFieldsValues()

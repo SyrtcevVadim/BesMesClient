@@ -1,8 +1,9 @@
 import QtQuick 2.15
-import QtQuick.Window 2.12
+import QtQuick.Window 2.15
 import QtQuick.Controls 2.15
 import QtQml 2.15
 import "Functions.js" as Core
+
 
 ApplicationWindow  {
     width: 640
@@ -17,8 +18,9 @@ ApplicationWindow  {
         function onConnected() {Core.changeServerStatus(true)}
         function onDisconnected() {Core.changeServerStatus(false)}
         function onMessageLogged(message) {Core.log(message)}
-        function onAuntificationComplete(isSuccess, answerCode, description) {Core.auntificationCompleted(isSuccess, answerCode, description)}
-        function onRegistrationComplete (isSuccess, answerCode, description) {Core.registrationComplete  (isSuccess, answerCode, description)}
+        function onAuntificationComplete   (isSuccess, answerCode, description) {Core.auntificationCompleted (isSuccess, answerCode, description)}
+        function onRegistrationComplete    (isSuccess, answerCode, description) {Core.registrationComplete   (isSuccess, answerCode, description)}
+        function onRegCodeCheckingComplete (isSuccess, answerCode, description) {Core.regCodeCheckingComplete(isSuccess, answerCode, description)}
     }
     StackView{
         id: mainStack
