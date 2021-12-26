@@ -1,0 +1,12 @@
+#адрес сервера и порт
+[client_connection]
+server_address = "127.0.0.1"
+port           = 1234
+
+#настройки слл подключения 
+[ssl_configuration]
+#когда true - использует файл сертификата для подключенияк серверу
+load_local_certificate_as_ca = false
+#не должен быть пустым при включенном предыдущем параметре
+local_certificate_path       = ""
+ignore_ssl_errors            = false

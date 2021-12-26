@@ -1,6 +1,5 @@
 #ifndef CONFIGREADER_H
 #define CONFIGREADER_H
-//Автор: Воропаев Владимир Геннадьевич
 #include <QString>
 #include <QVariant>
 #include <QDebug>
@@ -9,7 +8,7 @@
 #include <QVector>
 #include <vector>
 
-class ConfigReader
+class ConfigReader : public QObject
 {
 public:
     ///Класс-обертка для работы с json файлами конфигурации сервера
@@ -20,8 +19,10 @@ public:
     ///Метод возвращает содержимое файла конфигурации в виде QMap<QString, QVariant> (aka QVariantMap)
     QVariantMap getConfigs();
     ///Проверка выбранного файла на наличие указанных полей
-    bool checkConfig(QVector<QString> requiredFields);
+    void checkConfig(QString fileName);
 
+signals:
+    void defaultConfigSet();
 private:
     ///Путь к папке с файлами конфигурации
     QDir configFileDirectory;

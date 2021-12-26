@@ -13,6 +13,7 @@ SOURCES += \
         src\main.cpp
 
 RESOURCES += \
+        resources/config/configTemplates.qrc \
         resources\qml.qrc
 
 # Additional import path used to resolve QML modules in Qt Creator's code model
@@ -27,6 +28,7 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 HEADERS += \
+    lib/include/toml.hpp \
     src/BesProtocol.h \
     src/besclient.h \
     src/besclientdefaultconfigs.h \

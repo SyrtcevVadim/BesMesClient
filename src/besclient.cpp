@@ -1,17 +1,14 @@
 #include "besclient.h"
-#include "BesProtocol.h"
-#include <QVariantMap>
-#include <QSslError>
-
 
 BesClient::BesClient()
 {
     socket = new QSslSocket(this);
     out = new QTextStream(socket);
     log = new LogSystem("latest.txt");
-
+    config = new ConfigReader("mainConfig.toml");
     ConfigReader test("serverconfig.json");
-    if(!test.checkConfig({"serverAddress", "serverPort"}))
+    test.checkConfig("");
+    if(true)
     {
         log->logToFile("Файл конфигурации настроек подключений к серверу нарушен. Будут использованы стандартные настройки", LogSystem::LogMessageType::Error);
         serverAddress = CLIENT_CONNECTION_SERVERADDRESS;
@@ -32,6 +29,14 @@ BesClient::BesClient()
     setSocketSettings();
 }
 
+BesClient::~BesClient()
+{
+    delete socket;
+    delete out;
+    delete log;
+    delete config;
+}
+
 void BesClient::setSignals()
 {
     connect(socket, SIGNAL(encrypted()),
@@ -49,12 +54,14 @@ void BesClient::setSignals()
             qDebug() << a;
         }
     });
+    //connect(config, SIGNAL(defaultConfigSet()),
+    //        this,   SLOT(defaultConfigSett()));
 }
 
 void BesClient::setSocketSettings()
 {
     ConfigReader connectionConfig("connectionConfig.json");
-    if(!connectionConfig.checkConfig({"loadLocalCertificateAsCa", "localCertificatePath", "ignoreSslErrors"}))
+    if(true)
     {
         socket->setPeerVerifyMode(QSslSocket::PeerVerifyMode::QueryPeer);
         socket->ignoreSslErrors();
@@ -78,7 +85,7 @@ void BesClient::setSocketSettings()
 void BesClient::reloadServerProperties()
 {
     ConfigReader test("serverconfig.json");
-    if(!test.checkConfig({"serverAddress", "serverPort"}))
+    if(true)
     {
         log->logToFile("Файл конфигурации настроек подключений к серверу нарушен. Будут использованы стандартные настройки", LogSystem::LogMessageType::Error);
         serverAddress = CLIENT_CONNECTION_SERVERADDRESS;
@@ -265,4 +272,9 @@ void BesClient::readData()
 void BesClient::messageLoggedResend(QString message)
 {
     emit messageLogged(message);
+}
+
+void BesClient::defaultConfigSett()
+{
+    emit clientNotification(DEFAULT_CONFIG_ERROR_HEAD, DEFAULT_CONFIG_ERROR_MESSAGE);
 }

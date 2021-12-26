@@ -3,11 +3,16 @@
 #include "configreader.h"
 #include "logsystem.h"
 #include "besclientdefaultconfigs.h"
+#include "BesProtocol.h"
 
 #include <QObject>
-#include <QTcpSocket>
 #include <QSslSocket>
 #include <QDebug>
+#include <QVariantMap>
+#include <QSslError>
+
+#define DEFAULT_CONFIG_ERROR_HEAD    QString("Файл конфигурации поврежден")
+#define DEFAULT_CONFIG_ERROR_MESSAGE QString("Установлены настройки по умолчанию\nЕсли необходимо, измените настройки и перезапустите клиент")
 
 enum class RequestTarget
 {
@@ -22,6 +27,7 @@ class BesClient : public QObject
     Q_OBJECT
 public:
     BesClient();
+    ~BesClient();
     ///изменение адреса и порта сервера
     Q_INVOKABLE void reloadServerProperties(); //используется в экране разработчика
     ///выполнить подключение к серверу
@@ -51,6 +57,8 @@ signals:
     ///издается после окончания процедуры проверки кода регистрации
     void regCodeCheckingComplete(bool success, int answerCode, QString answerText);
 
+    void clientNotification(QString header, QString message);
+
 private:
     ///сокет подключения к серверу
     QSslSocket *socket;
@@ -66,6 +74,8 @@ private:
     RequestTarget target;
     ///если true, после разрыва соединения клиент попытается восстановить его
     bool keepConnected;
+    ///объект, взаимодействующий с конфигами
+    ConfigReader *config;
 
     ///первоначальное связывание сигналов и слотов
     void setSignals();
@@ -78,6 +88,7 @@ private slots:
     void messageLoggedResend(QString messageLogged);
 
     void setSocketSettings();
+    void defaultConfigSett();
 };
 
 #endif // BESCLIENT_H

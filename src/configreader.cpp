@@ -1,8 +1,9 @@
 #include "configreader.h"
 #include <QJsonDocument>
 #include <QJsonObject>
-
-ConfigReader::ConfigReader(QString configFileName, QDir configFileDirectory)
+#include "lib/include/toml.hpp"
+#include <string>
+ConfigReader::ConfigReader(QString configFileName, QDir configFileDirectory) : QObject(nullptr)
 {
     this->configFileDirectory = configFileDirectory;
     if(!configFileDirectory.exists())
@@ -32,42 +33,32 @@ QVariantMap ConfigReader::getConfigs()
     configFile->close();
     return map;
 }
-
-bool ConfigReader::checkConfig(QVector<QString> requiredFields)
+void check(toml::table table, std::string key)
 {
-    configFile->open(QIODevice::ReadWrite | QIODevice::Text);
-    QByteArray jsonString = configFile->readAll();
-    QJsonDocument doc = QJsonDocument::fromJson(jsonString);
-    QJsonObject obj = doc.object();
-
-    bool isBroken = false;
-
-    for(const QString &a : requiredFields)
+    if(table[key].is_table())
     {
-        if(!obj.contains(a))
+        qDebug() << "enter table "<<QString::fromStdString(key);
+        for(auto item : *table[key].as_table())
         {
-            isBroken = true;
+            check(*table[key].as_table(), item.first);
         }
     }
-
-    if(isBroken)
-    {
-        QJsonObject newObj;
-        for(const QString &a : requiredFields)
-        {
-            newObj.insert(a, "");
-        }
-        doc = QJsonDocument();
-        doc.setObject(newObj);
-        configFile->remove();
-        configFile->open(QIODevice::ReadWrite | QIODevice::Text);
-        configFile->write(doc.toJson());
-        configFile->close();
-        return false;
-    }
-    else
-    {
-        configFile->close();
-        return true;
+    else{
+        qDebug() << QString::fromStdString(key);
     }
 }
+
+void ConfigReader::checkConfig(QString fileName)
+{
+    QFile defaultConfig(":/mainConfig.toml");
+    qDebug() << defaultConfig.open(QIODevice::ReadOnly | QIODevice::Text);
+    QString confStr = defaultConfig.readAll();
+    toml::table configTable = toml::parse(confStr.toStdString());
+    for(auto item : configTable)
+    {
+        check(configTable, item.first);
+    }
+
+}
+
+
