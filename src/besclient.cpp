@@ -49,14 +49,7 @@ void BesClient::setSignals()
 
 void BesClient::setSocketSettings()
 {
-    if(true)
-    {
-        socket->setPeerVerifyMode(QSslSocket::PeerVerifyMode::QueryPeer);
-        socket->ignoreSslErrors();
-        return;
-    }
     QSslConfiguration sslConfig;
-
     sslConfig.setPeerVerifyMode(QSslSocket::PeerVerifyMode::QueryPeer);
     if(config->getConfigs()["ssl_configuration"]["load_local_certificate_as_ca"].value<bool>().value())
     {

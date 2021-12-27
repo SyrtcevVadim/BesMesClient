@@ -1,12 +1,8 @@
 #ifndef CONFIGREADER_H
 #define CONFIGREADER_H
 #include <QString>
-#include <QVariant>
-#include <QDebug>
 #include <QFile>
 #include <QDir>
-#include <QVector>
-#include <vector>
 #include <string>
 
 #include "lib/include/toml.hpp"

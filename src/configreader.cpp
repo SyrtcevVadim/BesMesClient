@@ -1,6 +1,5 @@
 #include "configreader.h"
-#include <QJsonDocument>
-#include <QJsonObject>
+
 ConfigReader::ConfigReader(QString configFileName, QDir configFileDirectory)
 {
     this->configFileDirectory = configFileDirectory;
