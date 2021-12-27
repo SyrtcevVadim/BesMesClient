@@ -1,6 +1,5 @@
 <RCC>
     <qresource prefix="/">
         <file>mainConfig.toml</file>
-        <file>mainConfigcopy.toml</file>
     </qresource>
 </RCC>

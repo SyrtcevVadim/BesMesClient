@@ -1,9 +1,7 @@
 #include "configreader.h"
 #include <QJsonDocument>
 #include <QJsonObject>
-#include "lib/include/toml.hpp"
-#include <string>
-ConfigReader::ConfigReader(QString configFileName, QDir configFileDirectory) : QObject(nullptr)
+ConfigReader::ConfigReader(QString configFileName, QDir configFileDirectory)
 {
     this->configFileDirectory = configFileDirectory;
     if(!configFileDirectory.exists())
@@ -11,6 +9,7 @@ ConfigReader::ConfigReader(QString configFileName, QDir configFileDirectory) : Q
         configFileDirectory.mkpath(".");
     }
     configFile = new QFile(configFileDirectory.path() + '/' + configFileName);
+    this->configFileName = configFileName;
 }
 
 ConfigReader::~ConfigReader()
@@ -18,47 +17,57 @@ ConfigReader::~ConfigReader()
     delete configFile;
 }
 
-QVariantMap ConfigReader::getConfigs()
+toml::table ConfigReader::getConfigs()
 {
-    QVariantMap map;
-    configFile->open(QIODevice::ReadOnly | QIODevice::Text);
-    QByteArray jsonString = configFile->readAll();
-
-    //тк конфигурационный файл по сути - объект json
-    QJsonDocument doc = QJsonDocument::fromJson(jsonString);
-    //рассматриваем документ json как содержимое одного объекта
-    QJsonObject obj = doc.object();
-
-    map = obj.toVariantMap();
-    configFile->close();
-    return map;
+    return configs;
 }
-void check(toml::table table, std::string key)
+
+void ConfigReader::checkNode(toml::table table, std::string key, QString previousLevelName, QStringList& items)
 {
     if(table[key].is_table())
     {
-        qDebug() << "enter table "<<QString::fromStdString(key);
         for(auto item : *table[key].as_table())
         {
-            check(*table[key].as_table(), item.first);
+            checkNode(*table[key].as_table(), item.first, QString("%1 %2").arg(previousLevelName, QString::fromStdString(key)), items);
         }
     }
     else{
-        qDebug() << QString::fromStdString(key);
+        items.append(QString("%1 %2").arg(previousLevelName, QString::fromStdString(key)));
     }
 }
 
-void ConfigReader::checkConfig(QString fileName)
+void ConfigReader::loadConfig()
 {
     QFile defaultConfig(":/mainConfig.toml");
-    qDebug() << defaultConfig.open(QIODevice::ReadOnly | QIODevice::Text);
-    QString confStr = defaultConfig.readAll();
-    toml::table configTable = toml::parse(confStr.toStdString());
-    for(auto item : configTable)
+    configFile->open(QIODevice::ReadOnly | QIODevice::Text);
+    defaultConfig.open(QIODevice::ReadOnly | QIODevice::Text);
+
+    QString defaultConfigStr = defaultConfig.readAll();
+    QString configStr = configFile->readAll();
+
+    toml::table defaultConfigTable = toml::parse(defaultConfigStr.toStdString());
+    configs = toml::parse(configStr.toStdString());
+    //обходим все узлы обоих таблиц,
+    //если они совпадают - конфиг файл соответствует шаблону
+    QStringList itemsInDefaultConfig, itemsInConfig;
+    for(auto item : defaultConfigTable)
     {
-        check(configTable, item.first);
+        checkNode(defaultConfigTable, item.first, "root", itemsInDefaultConfig);
     }
-
+    for(auto item : configs)
+    {
+        checkNode(configs, item.first, "root", itemsInConfig);
+    }
+    defaultConfig.close();
+    configFile->close();
+    if(!(itemsInDefaultConfig == itemsInConfig))
+    {
+        if(configFile->exists())
+        {
+            configFile->remove();
+        }
+        defaultConfig.copy(configFileDirectory.path() + '/' + configFileName);
+        configs = defaultConfigTable;
+        emit defaultConfigSet();
+    }
 }
-
-

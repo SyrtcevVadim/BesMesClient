@@ -120,14 +120,14 @@ function changeServerStatus(isConnected)
 function log(message) //вывод логов в экран разработчика
 {
     serverScreen.logTextAreaText += message
-    var screenCreator = new ScreenCreator("Notification.qml");
-    screenCreator.parameters = {
-        headerText: "Header",
-        backgroundColor: "#808080",
-        textColor: "#ffffff",
-        bodyText: "Body"
-    };
-    screenCreator.create(serverScreen, null);
+//    var screenCreator = new ScreenCreator("Notification.qml");
+//    screenCreator.parameters = {
+//        headerText: "Header",
+//        backgroundColor: "#808080",
+//        textColor: "#ffffff",
+//        bodyText: "Body"
+//    };
+//    screenCreator.create(serverScreen, null);
 }
 
 function auntificationCompleted(isSuccess, answerCode, description)

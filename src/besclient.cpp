@@ -1,27 +1,16 @@
 #include "besclient.h"
-
+#include <string>
+#include <QSslConfiguration>
 BesClient::BesClient()
 {
     socket = new QSslSocket(this);
     out = new QTextStream(socket);
     log = new LogSystem("latest.txt");
     config = new ConfigReader("mainConfig.toml");
-    ConfigReader test("serverconfig.json");
-    test.checkConfig("");
-    if(true)
-    {
-        log->logToFile("Файл конфигурации настроек подключений к серверу нарушен. Будут использованы стандартные настройки", LogSystem::LogMessageType::Error);
-        serverAddress = CLIENT_CONNECTION_SERVERADDRESS;
-        serverPort = CLIENT_CONNECTION_SERVERPORT;
-    }
-    else
-    {
-        QVariantMap configs = test.getConfigs();
-        serverAddress = configs["serverAddress"].toString();
-        serverPort = configs["serverPort"].toInt();
-    }
-
     setSignals();
+    config->loadConfig();
+    serverAddress = QString::fromStdString(config->getConfigs()["client_connection"]["server_address"].value<std::string>().value());
+    serverPort    = config->getConfigs()["client_connection"]["port"].value<int>().value();
 
     log->logToFile(QString("Установлены следующие настройки сервера: ip - %1, порт - %2").arg(serverAddress, QString::number(serverPort)));
 
@@ -54,49 +43,40 @@ void BesClient::setSignals()
             qDebug() << a;
         }
     });
-    //connect(config, SIGNAL(defaultConfigSet()),
-    //        this,   SLOT(defaultConfigSett()));
+    connect(config, SIGNAL(defaultConfigSet()),
+            this,   SLOT(defaultConfigSett()));
 }
 
 void BesClient::setSocketSettings()
 {
-    ConfigReader connectionConfig("connectionConfig.json");
     if(true)
     {
         socket->setPeerVerifyMode(QSslSocket::PeerVerifyMode::QueryPeer);
         socket->ignoreSslErrors();
         return;
     }
+    QSslConfiguration sslConfig;
 
-    QVariantMap configs = connectionConfig.getConfigs();
-    socket->setPeerVerifyMode(QSslSocket::PeerVerifyMode::QueryPeer);
-    if(configs["loadLocalCertificateAsCa"].toBool())
+    sslConfig.setPeerVerifyMode(QSslSocket::PeerVerifyMode::QueryPeer);
+    if(config->getConfigs()["ssl_configuration"]["load_local_certificate_as_ca"].value<bool>().value())
     {
-        QFile sert(configs["localCertificatePath"].toString());
+        QString sertFilePath = QString::fromStdString(config->getConfigs()["ssl_configuration"]["local_certificate_path"].value<std::string>().value());
+        QFile sert(sertFilePath);
         sert.open(QIODevice::ReadOnly);
-        socket->addCaCertificate(QSslCertificate(&sert));
+        sslConfig.addCaCertificate(QSslCertificate(&sert));
     }
-    if(configs["ignoreSslErrors"].toBool())
+    if(config->getConfigs()["ssl_configuration"]["ignore_ssl_errors"].value<bool>().value())
     {
         socket->ignoreSslErrors();
     }
+    socket->setSslConfiguration(sslConfig);
 }
 
 void BesClient::reloadServerProperties()
 {
-    ConfigReader test("serverconfig.json");
-    if(true)
-    {
-        log->logToFile("Файл конфигурации настроек подключений к серверу нарушен. Будут использованы стандартные настройки", LogSystem::LogMessageType::Error);
-        serverAddress = CLIENT_CONNECTION_SERVERADDRESS;
-        serverPort = CLIENT_CONNECTION_SERVERPORT;
-    }
-    else
-    {
-        QVariantMap configs = test.getConfigs();
-        serverAddress = configs["serverAddress"].toString();
-        serverPort = configs["serverPort"].toInt();
-    }
+    config->loadConfig();
+    serverAddress = QString::fromStdString(config->getConfigs()["client_connection"]["server_address"].value<std::string>().value());
+    serverPort    = config->getConfigs()["client_connection"]["port"].value<int>().value();
     log->logToFile(QString("Установлены следующие настройки сервера: ip - %1, порт - %2").arg(serverAddress, QString::number(serverPort)));
 }
 
