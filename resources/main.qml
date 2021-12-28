@@ -6,10 +6,10 @@ import "Functions.js" as Core
 
 
 ApplicationWindow  {
-    width: 640
-    height: 480
+    width: 800
+    height: 600
     visible: true
-    color: "#00000000"
+    color: "#000000"
     title: "BesMesClient"
 
     id: mains

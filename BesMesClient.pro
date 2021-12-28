@@ -31,6 +31,5 @@ HEADERS += \
     lib/include/toml.hpp \
     src/BesProtocol.h \
     src/besclient.h \
-    src/besclientdefaultconfigs.h \
     src/configreader.h \
     src/logsystem.h

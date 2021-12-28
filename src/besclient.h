@@ -2,13 +2,11 @@
 #define BESCLIENT_H
 #include "configreader.h"
 #include "logsystem.h"
-#include "besclientdefaultconfigs.h"
 #include "BesProtocol.h"
 
 #include <QObject>
 #include <QSslSocket>
 #include <QDebug>
-#include <QVariantMap>
 #include <QSslError>
 
 #define DEFAULT_CONFIG_ERROR_HEAD    QString("Файл конфигурации поврежден")
