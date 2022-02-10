@@ -2,9 +2,11 @@
     <qresource prefix="/">
         <file>main.qml</file>
         <file>WelcomeScreen.qml</file>
-        <file>Functions.js</file>
+        <file>main.js</file>
         <file>ServerScreen.qml</file>
         <file>FormScreen.qml</file>
         <file>Notification.qml</file>
+        <file>ScreenCreator.js</file>
+        <file>Timer.js</file>
     </qresource>
 </RCC>

@@ -32,6 +32,8 @@ public:
     Q_INVOKABLE void connectToServer();     //имя connect занято, так что пишем длинное название
     ///отключится от сервера
     Q_INVOKABLE void disconnectFromServer();
+    ///сделать запись в общий лог клиента
+    Q_INVOKABLE void log(QString logString);
 
     //процедуры общения клиента с сервером
     ///выполнить процедуру входа в аккаунт
@@ -40,6 +42,8 @@ public:
     Q_INVOKABLE void registration(QString name, QString surname, QString email, QString password);
     ///выполнить процедуру проверки кода регистрации
     Q_INVOKABLE void registrationCode(int registrationCode);
+
+    Q_INVOKABLE void makeRequest(QString requestType, QVector<QVariant> data);
 
 signals:
     ///сигнал издается при подключении к серверу
@@ -56,7 +60,8 @@ signals:
     void regCodeCheckingComplete(bool success, int answerCode, QString answerText);
 
     void clientNotification(QString header, QString message);
-
+    ///сигнал издается при необходимости передать информацию от с++ клиента к QML
+    void clientMessage(QString message, int errorCode, QVector<QVariant> additionalData);
 private:
     ///сокет подключения к серверу
     QSslSocket *socket;
@@ -67,7 +72,7 @@ private:
     ///порт сервера
     int serverPort;
     ///объект логирующей системы
-    LogSystem *log;
+    LogSystem *loggingSystem;
     ///сохраняет цель текущего обращения клиента к серверу для последующей обработки ответа
     RequestTarget target;
     ///если true, после разрыва соединения клиент попытается восстановить его
@@ -79,14 +84,12 @@ private:
     void setSignals();
 
 private slots:
-    ///
     void socketConnected();
     void socketDisconnected();
     void readData();
     void messageLoggedResend(QString messageLogged);
 
     void setSocketSettings();
-    void defaultConfigSett();
 };
 
 #endif // BESCLIENT_H

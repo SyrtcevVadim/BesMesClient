@@ -6,7 +6,6 @@ import QtQml 2.15
 Page{
     id: serverScreen
     signal backButtonClicked;
-    signal settingsChanged;
 
     signal connectButtonPressed;
     signal disconnectButtonPressed;

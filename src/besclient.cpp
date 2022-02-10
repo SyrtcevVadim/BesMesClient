@@ -5,14 +5,14 @@ BesClient::BesClient()
 {
     socket = new QSslSocket(this);
     out = new QTextStream(socket);
-    log = new LogSystem("latest.txt");
+    loggingSystem = new LogSystem("latest.txt");
     config = new ConfigReader("mainConfig.toml");
     setSignals();
     config->loadConfig();
     serverAddress = QString::fromStdString(config->getConfigs()["client_connection"]["server_address"].value<std::string>().value());
     serverPort    = config->getConfigs()["client_connection"]["port"].value<int>().value();
 
-    log->logToFile(QString("Установлены следующие настройки сервера: ip - %1, порт - %2").arg(serverAddress, QString::number(serverPort)));
+    loggingSystem->logToFile(QString("Установлены следующие настройки сервера: ip - %1, порт - %2").arg(serverAddress, QString::number(serverPort)));
 
 
     setSocketSettings();
@@ -22,7 +22,7 @@ BesClient::~BesClient()
 {
     delete socket;
     delete out;
-    delete log;
+    delete loggingSystem;
     delete config;
 }
 
@@ -34,7 +34,7 @@ void BesClient::setSignals()
             this,   SLOT(socketDisconnected()));
     connect(socket, SIGNAL(readyRead()),
             this,   SLOT(readData()));
-    connect(log , SIGNAL(messageLogged(QString)),
+    connect(loggingSystem , SIGNAL(messageLogged(QString)),
             this , SLOT (messageLoggedResend(QString)));
     connect(socket, QOverload<const QList<QSslError> &> :: of(&QSslSocket::sslErrors),
             [=](const QList<QSslError> &errors){
@@ -43,8 +43,6 @@ void BesClient::setSignals()
             qDebug() << a;
         }
     });
-    connect(config, SIGNAL(defaultConfigSet()),
-            this,   SLOT(defaultConfigSett()));
 }
 
 void BesClient::setSocketSettings()
@@ -70,27 +68,32 @@ void BesClient::reloadServerProperties()
     config->loadConfig();
     serverAddress = QString::fromStdString(config->getConfigs()["client_connection"]["server_address"].value<std::string>().value());
     serverPort    = config->getConfigs()["client_connection"]["port"].value<int>().value();
-    log->logToFile(QString("Установлены следующие настройки сервера: ip - %1, порт - %2").arg(serverAddress, QString::number(serverPort)));
+    loggingSystem->logToFile(QString("Установлены следующие настройки сервера: ip - %1, порт - %2").arg(serverAddress, QString::number(serverPort)));
 }
 
 void BesClient::connectToServer()
 {
+    QVector<QVariant> testArray;
+    testArray.append(QVariant(QString("string")));
+    testArray.append(QVariant(123));
+    testArray.append(QVariant(true));
+    emit clientMessage("testSignal", 0, testArray);
     if(socket->isEncrypted())
     {
-        log->logToFile("не надо коннектится второй раз");
+        loggingSystem->logToFile("не надо коннектится второй раз");
         return;
     }
     qDebug() << "Попытка подключения";
     if(serverAddress == "")
     {
-        log->logToFile("Не введены адрес и порт сервера");
+        loggingSystem->logToFile("Не введены адрес и порт сервера");
         return;
     }
-    log->logToFile("Попытка подключения к серверу");
+    loggingSystem->logToFile("Попытка подключения к серверу");
     socket->connectToHostEncrypted(serverAddress, serverPort);
     if(!socket->waitForEncrypted(2000))  //TODO избавится от ожидания
     {
-        log->logToFile("Ошибка подключения к серверу! Возможно, сервер отключён");
+        loggingSystem->logToFile("Ошибка подключения к серверу! Возможно, сервер отключён");
     }
     qDebug()<<socket->isEncrypted();
 }
@@ -102,12 +105,13 @@ void BesClient::disconnectFromServer()
 
 void BesClient::login(QString login, QString password)
 {
+    emit clientMessage("login", 0, QVector<QVariant>());
     if(!socket->isEncrypted())
     {
-        log->logToFile("Подключение к серверу не установлено, отмена операции", LogSystem::LogMessageType::Error);
+        loggingSystem->logToFile("Подключение к серверу не установлено, отмена операции", LogSystem::LogMessageType::Error);
         return;
     }
-    log->logToFile(QString("Получены следующие данные для входа: %1 %2").arg(login, password));
+    loggingSystem->logToFile(QString("Получены следующие данные для входа: %1 %2").arg(login, password));
     if(!socket->isWritable())
     {
         qDebug() << "Невозможно отправить сообщение на сервер";
@@ -115,7 +119,7 @@ void BesClient::login(QString login, QString password)
     }
     target = RequestTarget::Login;
     QString outString = QString(LOGIN_COMMAND) + QString(" %1 %2\r\n").arg(login, password);
-    log->logToFile(outString);
+    loggingSystem->logToFile(outString);
     *out<<outString;
     out->flush();
 }
@@ -124,10 +128,10 @@ void BesClient::registration(QString name, QString surname, QString email, QStri
 {
     if(!socket->isEncrypted())
     {
-        log->logToFile("Подключение к серверу не установлено, отмена операции", LogSystem::LogMessageType::Error);
+        loggingSystem->logToFile("Подключение к серверу не установлено, отмена операции", LogSystem::LogMessageType::Error);
         return;
     }
-    log->logToFile(QString("Получены следующие данные для регистрации: %1 %2 %3 %4").arg(name, surname, email, password));
+    loggingSystem->logToFile(QString("Получены следующие данные для регистрации: %1 %2 %3 %4").arg(name, surname, email, password));
     if(!socket->isWritable())
     {
         qDebug() << "Невозможно отправить сообщение на сервер";
@@ -135,7 +139,7 @@ void BesClient::registration(QString name, QString surname, QString email, QStri
     }
     target = RequestTarget::Registration;
     QString outString = QString(REGISTRATION_COMMAND) + QString(" %1 %2 %3 %4\r\n").arg(name, surname, email, password);
-    log->logToFile(outString);
+    loggingSystem->logToFile(outString);
     *out<<outString;
     out->flush();
 }
@@ -144,10 +148,10 @@ void BesClient::registrationCode(int registrationCode)
 {
     if(!socket->isEncrypted())
     {
-        log->logToFile("Подключение к серверу не установлено, отмена операции", LogSystem::LogMessageType::Error);
+        loggingSystem->logToFile("Подключение к серверу не установлено, отмена операции", LogSystem::LogMessageType::Error);
         return;
     }
-    log->logToFile(QString("Отправка кода %1 на проверку").arg(registrationCode));
+    loggingSystem->logToFile(QString("Отправка кода %1 на проверку").arg(registrationCode));
     if(!socket->isWritable())
     {
         qDebug() << "Невозможно отправить сообщение на сервер";
@@ -155,7 +159,7 @@ void BesClient::registrationCode(int registrationCode)
     }
     target = RequestTarget::SendRegCode;
     QString outString = QString(VERIFICATION_COMMAND) + QString(" %1\r\n").arg(registrationCode);
-    log->logToFile(outString);
+    loggingSystem->logToFile(outString);
     *out<<outString;
     out->flush();
 }
@@ -180,7 +184,7 @@ void BesClient::readData()
     {
         return;
     }
-    log->logToFile(data);
+    loggingSystem->logToFile(data);
 
     QChar status = data[0];
 
@@ -191,19 +195,19 @@ void BesClient::readData()
         {
             case RequestTarget::Login:
             {
-                log->logToFile("Успешная авторизация");
+                loggingSystem->logToFile("Успешная авторизация");
                 emit auntificationComplete(true, 0, answerString); // код 0 - авторизация успешна
                 break;
             }
             case RequestTarget::Registration:
             {
-                log->logToFile("Успешная регистрация, переход на экран ввода кода с почты");
+                loggingSystem->logToFile("Успешная регистрация, переход на экран ввода кода с почты");
                 emit registrationComplete(true, 0, answerString);
                 break;
             }
             case RequestTarget::SendRegCode:
             {
-                log->logToFile("Код регистрации верный, переход на экран мессенджера");
+                loggingSystem->logToFile("Код регистрации верный, переход на экран мессенджера");
                 emit regCodeCheckingComplete(true, 0, answerString);
                 break;
             }
@@ -219,19 +223,19 @@ void BesClient::readData()
         {
             case RequestTarget::Login:
             {
-                log->logToFile("Ошибка авторизации, код ошибки " + QString::number(answerCode), LogSystem::LogMessageType::Error);
+                loggingSystem->logToFile("Ошибка авторизации, код ошибки " + QString::number(answerCode), LogSystem::LogMessageType::Error);
                 emit auntificationComplete(false, answerCode, answerString);
                 break;
             }
             case RequestTarget::Registration:
             {
-                log->logToFile("Ошибка регистрации, код ошибки " + QString::number(answerCode), LogSystem::LogMessageType::Error);
+                loggingSystem->logToFile("Ошибка регистрации, код ошибки " + QString::number(answerCode), LogSystem::LogMessageType::Error);
                 emit registrationComplete(false, answerCode, answerString);
                 break;
             }
             case RequestTarget::SendRegCode:
             {
-                log->logToFile("Ошибка проверки кода регистрации, код ошибки " + QString::number(answerCode), LogSystem::LogMessageType::Error);
+                loggingSystem->logToFile("Ошибка проверки кода регистрации, код ошибки " + QString::number(answerCode), LogSystem::LogMessageType::Error);
                 emit regCodeCheckingComplete(false, answerCode, answerString);
                 break;
             }
@@ -247,7 +251,20 @@ void BesClient::messageLoggedResend(QString message)
     emit messageLogged(message);
 }
 
-void BesClient::defaultConfigSett()
+void BesClient::log(QString externalMessage)
 {
-    emit clientNotification(DEFAULT_CONFIG_ERROR_HEAD, DEFAULT_CONFIG_ERROR_MESSAGE);
+    loggingSystem->logToFile(externalMessage);
+}
+
+void BesClient::makeRequest(QString requestType, QVector<QVariant> data)
+{
+    if(requestType == ""){
+
+    }
+    else if(requestType == ""){
+
+    }
+    else{
+        loggingSystem->logToFile("Неизвестный запрос " + requestType, LogSystem::LogMessageType::Error);
+    }
 }

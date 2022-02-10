@@ -15,6 +15,8 @@ Page {
     property alias finalButtonText: roundButton.text
     property alias labelText: label.text
 
+    property var getMessage;
+
     signal finalButtonClicked;
     signal backButtonClicked;
 
