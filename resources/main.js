@@ -1,5 +1,9 @@
 .import "ScreenCreator.js" as SC
 
+function Timer() {
+    return Qt.createQmlObject("import QtQuick 2.0; Timer {}", mains);
+}
+
 function log(message) //вывод логов в экран разработчика
 {
     serverScreen.logTextAreaText += message
@@ -27,9 +31,9 @@ function backToWelcomeScreenButtonClicked()
 function welcomeScreen_onLoginButtonClicked(){
     var screenCreator = new SC.ScreenCreator("FormScreen.qml");
     screenCreator.parameters = {
-        namesArray: ["Почта", "Пароль"],
-        textFieldsArray: ["Введите почту", "Введите пароль"],
-        finalButtonText: "Войти",
+        namesArray: [qsTr("Почта"), qsTr("Пароль")],
+        textFieldsArray: [qsTr("Введите почту"), qsTr("Введите пароль")],
+        finalButtonText: qsTr("Войти"),
         labelText: "Вход",
         id: "loginScreen"
     };
@@ -54,10 +58,10 @@ function welcomeScreen_onLoginButtonClicked(){
 function welcomeScreen_onRegButtonClicked(){
     var screenCreator = new SC.ScreenCreator("FormScreen.qml");
     screenCreator.parameters = {
-        namesArray: ["Имя", "Фамилия", "Почта", "Пароль"],
-        textFieldsArray: ["Введите имя", "Введите фамилию", "Введите почту", "Введите пароль"],
-        finalButtonText: "Зарегистрироваться",
-        labelText: "Регистрация",
+        namesArray: [qsTr("Имя"), qsTr("Фамилия"), qsTr("Почта"), qsTr("Пароль")],
+        textFieldsArray: [qsTr("Введите имя"), qsTr("Введите фамилию"), qsTr("Введите почту"), qsTr("Введите пароль")],
+        finalButtonText: qsTr("Зарегистрироваться"),
+        labelText: qsTr("Регистрация"),
         id: "regScreen"
     };
     function getMessage(messageStr, errorCode, additionalDataArray){
@@ -85,10 +89,10 @@ function registrationComplete (errorCode, dataArray)
         //TODO: сюда первым делом вкинуть маску на ввод только чисел
         var screenCreator = new SC.ScreenCreator("FormScreen.qml");
         screenCreator.parameters = {
-            namesArray: ["Код"],
-            textFieldsArray: ["Введите код"],
-            finalButtonText: "Отправить",
-            labelText: "Подтверждение почты",
+            namesArray: [qsTr("Код")],
+            textFieldsArray: [qsTr("Введите код")],
+            finalButtonText: qsTr("Отправить"),
+            labelText: qsTr("Подтверждение почты"),
             id: "regCodeScreen"
         };
         function getMessage(messageStr, errorCode, additionalDataArray){

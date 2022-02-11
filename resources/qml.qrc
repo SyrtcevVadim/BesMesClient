@@ -7,6 +7,5 @@
         <file>FormScreen.qml</file>
         <file>Notification.qml</file>
         <file>ScreenCreator.js</file>
-        <file>Timer.js</file>
     </qresource>
 </RCC>

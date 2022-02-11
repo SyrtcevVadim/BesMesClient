@@ -23,7 +23,7 @@ ApplicationWindow  {
             console.log("статус сервера - Отключен");
             serverScreen.serverStatus = "Отключен";
         }
-        function onMessageLogged (message) {Core.log(message)}
+        function onMessageLogged (message) {Functions.log(message)}
         function onClientMessage (messageStr, errorCode, additionalDataArray) {
             switch(messageStr)
             {

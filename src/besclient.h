@@ -9,15 +9,12 @@
 #include <QDebug>
 #include <QSslError>
 
-#define DEFAULT_CONFIG_ERROR_HEAD    QString("Файл конфигурации поврежден")
-#define DEFAULT_CONFIG_ERROR_MESSAGE QString("Установлены настройки по умолчанию\nЕсли необходимо, измените настройки и перезапустите клиент")
-
 enum class RequestTarget
 {
     None,
     Login,
     Registration,
-    SendRegCode
+    RegCode
 };
 
 class BesClient : public QObject
@@ -35,31 +32,18 @@ public:
     ///сделать запись в общий лог клиента
     Q_INVOKABLE void log(QString logString);
 
-    //процедуры общения клиента с сервером
-    ///выполнить процедуру входа в аккаунт
-    Q_INVOKABLE void login(QString login, QString password);
-    ///выполнить процедуру регистрации
-    Q_INVOKABLE void registration(QString name, QString surname, QString email, QString password);
-    ///выполнить процедуру проверки кода регистрации
-    Q_INVOKABLE void registrationCode(int registrationCode);
-
-    Q_INVOKABLE void makeRequest(QString requestType, QVector<QVariant> data);
+    ///данный метод исполняет запрос на получение данных с сервера типа requestType, используя данные, предоставленные в data\n
+    ///запросы могут быть следующих типов:
+    ///'login' - оправить запрос на авторизацию, массив data должен содержать данные для авторизации(логин в 0 элементе и пароль в 1 элементе)
+    ///'registration' - запрос на авторизацию, массив data - 0 элемент - имя, 1 - фамилия, 2 - почта, 3 - пароль
+    ///'regCode' - запрос на верификацию почты, в 0 элементе массива должен содержаться сам код
+    Q_INVOKABLE void makeRequest(QString requestType, QVector<QString> data);
 
 signals:
     ///сигнал издается при подключении к серверу
     void connected();
     ///сигнал издается при отключении от сервера
     void disconnected();
-    ///издается после окончания процедуры входа в аккаунт
-    void auntificationComplete(bool success, int answerCode, QString answerText);
-    ///сигнал логирующей системы, высылаемый после регистрации сообщения
-    void messageLogged(QString messageLogged);
-    ///издается после окончания процедуры регистрации, при успехе - перейти на экран ввода кода регистрации
-    void registrationComplete(bool success, int answerCode, QString answerText);
-    ///издается после окончания процедуры проверки кода регистрации
-    void regCodeCheckingComplete(bool success, int answerCode, QString answerText);
-
-    void clientNotification(QString header, QString message);
     ///сигнал издается при необходимости передать информацию от с++ клиента к QML
     void clientMessage(QString message, int errorCode, QVector<QVariant> additionalData);
 private:

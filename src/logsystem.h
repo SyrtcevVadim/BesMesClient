@@ -1,9 +1,9 @@
 #ifndef LOGSYSTEM_H
 #define LOGSYSTEM_H
-// Автор: Сырцев Вадим Игоревич
 #include <QThread>
 #include <QFile>
 #include <QTextStream>
+#include <QLocale>
 
 #define LOG_FILE_NAME "latest.txt"
 
