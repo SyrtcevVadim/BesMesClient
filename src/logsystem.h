@@ -1,8 +1,12 @@
 #ifndef LOGSYSTEM_H
 #define LOGSYSTEM_H
+
 #include <QThread>
 #include <QFile>
 #include <QTextStream>
+#include <QLocale>
+#include <QDebug>
+#include <QDateTime>
 #include <QLocale>
 
 #define LOG_FILE_NAME "latest.txt"

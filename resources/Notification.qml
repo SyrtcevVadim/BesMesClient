@@ -1,54 +1,30 @@
-import QtQuick.Window 2.2
-import QtQuick.Controls 2.1
-import QtQuick 2.12
-import QtQml 2.15
+import QtQuick 2.15
+import QtQuick.Controls 2.15
 
-Item {
-    id: pop
-    width: 150
-    height: 60
+Popup {
+    id: popup
+    focus: false
+    width: 250
+    height: header.contentHeight + body.contentHeight
     property alias headerText: header.text
     property alias bodyText: body.text
-    property alias backgroundColor: background.color
     property alias textColor: header.color
-    property int iterator
-    visible: false
-    Component.onCompleted: {
-        startTimer.start();
-        visible = true;
-        opacity = 0;
-        iterator = 0;
-    }
-    Timer{
-        id: startTimer;
-        interval: 50
-        running: false
-        repeat: true
-        onTriggered: function(){
-            if(iterator < 20)
-            {
-                console.log(1)
-                opacity = iterator / 30
-            }
-            else if(iterator > 60 && iterator != 80)
-            {
-                console.log(2)
-                opacity = (80 - iterator)/ 30;
-            }
-            else if(iterator == 80)
-            {
-                console.log(3)
-                pop.destroy();
-            }
-            console.log(iterator);
-            iterator += 1;
+
+    closePolicy: Popup.NoAutoClose
+
+    Timer {
+        id: timer
+        interval: 5000
+        running: true
+        repeat: false
+        onTriggered: {
+            popup.close()
         }
     }
-    Rectangle {
-        id: background
-        color: "#808080"
-        anchors.fill: parent
-        radius: parent.width / 10
+    contentItem: MouseArea {
+        onClicked: {
+            popup.close()
+        }
     }
 
     Text {
@@ -59,10 +35,11 @@ Item {
         anchors.top: parent.top
         font.pixelSize: 17
         horizontalAlignment: Text.AlignHCenter
+        wrapMode: Text.WordWrap
     }
     Text {
         id: body
-        text: "111"
+        text: "121212121 121212121 121212 121212121111111 111 111 11 11  11 1111 111111 1111111111111"
         color: header.color
         anchors.left: parent.left
         anchors.right: parent.right
@@ -70,7 +47,11 @@ Item {
         anchors.bottom: parent.bottom
         font.pixelSize: 17
         horizontalAlignment: Text.AlignHCenter
-        anchors.topMargin: 2
-        anchors.bottomMargin: 0
+        wrapMode: Text.WordWrap
+    }
+    onOpened: {
+        timer.start()
     }
 }
+
+

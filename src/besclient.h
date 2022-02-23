@@ -2,24 +2,28 @@
 #define BESCLIENT_H
 #include "configreader.h"
 #include "logsystem.h"
-#include "BesProtocol.h"
+#include "besprotocol.h"
 
 #include <QObject>
 #include <QSslSocket>
 #include <QDebug>
 #include <QSslError>
+#include <QVector>
+#include <QSslConfiguration>
 
-enum class RequestTarget
-{
-    None,
-    Login,
-    Registration,
-    RegCode
-};
+#include <string>
 
 class BesClient : public QObject
 {
     Q_OBJECT
+private:
+    enum class RequestTarget
+    {
+        None,
+        Login,
+        Registration,
+        RegCode
+    };
 public:
     BesClient();
     ~BesClient();

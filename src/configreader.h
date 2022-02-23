@@ -1,11 +1,14 @@
 #ifndef CONFIGREADER_H
 #define CONFIGREADER_H
+
+#include "lib/include/toml.hpp"
+
 #include <QString>
 #include <QFile>
 #include <QDir>
+
 #include <string>
 
-#include "lib/include/toml.hpp"
 
 class ConfigReader : public QObject
 {

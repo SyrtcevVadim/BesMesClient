@@ -11,8 +11,8 @@ ApplicationWindow  {
     visible: true
     color: "#000000"
     title: "BesMesClient"
-
     id: mains
+
     Connections{
         target: BesClient
         function onConnected() {
@@ -23,12 +23,12 @@ ApplicationWindow  {
             console.log("статус сервера - Отключен");
             serverScreen.serverStatus = "Отключен";
         }
-        function onMessageLogged (message) {Functions.log(message)}
         function onClientMessage (messageStr, errorCode, additionalDataArray) {
+            console.log(messageStr);
             switch(messageStr)
             {
-            case "messageLogged":
-                Core.log(additionalDataArray[0]);
+            case "log":
+                Functions.log(additionalDataArray[0]);
                 break;
 
             default:
@@ -37,6 +37,15 @@ ApplicationWindow  {
             }
         }
     }
+    NotificationManager{
+        id: notifications
+        window: mains
+        anchors.right: parent.right
+        anchors.top: parent.top
+        ySpacing: 10
+        width: 150
+    }
+
     StackView{
         id: mainStack
         anchors.fill: parent

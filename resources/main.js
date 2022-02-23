@@ -7,14 +7,6 @@ function Timer() {
 function log(message) //вывод логов в экран разработчика
 {
     serverScreen.logTextAreaText += message
-//    var screenCreator = new ScreenCreator("Notification.qml");
-//    screenCreator.parameters = {
-//        headerText: "Header",
-//        backgroundColor: "#808080",
-//        textColor: "#ffffff",
-//        bodyText: "Body"
-//    };
-//    screenCreator.create(serverScreen, null);
 }
 
 function backToWelcomeScreenButtonClicked()
@@ -82,6 +74,18 @@ function welcomeScreen_onRegButtonClicked(){
     });
 }
 
+function loginComplete (errorCode, dataArray)
+{
+    if(errorCode === 0)
+    {
+
+    }
+    else
+    {
+        notifications.notify(dataArray[0], "Ошибка авторизации (" + errorCode + ")");
+    }
+}
+
 function registrationComplete (errorCode, dataArray)
 {
     if(errorCode === 0)
@@ -114,6 +118,6 @@ function registrationComplete (errorCode, dataArray)
     }
     else
     {
-        //надо писать уведомления, без них уже сложно
+        notifications.notify(dataArray[0], "Ошибка регистрации (" + errorCode + ")");
     }
 }

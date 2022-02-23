@@ -6,6 +6,7 @@
         <file>ServerScreen.qml</file>
         <file>FormScreen.qml</file>
         <file>Notification.qml</file>
+        <file>NotificationManager.qml</file>
         <file>ScreenCreator.js</file>
     </qresource>
 </RCC>

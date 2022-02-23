@@ -1,6 +1,5 @@
 #include "besclient.h"
-#include <string>
-#include <QSslConfiguration>
+
 BesClient::BesClient()
 {
     socket = new QSslSocket(this);
@@ -166,19 +165,19 @@ void BesClient::readData()
             case RequestTarget::Login:
             {
                 loggingSystem->logToFile("Успешная авторизация");
-                emit clientMessage("loginCompleted", 0, QVector({QVariant(answerString)})); // код 0 - авторизация успешна
+                emit clientMessage("loginCompleted", 0, QVector<QVariant>({QVariant(answerString)})); // код 0 - авторизация успешна
                 break;
             }
             case RequestTarget::Registration:
             {
                 loggingSystem->logToFile("Успешная регистрация, переход на экран ввода кода с почты");
-                emit clientMessage("registrationCompleted", 0, QVector({QVariant(answerString)}));
+                emit clientMessage("registrationCompleted", 0, QVector<QVariant>({QVariant(answerString)}));
                 break;
             }
             case RequestTarget::RegCode:
             {
                 loggingSystem->logToFile("Код регистрации верный, переход на экран мессенджера");
-                emit clientMessage("regCodeCompleted", 0, QVector({QVariant(answerString)}));
+                emit clientMessage("regCodeCompleted", 0, QVector<QVariant>({QVariant(answerString)}));
                 break;
             }
         default:
@@ -194,19 +193,19 @@ void BesClient::readData()
             case RequestTarget::Login:
             {
                 loggingSystem->logToFile("Ошибка авторизации, код ошибки " + QString::number(answerCode), LogSystem::LogMessageType::Error);
-                emit clientMessage("loginCompleted", answerCode, QVector({QVariant(answerString)}));
+                emit clientMessage("loginCompleted", answerCode, QVector<QVariant>({QVariant(answerString)}));
                 break;
             }
             case RequestTarget::Registration:
             {
                 loggingSystem->logToFile("Ошибка регистрации, код ошибки " + QString::number(answerCode), LogSystem::LogMessageType::Error);
-                emit clientMessage("registrationCompleted", answerCode, QVector({QVariant(answerString)}));
+                emit clientMessage("registrationCompleted", answerCode, QVector<QVariant>({QVariant(answerString)}));
                 break;
             }
             case RequestTarget::RegCode:
             {
                 loggingSystem->logToFile("Ошибка проверки кода регистрации, код ошибки " + QString::number(answerCode), LogSystem::LogMessageType::Error);
-                emit clientMessage("regCodeCompleted", answerCode, QVector({QVariant(answerString)}));
+                emit clientMessage("regCodeCompleted", answerCode, QVector<QVariant>({QVariant(answerString)}));
                 break;
             }
             default:
@@ -218,7 +217,7 @@ void BesClient::readData()
 
 void BesClient::messageLoggedResend(QString message)
 {
-    emit clientMessage("log", 0, QVector({QVariant(message)}));;
+    emit clientMessage("log", 0, QVector<QVariant>({QVariant(message)}));;
 }
 
 void BesClient::log(QString externalMessage)

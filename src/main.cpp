@@ -1,7 +1,8 @@
+#include "src/besclient.h"
+
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
-#include "src/besclient.h"
 
 int main(int argc, char *argv[])
 {

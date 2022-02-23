@@ -7,10 +7,11 @@ CONFIG += c++17
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-        src/besclient.cpp \
-        src/configreader.cpp \
-        src/logsystem.cpp \
-        src\main.cpp
+        $$files(src/*.cpp) \
+
+HEADERS += \
+    lib\include\toml.hpp \
+    $$files(src/*.h) \
 
 RESOURCES += \
         resources/config/configTemplates.qrc \
@@ -27,9 +28,3 @@ qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
-HEADERS += \
-    lib/include/toml.hpp \
-    src/BesProtocol.h \
-    src/besclient.h \
-    src/configreader.h \
-    src/logsystem.h

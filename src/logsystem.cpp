@@ -1,7 +1,4 @@
 #include "logsystem.h"
-#include <QDebug>
-#include <QDateTime>
-#include <QLocale>
 
 LogSystem::LogSystem(const QString &logFileName, QObject *parent) : QObject(parent)
 {
