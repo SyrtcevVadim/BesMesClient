@@ -8,5 +8,7 @@
         <file>Notification.qml</file>
         <file>NotificationManager.qml</file>
         <file>ScreenCreator.js</file>
+        <file>ChatListItem.qml</file>
+        <file>ChatScreen.qml</file>
     </qresource>
 </RCC>

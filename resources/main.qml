@@ -46,10 +46,16 @@ ApplicationWindow  {
         width: 150
     }
 
+    ChatScreen {
+        id: startChat
+        //anchors.fill: parent
+        visible: false
+    }
+
     StackView{
         id: mainStack
         anchors.fill: parent
-        initialItem: welcomeScreen
+        initialItem: startChat
     }
     WelcomeScreen {
         id: welcomeScreen
