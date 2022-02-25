@@ -1,4 +1,5 @@
-import QtQuick 2.0
+import QtQuick 2.12
+import QtQuick.Controls 2.15
 
 Item {
     id: root
@@ -6,8 +7,6 @@ Item {
 
     Rectangle {
         id: menurect
-        x: 0
-        y: 0
         width: root.width / 3
         height: root.height
 
@@ -24,6 +23,7 @@ Item {
             color: parent.color
             border.color: parent.border.color
             border.width: parent.border.width
+            z: 1
         }
 
         ListView {
@@ -31,13 +31,15 @@ Item {
             anchors.top: titlescreen.bottom
             width: parent.width
             anchors.bottom: buttonmenu.top
+            ScrollBar.vertical: ScrollBar{}
 
             delegate: ChatListItem {
                 width: listView.width
             }
-            model: 15
+            model: 30
         }
-
+// Добавить архив, чтобы хранить петабайты порнухи
+//(с) Глава Департамента Разработки 03ПГ
         Rectangle {
             id: buttonmenu
             anchors.bottom: parent.bottom

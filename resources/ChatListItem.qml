@@ -5,6 +5,18 @@ Item {
     width: 200
     height: 60
 
+    property alias chatName: nameChat.text
+    property alias chatMessage: messageChat.text
+
+    signal clicked;
+
+    MouseArea{
+        onClicked: {
+            rootitem.clicked();
+        }
+        anchors.fill: parent;
+    }
+
     Rectangle {
         id: icon
 
