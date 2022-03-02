@@ -33,7 +33,7 @@ Item {
         radius: width/2
         border.color: "black" //цвет обводки
         border.width: 2 //ширина обводки
-        color: "red"
+        color: Qt.rgba(Math.random(),Math.random(),Math.random(),1) //"red"
     }
 
     Text {

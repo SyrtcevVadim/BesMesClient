@@ -7,7 +7,7 @@ Item {
 
     Rectangle {
         id: menurect
-        width: root.width / 3
+        width: root.width > 600 ? root.width * 0.36 : root.width
         height: root.height
 
         color: "#B0FFDE"
