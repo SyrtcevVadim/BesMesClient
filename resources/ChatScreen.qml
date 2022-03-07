@@ -5,7 +5,7 @@ Item {
     id: root
     visible: true
     onWidthChanged: () => checkState();
-
+    state: "desktop"
     Component.onCompleted: () => checkState();
 
     function checkState()
@@ -82,13 +82,13 @@ Item {
         }
     }
 
-    Rectangle {
+    ChatDialog {
         id: chatrect
-        width: root.width - menurect.width
-        height: root.height
         anchors.left: menurect.right
-        border.color: "#9AE4C2"
-        border.width: 2
+        anchors.right: root.right
+        anchors.top: root.top
+        anchors.bottom: root.bottom
+        backgroundColor: "#FFFFFF"
     }
 }
 

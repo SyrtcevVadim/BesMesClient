@@ -10,5 +10,7 @@
         <file>ScreenCreator.js</file>
         <file>ChatListItem.qml</file>
         <file>ChatScreen.qml</file>
+        <file>ChatDialog.qml</file>
+        <file>ChatDialogMessage.qml</file>
     </qresource>
 </RCC>
