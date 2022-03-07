@@ -4,12 +4,42 @@ import QtQuick.Controls 2.15
 Item {
     id: root
     visible: true
+    onWidthChanged: () => checkState();
+
+    Component.onCompleted: () => checkState();
+
+    function checkState()
+    {
+        if(root.width > 600){
+            root.state = "desktop"
+        }
+        else
+        {
+            root.state = "mobile"
+        }
+    }
+    states: [
+        State{
+            name: "desktop"
+            PropertyChanges {
+                target: menurect;
+                width: root.width * 0.36
+            }
+        },
+        State{
+            name: "mobile"
+            PropertyChanges {
+                target: menurect
+                width: root.width
+            }
+        }
+
+    ]
 
     Rectangle {
         id: menurect
-        width: root.width > 600 ? root.width * 0.36 : root.width
         height: root.height
-
+        z: 1
         color: "#B0FFDE"
         border.color: "#9AE4C2"
         border.width: 2
@@ -23,7 +53,7 @@ Item {
             color: parent.color
             border.color: parent.border.color
             border.width: parent.border.width
-            z: 1
+            z: parent.z + 1
         }
 
         ListView {
@@ -61,3 +91,10 @@ Item {
         border.width: 2
     }
 }
+
+/*##^##
+Designer {
+    D{i:0;autoSize:true;formeditorZoom:1.5;height:480;width:640}D{i:6}D{i:7}D{i:10}D{i:5}
+D{i:11}
+}
+##^##*/
