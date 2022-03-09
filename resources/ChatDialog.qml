@@ -12,6 +12,7 @@ Item {
         anchors.fill: root
         model: chatModel
         spacing: 10
+        verticalLayoutDirection: ListView.BottomToTop
         delegate: ChatDialogMessage{
             backgroundColor: color
             messageContent: message
@@ -32,8 +33,8 @@ Item {
         id: chatModel
         ListElement{
             color: "#73FFC5"
-            name: "Владимир Воропаев fffffff"
-            message: "Успеешьпосрокам?hhhhhhhhhh hhhhhhhhhhhhh hhhhhhhhhhh hhhhhhhhhh hhhhhhh"
+            name: "Владимир Воропаев"
+            message: "Успеешь по срокам?"
 
         }
         ListElement{
