@@ -16,14 +16,24 @@ Item {
             backgroundColor: color
             messageContent: message
             messageSenderName: name
+            width: getWidth()
+            function getWidth(){
+                var realWidth = contentWidth + 50
+                if(realWidth > root.width*0.85){
+                    return root.width * 0.85
+                }
+                else{
+                    return realWidth
+                }
+            }
         }
     }
     ListModel{
         id: chatModel
         ListElement{
             color: "#73FFC5"
-            name: "Владимир Воропаев"
-            message: "Успеешь по срокам?"
+            name: "Владимир Воропаев fffffff"
+            message: "Успеешьпосрокам?hhhhhhhhhh hhhhhhhhhhhhh hhhhhhhhhhh hhhhhhhhhh hhhhhhh"
 
         }
         ListElement{
