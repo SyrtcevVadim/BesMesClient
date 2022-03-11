@@ -8,11 +8,24 @@ Item {
         anchors.fill: root
         color: "#FFFFFF"
     }
+    Rectangle{
+        id: header
+        z:1
+        anchors.top: root.top
+        anchors.left: root.left
+        anchors.right: root.right
+        color: "#B0FFDE"
+        height: 60
+    }
+
     ListView{
-        anchors.fill: root
+        id: messageList
+        anchors.top: header.bottom
+        anchors.left: root.left
+        anchors.right: root.right
+        anchors.bottom: footer.top
         model: chatModel
         spacing: 10
-        id: messageList
         verticalLayoutDirection: ListView.BottomToTop
         delegate: Row{
             layoutDirection: isSender ? Qt.RightToLeft : Qt.LeftToRight
@@ -34,6 +47,16 @@ Item {
             }
         }
     }
+    Rectangle{
+        id: footer
+        z:1
+        anchors.left: root.left
+        anchors.right: root.right
+        anchors.bottom: root.bottom
+        color: "#B0FFDE"
+        height: 50
+    }
+
     ListModel{
         id: chatModel
         ListElement{

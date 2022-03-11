@@ -13,9 +13,12 @@ Item {
         if(root.width > 600){
             root.state = "desktop"
         }
-        else
+        else if(chatrect.chatActive)
         {
-            root.state = "mobile"
+            root.state = "mobile-chat"
+        }
+        else{
+            root.state = "mobile-menu"
         }
     }
     states: [
@@ -24,14 +27,25 @@ Item {
             PropertyChanges {
                 target: menurect;
                 width: root.width * 0.36
+                visible: true
             }
         },
         State{
-            name: "mobile"
+            name: "mobile-menu"
             PropertyChanges {
                 target: menurect
                 width: root.width
+                visible: true
             }
+        },
+        State{
+            name: "mobile-chat"
+            PropertyChanges {
+                target: menurect
+                width: 0
+                visible: false
+            }
+
         }
     ]
     Rectangle {
@@ -71,7 +85,7 @@ Item {
         Rectangle {
             id: buttonmenu
             anchors.bottom: parent.bottom
-            height: 60
+            height: 50
             width: parent.width
             anchors.left: parent.left
             color: parent.color
@@ -82,6 +96,7 @@ Item {
 
     ChatDialog {
         id: chatrect
+        property bool chatActive: true
         anchors.left: menurect.right
         anchors.right: root.right
         anchors.top: root.top
