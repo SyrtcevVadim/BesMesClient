@@ -33,9 +33,7 @@ Item {
                 width: root.width
             }
         }
-
     ]
-
     Rectangle {
         id: menurect
         height: root.height
