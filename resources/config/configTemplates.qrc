@@ -1,5 +1,0 @@
-<RCC>
-    <qresource prefix="/">
-        <file>mainConfig.toml</file>
-    </qresource>
-</RCC>
