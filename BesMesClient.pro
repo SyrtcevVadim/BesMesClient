@@ -1,15 +1,9 @@
 QT += quick
 
 SOURCES += \
-        $$files(src/*.cpp) \
-        src/configreader.cpp \
-        src/loggingsystem.cpp \
-        src/serverconnectorcomponent.cpp
+        $$files(src/*.cpp)
 HEADERS += \
-        $$files(src/*.h) \
-        src/configreader.h \
-        src/loggingsystem.h \
-        src/serverconnectorcomponent.h
+        $$files(src/*.h)
 
 #resources.files = qml/main.qml
 #resources.prefix = /$${TARGET}
