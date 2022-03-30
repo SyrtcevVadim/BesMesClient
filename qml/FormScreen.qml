@@ -6,8 +6,8 @@ import QtQml.Models
 
 Page {
     id: root
-    property variant namesArray: ["One", "Two", "Three"]
-    property variant textFieldsArray: ["oneText", "twoText", "threeText"]
+    property var namesArray: ["One", "Two", "Three"]
+    property var textFieldsArray: ["oneText", "twoText", "threeText"]
     property alias finalButtonText: roundButton.text
     property alias labelText: label.text
 
@@ -15,15 +15,9 @@ Page {
     signal closed;
 
     property int itemHeight: 40
-    property int fontSize: itemHeight/3
+    property int fontSize: 15
 
-    Component.onCompleted: {
-        for(var i = 0; i < namesArray.length; i++)
-        {
-            namesModel.append     ({"name": namesArray[i]});
-            textFieldsModel.append({"text": textFieldsArray[i]})
-        }
-    }
+
 
     function getFieldsValues()
     {
@@ -67,9 +61,9 @@ Page {
             spacing: 10
             Repeater{
                 id: textRepeater
-                model: namesModel
+                model: namesArray
                 delegate: Text {
-                    text: name
+                    text: modelData
                     font.pixelSize: height * 0.5
                     height: root.itemHeight
                 }
@@ -79,7 +73,7 @@ Page {
             spacing: 10
             Repeater{
                 id: fieldsRepeater
-                model: textFieldsModel
+                model: textFieldsArray
 
                 delegate: TextField{
                     background: Rectangle
@@ -90,7 +84,7 @@ Page {
                     }
                     width : 200
                     font.pixelSize: root.fontSize
-                    placeholderText: text
+                    placeholderText: modelData
                     selectByMouse: true
                     height: root.itemHeight
                 }

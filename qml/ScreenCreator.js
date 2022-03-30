@@ -22,14 +22,14 @@ class ScreenCreator
                 if(status === QtQuick.Component.Ready)
                 {
                     if(callback !== null)
-                        callback(this.object);
+                        callback(this.incubator.object);
                 }
             }
         }
         else
         {
             if(callback !== null)
-                callback(this.object);
+                callback(this.incubator.object);
         }
     }
 

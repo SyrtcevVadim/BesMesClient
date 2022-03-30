@@ -1,5 +1,6 @@
 import QtQuick
 import QtQuick.Controls
+import com.test.object
 
 Window {
     width: 800
@@ -8,9 +9,14 @@ Window {
     title: "BesMes"
     id: appRoot
 
+    CppInterface{
+        id: test
+    }
+
     Style{
         id: style
     }
+    //элемент объединяющий в себе все функции обработки событий qml
     Controller{
         id: viewController
     }
@@ -20,11 +26,12 @@ Window {
         initialItem: startScreen
     }
 
+    //статичные экраны, которые должны быть созданы во время запуска
     WelcomeScreen{
         id: startScreen
         maxContentWidth: 300
         isDebug: true
-
+        onLoginButtonClicked: viewController.createLoginScreen()
         onRegButtonClicked: viewController.createRegistrationScreen()
         onServerButtonClicked: viewController.openServerScreen()
     }

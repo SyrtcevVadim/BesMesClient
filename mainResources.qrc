@@ -1,0 +1,11 @@
+<RCC>
+    <qresource prefix="/">
+        <file>qml/Controller.qml</file>
+        <file>qml/FormScreen.qml</file>
+        <file>qml/ScreenCreator.js</file>
+        <file>qml/main.qml</file>
+        <file>qml/ServerScreen.qml</file>
+        <file>qml/Style.qml</file>
+        <file>qml/WelcomeScreen.qml</file>
+    </qresource>
+</RCC>

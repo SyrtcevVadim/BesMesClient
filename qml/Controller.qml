@@ -1,11 +1,10 @@
 import QtQuick
-import "FormScreenCreator.js" as FSC
+import "ScreenCreator.js" as SC
 
 QtObject {
     function openServerScreen()
     {
         mainStack.push(serverScreen)
-        console.log("dddd")
     }
 
     function deleteFormScreen()
@@ -21,9 +20,9 @@ QtObject {
 
     function createRegistrationScreen()
     {
-        var SC = new FSC.ScreenCreator()
+        var ScreenCreator = new SC.ScreenCreator()
         //данные параметры будут переданны в созданный объект
-        SC.parameters = {
+        ScreenCreator.parameters = {
             namesArray: [qsTr("Имя"), qsTr("Фамилия"), qsTr("Почта"), qsTr("Пароль")],
             textFieldsArray: [qsTr("Введите имя"), qsTr("Введите фамилию"), qsTr("Введите почту"), qsTr("Введите пароль")],
             finalButtonText: qsTr("Зарегистрироваться"),
@@ -35,19 +34,18 @@ QtObject {
 
         function callbackFunction(object){
             mainStack.push(object);
-            console.log(object)
             object.onClosed.connect(deleteFormScreen);
             object.onSubmit.connect(submitFunction)
         }
 
-        SC.create(appRoot, callbackFunction);
+        ScreenCreator.create(appRoot, callbackFunction);
     }
 
     function createLoginScreen()
     {
-        var SC = new FSC.ScreenCreator()
+        var ScreenCreator = new SC.ScreenCreator()
         //данные параметры будут переданны в созданный объект
-        SC.parameters = {
+        ScreenCreator.parameters = {
             namesArray: [qsTr("Почта"), qsTr("Пароль")],
             textFieldsArray: [qsTr("Введите почту"), qsTr("Введите пароль")],
             finalButtonText: qsTr("Войти"),
@@ -63,7 +61,7 @@ QtObject {
             object.onSubmit.connect(submitFunction)
         }
 
-        SC.create(appRoot, callbackFunction);
+        ScreenCreator.create(appRoot, callbackFunction);
     }
 
 
