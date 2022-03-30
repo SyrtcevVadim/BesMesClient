@@ -1,10 +1,20 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
+#include <QSettings>
+#include <QDebug>
 #include "cppinterface.h"
+
 
 int main(int argc, char *argv[])
 {
     QGuiApplication app(argc, argv);
+
+    QCoreApplication::setOrganizationName("config");
+    QCoreApplication::setApplicationName("BesMesClient");
+
+    QSettings::setDefaultFormat(QSettings::IniFormat);
+    QSettings::setPath(QSettings::IniFormat, QSettings::SystemScope, "./");
+    QSettings::setPath(QSettings::IniFormat, QSettings::UserScope, "./");
 
     QQmlApplicationEngine engine;
 
@@ -17,6 +27,8 @@ int main(int argc, char *argv[])
             QCoreApplication::exit(-1);
     }, Qt::QueuedConnection);
     engine.load(url);
+
+
 
     return app.exec();
 }

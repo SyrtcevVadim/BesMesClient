@@ -3,7 +3,8 @@ QT += quick
 SOURCES += \
         $$files(src/*.cpp)
 HEADERS += \
-        $$files(src/*.h)
+        $$files(src/*.h) \
+        src/defaultsettings.h
 
 #resources.files = qml/main.qml
 #resources.prefix = /$${TARGET}

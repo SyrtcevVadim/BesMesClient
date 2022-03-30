@@ -1,11 +1,12 @@
 #ifndef LOGGINGSYSTEM_H
 #define LOGGINGSYSTEM_H
+#include <QObject>
 
-
-class LoggingSystem
+class LoggingSystem : public QObject
 {
+    Q_OBJECT
 public:
-    LoggingSystem();
+    LoggingSystem(QObject *parent = nullptr);
 };
 
 #endif // LOGGINGSYSTEM_H
