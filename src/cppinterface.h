@@ -4,6 +4,8 @@
 #include <QObject>
 #include <QQmlEngine>
 
+#include "serverconnectorcomponent.h"
+
 class CppInterface : public QObject
 {
     Q_OBJECT
@@ -15,17 +17,24 @@ public:
 
     QString test() {return _test;};
 
+    Q_INVOKABLE void connectToServer();
+    Q_INVOKABLE void disconnectFromServer();
+
     Q_INVOKABLE void sendLoginRequest(QString email, QString password);
     Q_INVOKABLE void sendRegistrationRequest(QString name, QString surname, QString email, QString password);
     Q_INVOKABLE void sendRegistrationCodeRequest(QString registrationCode);
 
 signals:
+    void serverStatusChanged(int statusCode);
+
     void loginRequestCompleted(int code);
     void registrationRequestCompleted(int code);
     void registrationCodeRequestCompleted(int code);
 
 private:
     QString _test = "Привет из плюсов";
+    ServerConnectorComponent *connection;
+
 };
 
 #endif // CPPINTERFACE_H

@@ -1,5 +1,6 @@
 #ifndef DEFAULTSETTINGS_H
 #define DEFAULTSETTINGS_H
+
 #include <QString>
 
 namespace DefaultSettings {

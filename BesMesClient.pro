@@ -1,10 +1,12 @@
 QT += quick
 
 SOURCES += \
-        $$files(src/*.cpp)
+        $$files(src/*.cpp) \
+        src/settingsreader.cpp
 HEADERS += \
         $$files(src/*.h) \
-        src/defaultsettings.h
+        src/defaultsettings.h \
+        src/settingsreader.h
 
 #resources.files = qml/main.qml
 #resources.prefix = /$${TARGET}

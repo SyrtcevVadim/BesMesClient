@@ -7,7 +7,7 @@ CppInterface::CppInterface(QObject* parent) : QObject(parent)
 
 CppInterface::~CppInterface()
 {
-
+    delete connection;
 }
 
 void CppInterface::sendLoginRequest(QString email, QString password)

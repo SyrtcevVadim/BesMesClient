@@ -2,5 +2,5 @@
 
 ServerConnectorComponent::ServerConnectorComponent()
 {
-
+    settings = new SettingsReader();
 }
