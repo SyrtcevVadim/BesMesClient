@@ -10,6 +10,16 @@ CppInterface::~CppInterface()
     delete connection;
 }
 
+void CppInterface::connectToServer()
+{
+
+}
+
+void CppInterface::disconnectFromServer()
+{
+
+}
+
 void CppInterface::sendLoginRequest(QString email, QString password)
 {
 

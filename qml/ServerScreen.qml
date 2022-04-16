@@ -1,7 +1,8 @@
-import QtQuick 2.15
-import QtQuick.Window 2.15
-import QtQuick.Controls 2.15
-import QtQml 2.15
+import QtQuick
+import QtQuick.Window
+import QtQuick.Controls
+import QtQml
+import JSConsole
 
 Page{
     id: serverScreen
@@ -12,7 +13,6 @@ Page{
     signal reloadButtonPressed;
 
     property alias serverStatus: serverStatusText.text
-    property alias logTextAreaText: logText.text
 
 
     Button {
@@ -31,32 +31,16 @@ Page{
         text: qsTr("Настройки сервера")
         font.pixelSize: 29
     }
-    Flickable {
-        id: flickabelTextArea
-        anchors.top: pageNameText.bottom
-        anchors.bottom: column.top
-        flickableDirection: Flickable.VerticalFlick
-
-        anchors.bottomMargin: 0
+    JSConsole {
+        id: flickableTextArea
         property int sidemargin: parent.width * 0.1
-        anchors.rightMargin: sidemargin
-        anchors.leftMargin: sidemargin
-        anchors.left: parent.left
-        anchors.right: parent.right
-        TextArea.flickable: TextArea {
-            id: logText
-            text: ""
-            readOnly: true
-            wrapMode: TextArea.Wrap
-            anchors.topMargin: -6
-            background: Rectangle {
-                border.width: 1
-                border.color: "black"
-            }
+        width: parent.width * 0.8
+        anchors{
+            top: pageNameText.bottom
+            bottom: column.top
+            horizontalCenter: parent.horizontalCenter
         }
-        ScrollBar.vertical: ScrollBar { }
     }
-
     Column {
         id: column
         y: 403
@@ -98,6 +82,6 @@ Page{
 }
 /*##^##
 Designer {
-    D{i:0;autoSize:true;height:480;width:640}
+    D{i:0;autoSize:true;height:480;width:640}D{i:1}D{i:2}D{i:3}D{i:5}D{i:6}D{i:4}
 }
 ##^##*/

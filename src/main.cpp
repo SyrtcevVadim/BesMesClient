@@ -17,6 +17,8 @@ int main(int argc, char *argv[])
 
     QQmlApplicationEngine engine;
 
+    engine.addImportPath("qrc:/qml/modules");
+
     qmlRegisterType<CppInterface>("com.test.object", 1, 0, "CppInterface");
 
     const QUrl url("qrc:/qml/main.qml");

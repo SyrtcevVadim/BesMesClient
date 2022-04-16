@@ -7,5 +7,8 @@
         <file>qml/ServerScreen.qml</file>
         <file>qml/Style.qml</file>
         <file>qml/WelcomeScreen.qml</file>
+        <file>qml/modules/JSConsole/jsconsole.js</file>
+        <file>qml/modules/JSConsole/JSConsole.qml</file>
+        <file>qml/modules/JSConsole/qmldir</file>
     </qresource>
 </RCC>
