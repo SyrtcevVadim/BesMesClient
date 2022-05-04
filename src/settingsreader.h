@@ -2,15 +2,17 @@
 #define SETTINGSREADER_H
 
 #include <QString>
+#include <QSettings>
+
+#include "defaultsettings.h"
 
 class SettingsReader
 {
 public:
-    QString getServerAddress();
-    int  getServerPort();
+    static QString getServerAddress();
+    static int getServerPort();
 
-    QString getLogFileName();
-    //и так далее
+    static QString getLogFileName();
 };
 
 #endif // SETTINGSREADER_H

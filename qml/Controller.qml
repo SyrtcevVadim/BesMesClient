@@ -1,4 +1,4 @@
-import QtQuick
+ import QtQuick
 import "ScreenCreator.js" as SC
 
 QtObject {

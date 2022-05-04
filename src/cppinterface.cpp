@@ -3,6 +3,7 @@
 
 CppInterface::CppInterface(QObject* parent) : QObject(parent)
 {
+    connection = new ServerConnectorComponent();
 }
 
 CppInterface::~CppInterface()

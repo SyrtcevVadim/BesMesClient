@@ -1,13 +1,9 @@
-QT += quick
+QT += quick websockets
 
 SOURCES += \
-        $$files(src/*.cpp) \
-        src/settingsreader.cpp
+        $$files(src/*.cpp)
 HEADERS += \
-        $$files(src/*.h) \
-        src/defaultsettings.h \
-        src/settingsreader.h
-
+        $$files(src/*.h)
 #resources.files = qml/main.qml
 #resources.prefix = /$${TARGET}
 RESOURCES += mainResources.qrc #resources \
