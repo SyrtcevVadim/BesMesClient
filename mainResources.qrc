@@ -10,5 +10,9 @@
         <file>qml/modules/JSConsole/jsconsole.js</file>
         <file>qml/modules/JSConsole/JSConsole.qml</file>
         <file>qml/modules/JSConsole/qmldir</file>
+        <file>qml/ChatDialog.qml</file>
+        <file>qml/ChatDialogMessage.qml</file>
+        <file>qml/ChatListItem.qml</file>
+        <file>qml/ChatScreen.qml</file>
     </qresource>
 </RCC>
