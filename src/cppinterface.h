@@ -5,6 +5,7 @@
 #include <QQmlEngine>
 
 #include "serverconnectorcomponent.h"
+#include "requestcreator.h"
 
 class CppInterface : public QObject
 {
@@ -32,9 +33,10 @@ signals:
     void registrationCodeRequestCompleted(int code);
 
 private:
+    void setSignals();
+
     QString _test = "Привет из плюсов";
     ServerConnectorComponent *connection;
-
 };
 
 #endif // CPPINTERFACE_H

@@ -27,7 +27,7 @@ public:
     // оправка сформированного запроса на сервер
     void sendRequest(QString requestString);
 
-    bool reloadServerSettings();
+    void reloadServerSettings();
     ServerConnectorComponent();
 
 signals:
@@ -36,7 +36,7 @@ private slots:
     void onSocketConnected();
     void onSocketDisconnected();
 
-    void onReadyRead();
+    void onTextMessageRecieved(const QString &message);
 
 private:
     void setSocketSettings();

@@ -9,7 +9,7 @@ ServerConnectorComponent::ServerConnectorComponent() : QObject(nullptr)
 
 void ServerConnectorComponent::onSocketConnected()
 {
-    //emit connectionStatusChanged(true);
+    emit connectionStatusChanged(true);
 }
 
 void ServerConnectorComponent::onSocketDisconnected()
@@ -17,7 +17,7 @@ void ServerConnectorComponent::onSocketDisconnected()
 
 }
 
-void ServerConnectorComponent::onReadyRead()
+void ServerConnectorComponent::onTextMessageRecieved(const QString &message)
 {
 
 }
@@ -54,7 +54,7 @@ void ServerConnectorComponent::sendRequest(QString requestString)
 
 }
 
-bool ServerConnectorComponent::reloadServerSettings()
+void ServerConnectorComponent::reloadServerSettings()
 {
 
 }

@@ -1,9 +1,11 @@
 QT += quick websockets
 
 SOURCES += \
-        $$files(src/*.cpp)
+        $$files(src/*.cpp) \
+        src/requestcreator.cpp
 HEADERS += \
-        $$files(src/*.h)
+        $$files(src/*.h) \
+        src/requestcreator.h
 #resources.files = qml/main.qml
 #resources.prefix = /$${TARGET}
 RESOURCES += mainResources.qrc #resources \
