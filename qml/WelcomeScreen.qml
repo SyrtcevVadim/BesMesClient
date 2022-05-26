@@ -21,18 +21,10 @@ Page{
         spacing: 10
 
         anchors{
-            centerIn: parent.Center
             verticalCenter: parent.verticalCenter
             horizontalCenter: parent.horizontalCenter
         }
-        width: {
-            if(parent.width < maxContentWidth){
-                parent.width
-            }
-            else{
-                maxContentWidth
-            }
-        }
+        width: Math.min(parent.width, maxContentWidth)
 
         Text {
             width: parent.width
