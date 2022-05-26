@@ -14,5 +14,8 @@
         <file>qml/ChatDialogMessage.qml</file>
         <file>qml/ChatListItem.qml</file>
         <file>qml/ChatScreen.qml</file>
+        <file>qml/Notification.qml</file>
+        <file>qml/NotificationManager.qml</file>
+        <file>qml/StackWindow.qml</file>
     </qresource>
 </RCC>

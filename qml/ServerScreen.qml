@@ -31,16 +31,16 @@ Page{
         text: qsTr("Настройки сервера")
         font.pixelSize: 29
     }
-    JSConsole {
-        id: flickableTextArea
-        property int sidemargin: parent.width * 0.1
-        width: parent.width * 0.8
-        anchors{
-            top: pageNameText.bottom
-            bottom: column.top
-            horizontalCenter: parent.horizontalCenter
-        }
-    }
+//    JSConsole {
+//        id: flickableTextArea
+//        property int sidemargin: parent.width * 0.1
+//        width: parent.width * 0.8
+//        anchors{
+//            top: pageNameText.bottom
+//            bottom: column.top
+//            horizontalCenter: parent.horizontalCenter
+//        }
+//    }
     Column {
         id: column
         y: 403

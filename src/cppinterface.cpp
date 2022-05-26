@@ -4,6 +4,7 @@
 CppInterface::CppInterface(QObject* parent) : QObject(parent)
 {
     connection = new ServerConnectorComponent();
+    setSignals();
 }
 
 CppInterface::~CppInterface()
@@ -33,13 +34,25 @@ void CppInterface::sendRegistrationRequest(QString name, QString surname, QStrin
     connection->sendRequest(request);
 }
 
-void CppInterface::sendRegistrationCodeRequest(QString registrationCode)
+void CppInterface::connectionStatusChanged(bool status)
 {
-    QString request = RequestCreator::createVerificationRequest(registrationCode);
-    connection->sendRequest(request);
+    emit serverStatusChanged((int)status);
+}
+
+void CppInterface::serverMessageRecieved(QString serverMessage)
+{
+
 }
 
 void CppInterface::setSignals()
+{
+    QObject::connect(connection, &ServerConnectorComponent::connectionStatusChanged,
+                     this,       &CppInterface::connectionStatusChanged);
+    QObject::connect(connection, &ServerConnectorComponent::serverMessage,
+                     this,       &CppInterface::serverMessageRecieved);
+}
+
+void CppInterface::startApplication()
 {
 
 }

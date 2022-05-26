@@ -2,7 +2,7 @@
 #define SERVERCONNECTORCOMPONENT_H
 
 #include <QObject>
-#include <QWebSocket>
+#include <QSslSocket>
 #include <QSslConfiguration>
 
 #include "settingsreader.h"
@@ -29,20 +29,23 @@ public:
 
     void reloadServerSettings();
     ServerConnectorComponent();
+    ~ServerConnectorComponent();
 
 signals:
     void connectionStatusChanged(bool isConnected);
+
+    void serverMessage(QString serverAnswer);
 private slots:
     void onSocketConnected();
     void onSocketDisconnected();
 
-    void onTextMessageRecieved(const QString &message);
+    void onReadyRead();
 
 private:
     void setSocketSettings();
     void setSignals();
 
-    QWebSocket *socket;
+    QSslSocket *socket;
     //настройки подключения
     QString serverAddress;
     int serverPort;

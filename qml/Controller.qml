@@ -30,6 +30,8 @@ QtObject {
         };
         function submitFunction(){
             //обращение к с++ модели - запрос на авторизацию
+            var array = mainStack.currentItem.getFieldsValues()
+            model.sendRegistrationRequest(array[0], array[1], array[2], array[3])
         }
 
         function callbackFunction(object){
@@ -53,6 +55,8 @@ QtObject {
         }
         function submitFunction(){
             //обращение к с++ модели - запрос на авторизацию
+            var array = mainStack.currentItem.getFieldsValues()
+            model.sendLoginRequest(array[0], array[1])
         }
 
         function callbackFunction(object){
@@ -64,5 +68,13 @@ QtObject {
         ScreenCreator.create(appRoot, callbackFunction);
     }
 
+    function serverStatusChanged()
+    {
 
+    }
+
+    function startApplication()
+    {
+        model.connectToServer()
+    }
 }

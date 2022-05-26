@@ -9,8 +9,10 @@ Window {
     title: "BesMes"
     id: appRoot
 
+    Component.onCompleted: viewController.startApplication()
+
     CppInterface{
-        id: test
+        id: model
     }
 
     Style{
@@ -20,9 +22,10 @@ Window {
     Controller{
         id: viewController
     }
-    StackView{
+    StackWindow{
         id: mainStack
         anchors.fill: parent
+        focus: true
         initialItem: startScreen
     }
 
