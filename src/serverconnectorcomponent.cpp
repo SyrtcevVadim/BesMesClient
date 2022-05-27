@@ -1,5 +1,6 @@
 #include "serverconnectorcomponent.h"
 #include <QJsonDocument>
+#include <QAbstractSocket>
 
 ServerConnectorComponent::ServerConnectorComponent() : QObject(nullptr)
 {
@@ -19,11 +20,14 @@ ServerConnectorComponent::~ServerConnectorComponent()
 void ServerConnectorComponent::onSocketConnected()
 {
     emit connectionStatusChanged(true);
+    qDebug() << "connected";
 }
 
 void ServerConnectorComponent::onSocketDisconnected()
 {
     emit connectionStatusChanged(false);
+    qDebug() << "disconnected";
+    qDebug() << socket->sslHandshakeErrors().length();
 }
 
 void ServerConnectorComponent::onReadyRead()
@@ -33,6 +37,7 @@ void ServerConnectorComponent::onReadyRead()
     data += dataPart;
     QJsonParseError error;
     QJsonDocument doc = QJsonDocument::fromJson(data.toUtf8(), &error);
+    qDebug() << "получили пакет " << data;
     if(!doc.isNull())
     {
         emit serverMessage(data);
@@ -56,12 +61,20 @@ void ServerConnectorComponent::setSignals()
             }
         }
     );
+    QObject::connect(socket, &QSslSocket::errorOccurred,
+                     this,   &ServerConnectorComponent::test);
+}
+
+void ServerConnectorComponent::test(QAbstractSocket::SocketError socketError)
+{
+    qDebug() << "error: " << socketError;
 }
 
 void ServerConnectorComponent::setSocketSettings()
 {
     QSslConfiguration sslConfig;
-    sslConfig.setPeerVerifyMode(QSslSocket::PeerVerifyMode::QueryPeer);
+    sslConfig.setPeerVerifyMode(QSslSocket::PeerVerifyMode::VerifyNone);
+    sslConfig.setProtocol(QSsl::TlsV1_2);
     socket->setSslConfiguration(sslConfig);
 
     serverAddress = settings->getServerAddress();
@@ -72,6 +85,7 @@ void ServerConnectorComponent::setSocketSettings()
 
 void ServerConnectorComponent::connect()
 {
+    qDebug() << QString("Подключаемся по адресу %1:%2").arg(serverAddress).arg(serverPort);
     socket->connectToHostEncrypted(serverAddress, serverPort);
 }
 
@@ -83,7 +97,9 @@ void ServerConnectorComponent::disconnect()
 void ServerConnectorComponent::sendRequest(QString requestString)
 {
     qDebug() << requestString;
-    //socket->write(requestString.toUtf8());
+    socket->write(requestString.toUtf8());
+    //QTextStream out(socket);
+    //out << requestString;
 }
 
 void ServerConnectorComponent::reloadServerSettings()

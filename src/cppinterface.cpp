@@ -41,7 +41,7 @@ void CppInterface::connectionStatusChanged(bool status)
 
 void CppInterface::serverMessageRecieved(QString serverMessage)
 {
-
+    qDebug() <<"сервер вернул " << serverMessage;
 }
 
 void CppInterface::setSignals()
@@ -54,5 +54,6 @@ void CppInterface::setSignals()
 
 void CppInterface::startApplication()
 {
-
+    connectToServer();
+    qDebug() << "Подключаемся";
 }

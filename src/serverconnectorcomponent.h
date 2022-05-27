@@ -40,6 +40,7 @@ private slots:
     void onSocketDisconnected();
 
     void onReadyRead();
+    void test(QAbstractSocket::SocketError socketError);
 
 private:
     void setSocketSettings();

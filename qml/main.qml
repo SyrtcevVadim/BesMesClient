@@ -13,6 +13,7 @@ Window {
 
     CppInterface{
         id: model
+        onServerStatusChanged: (status) =>  console.log("статус сервера " + status)
     }
 
     Style{
@@ -42,5 +43,7 @@ Window {
         id: serverScreen
         visible: false
         onBackButtonClicked: mainStack.pop()
+        onConnectButtonPressed: viewController.startApplication()
+        onDisconnectButtonPressed: viewController.disconnectFromServer()
     }
 }
