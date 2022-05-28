@@ -44,16 +44,18 @@ StackView {
                 horizontalAlignment: Text.AlignHCenter
                 text: "Header"
             }
-            Text{
+            Text {
                 id: windowContent
+                width: parent.width
                 anchors{
                     top: windowHeader.bottom
                     left: parent.left
                     right: parent.right
                 }
+                wrapMode: TextEdit.WordWrap
                 font.pixelSize: 15
                 horizontalAlignment: Text.AlignHCenter
-                text: "test test test test test test test test test test"
+                text: "При выполнении операции произошла ошибка, код ошибки: 1"
             }
             RoundButton {
                 id: button

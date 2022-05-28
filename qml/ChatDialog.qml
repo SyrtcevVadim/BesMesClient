@@ -5,8 +5,17 @@ Item {
     property alias backgroundColor: background.color
     Rectangle{
         id: background
-        anchors.fill: root
-        color: "#FFFFFF"
+//        anchors.fill: root
+//        color: "red"
+//        border.color: "red"
+//        border.width: 1
+//        Rectangle {
+//            height: 1
+//            color: "red"
+//            anchors.bottom: parent.bottom
+//            anchors.left: parent.left
+//            anchors.right: parent.right
+//        }
     }
     Rectangle{
         id: header

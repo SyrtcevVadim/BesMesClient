@@ -54,7 +54,7 @@ Item {
         z: 1
         color: "#B0FFDE"
         border.color: "#9AE4C2"
-        border.width: 2
+        border.width: 1
 
         Rectangle {
             id: titlescreen

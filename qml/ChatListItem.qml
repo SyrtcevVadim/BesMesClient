@@ -31,8 +31,8 @@ Item {
         width: rootitem.height - 10
         height: width
         radius: width/2
-        border.color: "black" //цвет обводки
-        border.width: 2 //ширина обводки
+        border.color: "gray" //цвет обводки
+        border.width: 1 //ширина обводки
         color: Qt.rgba(Math.random(),Math.random(),Math.random(),1) //"red"
     }
 
@@ -62,4 +62,14 @@ Item {
         text: "texttexttexttexttexttexttexttexttext"
         elide: Text.ElideRight
     }
+
+    Rectangle {
+        height: 1
+        color: "#9AE4C2"
+        anchors.bottom: parent.bottom
+        anchors.left: parent.left
+        anchors.right: parent.right
+    }
+
+
 }
