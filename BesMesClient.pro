@@ -6,7 +6,7 @@ HEADERS += \
         $$files(src/*.h)
 #resources.files = qml/main.qml
 #resources.prefix = /$${TARGET}
-RESOURCES += mainResources.qrc #resources \
+RESOURCES += $$files(*.qrc) #resources \
 
 
 # Additional import path used to resolve QML modules in Qt Creator's code model

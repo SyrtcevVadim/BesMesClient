@@ -19,12 +19,14 @@ ServerConnectorComponent::~ServerConnectorComponent()
 
 void ServerConnectorComponent::onSocketConnected()
 {
+    connected = true;
     emit connectionStatusChanged(true);
     qDebug() << "connected";
 }
 
 void ServerConnectorComponent::onSocketDisconnected()
 {
+    connected = false;
     emit connectionStatusChanged(false);
     qDebug() << "disconnected";
     qDebug() << socket->sslHandshakeErrors().length();

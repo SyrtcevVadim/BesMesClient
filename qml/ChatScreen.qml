@@ -66,6 +66,13 @@ Item {
             border.color: parent.border.color
             border.width: parent.border.width
             z: parent.z + 1
+            Text {
+                anchors.fill: parent
+                text: qsTr("Чаты")
+                font.pixelSize: 30
+                horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
+            }
         }
 
         ListView {
@@ -91,6 +98,20 @@ Item {
             color: parent.color
             border.color: parent.border.color
             border.width: parent.border.width
+            Row {
+                anchors.fill: parent
+                ImageButton{
+                    id: chatsButton
+                    source_activated: "qrc:images/chat_icon_activated.png"
+                    source_deactivated: "qrc:images/chat_icon_deactivated.png"
+                    //height: parent.height
+                }
+                ImageButton{
+                    source_activated: "qrc:images/settings_icon_activated"
+                    source_deactivated: "qrc:images/settings_icon_deactivated"
+                    //height: parent.height
+                }
+            }
         }
     }
 

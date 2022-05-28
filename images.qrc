@@ -1,0 +1,8 @@
+<RCC>
+    <qresource prefix="/">
+        <file>images/chat_icon_activated.png</file>
+        <file>images/chat_icon_deactivated.png</file>
+        <file>images/settings_icon_activated.png</file>
+        <file>images/settings_icon_deactivated.png</file>
+    </qresource>
+</RCC>

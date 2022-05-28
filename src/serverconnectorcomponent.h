@@ -23,6 +23,7 @@ public:
     // отключение от сервера
     void disconnect();
 
+    bool isConnected();
 
     // оправка сформированного запроса на сервер
     void sendRequest(QString requestString);
@@ -51,7 +52,7 @@ private:
     QString serverAddress;
     int serverPort;
 
-    bool keepConnection;
+    bool connected;
     SettingsReader *settings;
 };
 

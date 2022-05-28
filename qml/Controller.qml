@@ -34,6 +34,7 @@ QtObject {
             if(code === 0) // удачное
             {
                 //открыть окно
+                openChatScreen();
             }
             else
             {
@@ -74,6 +75,8 @@ QtObject {
             if(code === 0) // удачное
             {
                 //открыть окно
+                openChatScreen();
+
             }
             else
             {
@@ -97,6 +100,17 @@ QtObject {
         ScreenCreator.create(appRoot, callbackFunction);
     }
 
+    function openChatScreen()
+    {
+        var ScreenCreator = new SC.ScreenCreator("ChatScreen.qml");
+
+        function callbackFunction(object){
+            mainStack.push(object);
+        }
+
+        ScreenCreator.create(appRoot,  callbackFunction);
+    }
+
     function serverStatusChanged()
     {
 
@@ -105,5 +119,6 @@ QtObject {
     function startApplication()
     {
         model.connectToServer()
+        //openChatScreen()
     }
 }
