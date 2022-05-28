@@ -28,9 +28,24 @@ QtObject {
             finalButtonText: qsTr("Зарегистрироваться"),
             labelText: qsTr("Регистрация")
         };
+
+        function registrationCompleted (code)
+        {
+            if(code === 0) // удачное
+            {
+                //открыть окно
+            }
+            else
+            {
+                mainStack.showWindow(qsTr("Ошибка"), qsTr("При выполнении операции произошла ошибка, код ошибки: ") + code);
+            }
+            model.registrationRequestCompleted.disconnect(registrationCompleted);
+        }
+
         function submitFunction(){
             //обращение к с++ модели - запрос на авторизацию
             var array = mainStack.currentItem.getFieldsValues()
+            model.registrationRequestCompleted.connect(registrationCompleted);
             model.sendRegistrationRequest(array[0], array[1], array[2], array[3])
         }
 
@@ -53,9 +68,23 @@ QtObject {
             finalButtonText: qsTr("Войти"),
             labelText: "Вход"
         }
+
+        function loginCompleted(code)
+        {
+            if(code === 0) // удачное
+            {
+                //открыть окно
+            }
+            else
+            {
+                mainStack.showWindow(qsTr("Ошибка"), qsTr("При выполнении операции произошла ошибка, код ошибки: ") + code);
+            }
+            model.loginRequestCompleted.disconnect(loginCompleted);
+        }
         function submitFunction(){
             //обращение к с++ модели - запрос на авторизацию
             var array = mainStack.currentItem.getFieldsValues()
+            model.loginRequestCompleted.connect(loginCompleted);
             model.sendLoginRequest(array[0], array[1])
         }
 

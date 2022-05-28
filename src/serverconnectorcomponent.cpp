@@ -98,8 +98,6 @@ void ServerConnectorComponent::sendRequest(QString requestString)
 {
     qDebug() << requestString;
     socket->write(requestString.toUtf8());
-    //QTextStream out(socket);
-    //out << requestString;
 }
 
 void ServerConnectorComponent::reloadServerSettings()

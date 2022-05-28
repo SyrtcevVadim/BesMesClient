@@ -22,6 +22,9 @@ public:
 
     Q_INVOKABLE void sendLoginRequest(QString email, QString password);
     Q_INVOKABLE void sendRegistrationRequest(QString name, QString surname, QString email, QString password);
+    Q_INVOKABLE void sendChatCreationRequest(const QString name);
+    Q_INVOKABLE void sendChatRemovingtRequest(const int chat_id);
+    Q_INVOKABLE void sendChatListRequest();
 
 signals:
     void serverStatusChanged(int statusCode);
@@ -29,6 +32,10 @@ signals:
     void loginRequestCompleted(int code);
     void registrationRequestCompleted(int code);
     void registrationCodeRequestCompleted(int code);
+
+    void sendChatCreationRequestCompleted(const QString name);
+    void sendChatRemovingtRequestCompleted(const int chat_id);
+    void sendChatListRequestCompleted();
 
 private slots:
     void connectionStatusChanged(bool status);

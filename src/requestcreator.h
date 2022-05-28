@@ -8,6 +8,9 @@ namespace RequestCreator
 {
     QString createLoginRequest(const QString email, const QString password);
     QString createRegistrationRequest(const QString name, const QString surname, const QString email, const QString password);
+    QString createChatCreationRequest(const QString name);
+    QString createChatRemovingtRequest(const int chat_id);
+    QString createChatListRequest();
 
     const QString loginCommand {u"ЛОГИН"_qs};
 
