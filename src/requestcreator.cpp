@@ -52,3 +52,12 @@ QString RequestCreator::createChatListRequest()
     QJsonDocument doc(obj);
     return QString::fromUtf8(doc.toJson());
 }
+
+QString RequestCreator::createUserListRequest()
+{
+    QJsonObject obj{
+        {"тип_запроса", usersListCommand}
+    };
+    QJsonDocument doc(obj);
+    return QString::fromUtf8(doc.toJson());
+}

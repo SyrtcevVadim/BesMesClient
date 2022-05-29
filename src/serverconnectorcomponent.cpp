@@ -39,7 +39,6 @@ void ServerConnectorComponent::onReadyRead()
     data += dataPart;
     QJsonParseError error;
     QJsonDocument doc = QJsonDocument::fromJson(data.toUtf8(), &error);
-    qDebug() << "получили пакет " << data;
     if(!doc.isNull())
     {
         emit serverMessage(data);

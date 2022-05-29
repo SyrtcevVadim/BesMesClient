@@ -1,4 +1,4 @@
-import QtQuick 2.0
+import QtQuick
 
 Item {
     id: rootitem
@@ -10,10 +10,6 @@ Item {
     property bool isSelected: false
 
     signal clicked;
-
-    onIsSelectedChanged: {
-        console.log("changed")
-    }
 
     MouseArea{
         onClicked: {

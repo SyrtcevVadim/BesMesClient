@@ -29,7 +29,13 @@ Item {
 
     function updateChatListModel()
     {
-        database.updateChatListModel(chatListModel)
+        let model = ApplicationWindow.menuBar.getModelReference()
+
+        function callback()
+        {
+            database.updateChatListModel(chatListModel)
+        }
+        database.getChatList(model, callback)
     }
 
     states: [
@@ -62,6 +68,10 @@ Item {
 
     Database {
         id: database
+    }
+
+    ChatScreenController {
+        id: controller
     }
 
     Rectangle {
@@ -103,8 +113,8 @@ Item {
                     bottom: parent.bottom
                 }
                 width: height
-                source_activated: "qrc:images/chat_add.png"
-                source_deactivated: "qrc:images/chat_add.png"
+                source_activated: "qrc:images/plus_icon_chat.png"
+                source_deactivated: "qrc:images/plus_icon_chat.png"
                 onClicked:{
                     database.updateChatListModel(chatListModel)
                 }

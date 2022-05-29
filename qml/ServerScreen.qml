@@ -2,7 +2,6 @@ import QtQuick
 import QtQuick.Window
 import QtQuick.Controls
 import QtQml
-import JSConsole
 
 Page{
     id: serverScreen

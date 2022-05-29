@@ -4,6 +4,7 @@
         <file>images/chat_icon_deactivated.png</file>
         <file>images/settings_icon_activated.png</file>
         <file>images/settings_icon_deactivated.png</file>
-        <file>images/chat_add.png</file>
+        <file>images/plus_icon_chat.png</file>
+        <file>images/plus_icon_doc.png</file>
     </qresource>
 </RCC>

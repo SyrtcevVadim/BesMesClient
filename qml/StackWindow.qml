@@ -15,7 +15,7 @@ StackView {
     Item {
         id: rootItem
         anchors.fill: parent
-        visible: true
+        visible: false
         z: 1
         Rectangle {
             opacity: 0.5

@@ -1,5 +1,6 @@
 import QtQuick
 import QtQuick.LocalStorage
+import QtQuick.Controls
 
 QtObject {
     property string createMessageTable: `
@@ -10,39 +11,56 @@ QtObject {
         sender_id  integer
     );
     `
+    property string dropMessageTable:`
+    DROP TABLE IF EXISTS message;
+    `
     property string createChatTable : `
     CREATE TABLE IF NOT EXISTS chat (
         id         integer PRIMARY KEY,
         chat_name  text
     );
     `
+    property string dropChatTable:`
+    DROP TABLE IF EXISTS chat;
+    `
     property string createUserTable: `
     CREATE TABLE IF NOT EXISTS user (
-        id         integer PRIMARY KEY AUTOINCREMENT,
+        id         integer PRIMARY KEY,
         first_name text,
         last_name  text,
         email      text
     );
     `
+    property string dropUserTable:`
+    DROP TABLE IF EXISTS user;
+    `
     property string getChatsList: `
     SELECT id, chat_name FROM chat;
     `
     property string test: `
-    INSERT INTO chat (id, chat_name)
-    VALUES (1, "firstChat"),
-           (2, "secondChat"),
-           (3, "thirdChat");
+    SELECT * FROM user;
     `
-    Component.onCompleted: openDatabase()
-    function openDatabase()
+    function createDatabase()
     {
-        console.log("db opened")
+        console.log("db created")
         var db = LocalStorage.openDatabaseSync(":memory:", "1.0", "test", 1000000)
         db.transaction(
             function(tx) {
                 tx.executeSql(createMessageTable);
                 tx.executeSql(createChatTable);
                 tx.executeSql(createUserTable);
+            }
+        );
+    }
+    function dropDatabase()
+    {
+        console.log("db dropped")
+        var db = LocalStorage.openDatabaseSync(":memory:", "1.0", "test", 1000000)
+        db.transaction(
+            function(tx) {
+                tx.executeSql(dropMessageTable);
+                tx.executeSql(dropChatTable);
+                tx.executeSql(dropUserTable);
             }
         );
     }
@@ -80,6 +98,13 @@ QtObject {
                 {
                     console.log(key + " " + result[key])
                 }
+                for (let i = 0; i < result.rows.length; i++)
+                {
+                    for(let key in result.rows.item(i))
+                    {
+                        console.log(key + " " + result.rows.item(i)[key])
+                    }
+                }
             }
         );
     }
@@ -96,5 +121,96 @@ QtObject {
                 }
             }
         );
+    }
+
+    function getUsers(model, callback = null)
+    {
+
+        function request_callback(jsonString)
+        {
+            var data = JSON.parse(jsonString)
+            var db = LocalStorage.openDatabaseSync(":memory:", "1.0", "test", 1000000)
+
+            db.transaction(
+                function(tx) {
+                    tx.executeSql(dropUserTable)
+                    tx.executeSql(createUserTable)
+                    let usersList = data["пользователи"]
+                    if(usersList.length === 0)
+                        return;
+                    let query = "INSERT INTO user (id, first_name, last_name, email) VALUES"
+                    for(let i = 0; i < usersList.length; i++)
+                    {
+                        let id = usersList[i]["ид_пользователя"]
+                        let first_name = usersList[i]["имя"]
+                        let last_name = usersList[i]["фамилия"]
+                        let email = usersList[i]["почта"]
+                        query += ` ("${id}", "${first_name}", "${last_name}", "${email}")`
+                        if(i !== usersList.length-1 )
+                            query += ','
+                        else
+                            query += ';'
+                    }
+                    console.log(query)
+                    tx.executeSql(query)
+                }
+            );
+            if(callback !== null)
+                callback();
+            model.sendUserListRequestCompleted.disconnect(request_callback)
+        }
+        model.sendUserListRequest()
+        model.sendUserListRequestCompleted.connect(request_callback)
+    }
+    function getCurrentUserId(email)
+    {
+        var db = LocalStorage.openDatabaseSync(":memory:", "1.0", "test", 1000000)
+        let returnItem;
+        db.transaction(
+            function(tx) {
+                let query = `SELECT id FROM user WHERE email = "${email}"`
+                let result = tx.executeSql(query)
+                returnItem = result.rows.item(0).id;
+            }
+        );
+        return returnItem;
+    }
+
+    function getChatList(model, callback = null)
+    {
+        function request_callback(jsonString)
+        {
+            var data = JSON.parse(jsonString)
+            var db = LocalStorage.openDatabaseSync(":memory:", "1.0", "test", 1000000)
+            console.log("пришел ответ на чатлист")
+            db.transaction(
+                function(tx) {
+                    tx.executeSql(dropChatTable)
+                    tx.executeSql(createChatTable)
+                    let chatList = data["чаты"]
+                    if(chatList.length === 0)
+                        return;
+                    let query = "INSERT INTO chat (id, chat_name) VALUES"
+                    for(let i = 0; i < chatList.length; i++)
+                    {
+                        let id = chatList[i]["ид_чата"]
+                        let chat_name = chatList[i]["название"]
+                        query += ` ("${id}", "${chat_name}")`
+                        if(i !== chatList.length-1 )
+                            query += ', '
+                        else
+                            query += ';'
+                    }
+                    console.log(query)
+                    tx.executeSql(query)
+                }
+            );
+            if(callback !== null)
+                callback()
+            model.sendChatListRequestCompleted.disconnect(request_callback)
+        }
+
+        model.sendChatListRequest()
+        model.sendChatListRequestCompleted.connect(request_callback)
     }
 }

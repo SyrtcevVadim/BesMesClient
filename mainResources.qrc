@@ -7,9 +7,6 @@
         <file>qml/ServerScreen.qml</file>
         <file>qml/Style.qml</file>
         <file>qml/WelcomeScreen.qml</file>
-        <file>qml/modules/JSConsole/jsconsole.js</file>
-        <file>qml/modules/JSConsole/JSConsole.qml</file>
-        <file>qml/modules/JSConsole/qmldir</file>
         <file>qml/ChatDialog.qml</file>
         <file>qml/ChatDialogMessage.qml</file>
         <file>qml/ChatListItem.qml</file>
@@ -19,5 +16,6 @@
         <file>qml/StackWindow.qml</file>
         <file>qml/ImageButton.qml</file>
         <file>qml/Database.qml</file>
+        <file>qml/ChatScreenController.qml</file>
     </qresource>
 </RCC>

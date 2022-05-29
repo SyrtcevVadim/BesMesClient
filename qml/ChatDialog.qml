@@ -58,7 +58,7 @@ Item {
     }
     Rectangle{
         id: footer
-        z:1
+        z: 1
         anchors.left: root.left
         anchors.right: root.right
         anchors.bottom: root.bottom

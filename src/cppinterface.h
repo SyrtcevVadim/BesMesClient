@@ -15,6 +15,8 @@ public:
     CppInterface(QObject* parent = nullptr);
     ~CppInterface();
 
+    Q_PROPERTY(QString email MEMBER m_email);
+    Q_PROPERTY(int user_id MEMBER m_user_id);
 
     Q_INVOKABLE void connectToServer();
     Q_INVOKABLE void disconnectFromServer();
@@ -24,6 +26,8 @@ public:
     Q_INVOKABLE void sendChatCreationRequest(const QString name);
     Q_INVOKABLE void sendChatRemovingtRequest(const int chat_id);
     Q_INVOKABLE void sendChatListRequest();
+    Q_INVOKABLE void sendUserListRequest();
+
 
 signals:
     void serverStatusChanged(int statusCode);
@@ -34,16 +38,18 @@ signals:
 
     void sendChatCreationRequestCompleted(const QString name);
     void sendChatRemovingtRequestCompleted(const int chat_id);
-    void sendChatListRequestCompleted();
+    void sendChatListRequestCompleted(const QString jsonAnswer);
+    void sendUserListRequestCompleted(const QString jsonAnswer);
 
 private slots:
     void connectionStatusChanged(bool status);
     void serverMessageRecieved(QString serverMessage);
 private:
     void setSignals();
-    void setUpDatabase();
-    ServerConnectorComponent *connection;
 
+    QString m_email;
+    int m_user_id;
+    ServerConnectorComponent *connection;
 };
 
 #endif // CPPINTERFACE_H

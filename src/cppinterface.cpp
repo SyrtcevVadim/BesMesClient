@@ -24,12 +24,14 @@ void CppInterface::disconnectFromServer()
 
 void CppInterface::sendLoginRequest(QString email, QString password)
 {
+    m_email = email;
     QString request = RequestCreator::createLoginRequest(email, password);
     connection->sendRequest(request);
 }
 
 void CppInterface::sendRegistrationRequest(QString name, QString surname, QString email, QString password)
 {
+    m_email = email;
     QString request = RequestCreator::createRegistrationRequest(name, surname, email, password);
     connection->sendRequest(request);
 }
@@ -52,6 +54,12 @@ void CppInterface::sendChatListRequest()
     connection->sendRequest(request);
 }
 
+void CppInterface::sendUserListRequest()
+{
+    QString request = RequestCreator::createUserListRequest();
+    connection->sendRequest(request);
+}
+
 void CppInterface::connectionStatusChanged(bool status)
 {
     emit serverStatusChanged((int)status);
@@ -65,6 +73,8 @@ void CppInterface::serverMessageRecieved(QString serverMessage)
 
     using namespace RequestCreator;
 
+    qDebug() << "Пришел ответ типа: " << answerType;
+
     if(answerType == loginCommand)
     {
         int errorCode = requestResult["код_ответа"].toInt();
@@ -77,7 +87,8 @@ void CppInterface::serverMessageRecieved(QString serverMessage)
     }
     else if(answerType == chatListCommand)
     {
-
+        qDebug() << "fdfddf";
+        emit sendChatListRequestCompleted(serverMessage);
     }
     else if(answerType == chatCreateCommand)
     {
@@ -87,6 +98,10 @@ void CppInterface::serverMessageRecieved(QString serverMessage)
     {
 
     }
+    else if(answerType == usersListCommand)
+    {
+        emit sendUserListRequestCompleted(serverMessage);
+    }
 }
 
 void CppInterface::setSignals()
@@ -95,10 +110,4 @@ void CppInterface::setSignals()
                      this,       &CppInterface::connectionStatusChanged);
     QObject::connect(connection, &ServerConnectorComponent::serverMessage,
                      this,       &CppInterface::serverMessageRecieved);
-}
-
-void CppInterface::setUpDatabase()
-{
-
-
 }

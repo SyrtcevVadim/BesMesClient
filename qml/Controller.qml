@@ -1,4 +1,4 @@
- import QtQuick
+import QtQuick
 import "ScreenCreator.js" as SC
 
 QtObject {
@@ -33,8 +33,7 @@ QtObject {
         {
             if(code === 0) // удачное
             {
-                //открыть окно
-                openChatScreen();
+                mainStack.showWindow(qsTr("Успешно"), qsTr("Регистрация успешна, теперь вы можете войти в созданный аккаунт"))
             }
             else
             {
@@ -74,9 +73,7 @@ QtObject {
         {
             if(code === 0) // удачное
             {
-                //открыть окно
-                openChatScreen();
-
+                loginSuccess()
             }
             else
             {
@@ -111,14 +108,32 @@ QtObject {
         ScreenCreator.create(appRoot,  callbackFunction);
     }
 
-    function serverStatusChanged()
+    function serverStatusChanged(status)
     {
-
+        if(status === false)
+            mainStack.showWindow("Статус сервера", "Произошло отключение от сервера")
     }
 
     function startApplication()
     {
+        database.createDatabase()
         model.connectToServer()
-        openChatScreen()
+        model.serverStatusChanged.connect(serverStatusChanged)
+        //openChatScreen()
+    }
+    function loginSuccess()
+    {
+        console.log("удачная авторизация, обновляем всех пользователей")
+        function callback()
+        {
+            //узнать кто из них - мы
+            console.log("выясняем кто мы")
+            let id = database.getCurrentUserId(model.email)
+            model.user_id = id;
+            console.log(id)
+            openChatScreen()
+        }
+        //обновить список всех пользователей
+        database.getUsers(model, callback)
     }
 }

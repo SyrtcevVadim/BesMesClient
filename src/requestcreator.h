@@ -11,6 +11,7 @@ namespace RequestCreator
     QString createChatCreationRequest(const QString name);
     QString createChatRemovingtRequest(const int chat_id);
     QString createChatListRequest();
+    QString createUserListRequest();
 
     const QString loginCommand {u"ЛОГИН"_qs};
 

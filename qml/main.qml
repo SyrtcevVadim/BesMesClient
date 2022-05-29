@@ -12,15 +12,44 @@ ApplicationWindow {
     Component.onCompleted: viewController.startApplication()
 
     menuBar: MenuBar {
-        function getChatListActionReference() {return textChatListUpdate}
-
+        function getChatListActionReference() {return testChatListUpdate}
+        function getModelReference() {return model}
         Menu {
             title: "Test functions"
             Action {
-                id: textChatListUpdate
+                id: testChatListUpdate
                 text: "Update chat list"
             }
+            Action {
+                id: testUserListUpdate
+                text: "Update user list"
+                onTriggered: database.getUsers(model)
+            }
         }
+        Menu {
+            title: "База данных"
+            Action {
+                id: databaseCreate
+                text: "Создать базу данных"
+                onTriggered: database.createDatabase()
+            }
+            Action {
+                id: databaseDrop
+                text: "Удалить базу данных"
+                onTriggered: database.dropDatabase()
+            }
+        }
+        Menu {
+            title: "Подключение"
+            Action {
+                text: "Подключится к серверу"
+                onTriggered: model.connectToServer()
+            }
+        }
+    }
+
+    Database {
+        id: database
     }
 
     CppInterface{
@@ -41,14 +70,13 @@ ApplicationWindow {
         anchors.fill: parent
         focus: true
         initialItem: startScreen
-//        initialItem: test
     }
     //статичные экраны, которые должны быть созданы во время запуска
     WelcomeScreen{
         id: startScreen
         maxContentWidth: 300
         isDebug: true
-//        visible: false
+        visible: false
         onLoginButtonClicked: viewController.createLoginScreen()
         onRegButtonClicked: viewController.createRegistrationScreen()
         onServerButtonClicked: viewController.openServerScreen()
@@ -60,7 +88,9 @@ ApplicationWindow {
         onConnectButtonPressed: viewController.startApplication()
         onDisconnectButtonPressed: viewController.disconnectFromServer()
     }
-    ChatScreen{
-        id: test
+
+    function getControllerReference() {
+        return viewController
     }
+
 }
