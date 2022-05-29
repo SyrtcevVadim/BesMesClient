@@ -4,10 +4,15 @@ import QtQuick.Controls
 Item {
     id: root
     visible: true
-    onWidthChanged: () => checkState();
+    onWidthChanged: checkState()
     state: "desktop"
-    Component.onCompleted: () => checkState();
+    Component.onCompleted: initComponent()
 
+    function initComponent()
+    {
+        checkState()
+        ApplicationWindow.menuBar.getChatListActionReference().onTriggered.connect(updateChatListModel)
+    }
     function checkState()
     {
         if(root.width > 600){
@@ -21,6 +26,12 @@ Item {
             root.state = "mobile-menu"
         }
     }
+
+    function updateChatListModel()
+    {
+        database.updateChatListModel(chatListModel)
+    }
+
     states: [
         State{
             name: "desktop"

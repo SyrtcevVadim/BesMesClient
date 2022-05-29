@@ -2,7 +2,7 @@ import QtQuick
 import QtQuick.Controls
 import com.test.object
 
-Window {
+ApplicationWindow {
     width: 800
     height: 600
     visible: true
@@ -10,6 +10,18 @@ Window {
     id: appRoot
 
     Component.onCompleted: viewController.startApplication()
+
+    menuBar: MenuBar {
+        function getChatListActionReference() {return textChatListUpdate}
+
+        Menu {
+            title: "Test functions"
+            Action {
+                id: textChatListUpdate
+                text: "Update chat list"
+            }
+        }
+    }
 
     CppInterface{
         id: model
