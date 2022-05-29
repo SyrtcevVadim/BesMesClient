@@ -1,5 +1,5 @@
-import QtQuick 2.12
-import QtQuick.Controls 2.15
+import QtQuick
+import QtQuick.Controls
 
 Item {
     id: root
@@ -72,18 +72,38 @@ Item {
             border.width: parent.border.width
             z: parent.z + 1
             Text {
-                anchors.fill: parent
+                id: chatText
+                anchors {
+                    left: parent.left
+                    top: parent.top
+                    bottom: parent.bottom
+                    right: addButton.left
+                }
                 text: qsTr("Чаты")
                 font.pixelSize: 30
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
+            }
+            ImageButton{
+                id: addButton
+                anchors {
+                    right: parent.right
+                    top: parent.top
+                    bottom: parent.bottom
+                }
+                width: height
+                source_activated: "qrc:images/chat_add.png"
+                source_deactivated: "qrc:images/chat_add.png"
+                onClicked:{
+                    database.updateChatListModel(chatListModel)
+                }
             }
         }
 
         ListView {
             id: listView
             anchors.top: titlescreen.bottom
-            width: parent.width
+            width: menurect.width
             anchors.bottom: buttonmenu.top
             ScrollBar.vertical: ScrollBar{}
             focus: true

@@ -53,10 +53,6 @@ QtObject {
         db.transaction(
             function(tx) {
                 var result = tx.executeSql(getChatsList)
-                for(var key in result.rows)
-                {
-                    console.log(key + " " + result[key])
-                }
                 modelElement.clear()
                 for (var i = 0; i < result.rows.length; i++)
                 {
@@ -65,9 +61,9 @@ QtObject {
                         id: result.rows.item(i).id,
                         name: result.rows.item(i).chat_name
                     });
-                    for(var keyy in result.rows.item(i))
+                    for(let key in result.rows.item(i))
                     {
-                        console.log(keyy + " " + result.rows.item(i)[keyy])
+                        console.log(key + " " + result.rows.item(i)[key])
                     }
                 }
             }
@@ -80,6 +76,20 @@ QtObject {
         db.transaction(
             function(tx) {
                 var result = tx.executeSql(test)
+                for(var key in result)
+                {
+                    console.log(key + " " + result[key])
+                }
+            }
+        );
+    }
+
+    function executeModelRequest(request)
+    {
+        var db = LocalStorage.openDatabaseSync(":memory:", "1.0", "test", 1000000)
+        db.transaction(
+            function(tx) {
+                var result = tx.executeSql(request)
                 for(var key in result)
                 {
                     console.log(key + " " + result[key])

@@ -23,13 +23,13 @@ Window {
     Controller{
         id: viewController
     }
+
     StackWindow{
         id: mainStack
         anchors.fill: parent
         focus: true
         initialItem: startScreen
     }
-
     //статичные экраны, которые должны быть созданы во время запуска
     WelcomeScreen{
         id: startScreen
