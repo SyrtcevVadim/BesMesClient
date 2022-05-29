@@ -18,5 +18,6 @@
         <file>qml/NotificationManager.qml</file>
         <file>qml/StackWindow.qml</file>
         <file>qml/ImageButton.qml</file>
+        <file>qml/Database.qml</file>
     </qresource>
 </RCC>

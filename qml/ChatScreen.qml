@@ -48,6 +48,11 @@ Item {
 
         }
     ]
+
+    Database {
+        id: database
+    }
+
     Rectangle {
         id: menurect
         height: root.height
@@ -81,12 +86,24 @@ Item {
             width: parent.width
             anchors.bottom: buttonmenu.top
             ScrollBar.vertical: ScrollBar{}
-
+            focus: true
             delegate: ChatListItem {
                 width: listView.width
+                chatName: model.name
+                chatMessage: model.id
+                isSelected: ListView.isCurrentItem
+                MouseArea {
+                    anchors.fill: parent
+                    onClicked: listView.currentIndex = index
+                }
             }
-            model: 30
+            model: chatListModel
         }
+
+        ListModel {
+            id: chatListModel
+        }
+
 // Добавить архив, чтобы хранить петабайты порнухи
 //(с) Глава Департамента Разработки 03ПГ
         Rectangle {
@@ -104,12 +121,17 @@ Item {
                     id: chatsButton
                     source_activated: "qrc:images/chat_icon_activated.png"
                     source_deactivated: "qrc:images/chat_icon_deactivated.png"
-                    //height: parent.height
+                    onClicked: {
+                        chatListModel.clear()
+                        database.updateChatListModel(chatListModel)
+                    }
                 }
                 ImageButton{
                     source_activated: "qrc:images/settings_icon_activated"
                     source_deactivated: "qrc:images/settings_icon_deactivated"
-                    //height: parent.height
+                    onClicked: {
+                        database.testRecords(chatListModel)
+                    }
                 }
             }
         }

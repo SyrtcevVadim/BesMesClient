@@ -1,9 +1,7 @@
-QT += quick websockets
+QT += quick websockets sql
 
-SOURCES += \
-        $$files(src/*.cpp)
-HEADERS += \
-        $$files(src/*.h)
+SOURCES += $$files(src/*.cpp)
+HEADERS += $$files(src/*.h)
 #resources.files = qml/main.qml
 #resources.prefix = /$${TARGET}
 RESOURCES += $$files(*.qrc) #resources \

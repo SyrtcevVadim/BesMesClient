@@ -93,7 +93,7 @@ void ServerConnectorComponent::connect()
 
 void ServerConnectorComponent::disconnect()
 {
-    socket->close();
+    socket->disconnectFromHost();
 }
 
 void ServerConnectorComponent::sendRequest(QString requestString)

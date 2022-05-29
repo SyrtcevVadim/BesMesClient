@@ -18,7 +18,6 @@ public:
 
     Q_INVOKABLE void connectToServer();
     Q_INVOKABLE void disconnectFromServer();
-    Q_INVOKABLE void startApplication();
 
     Q_INVOKABLE void sendLoginRequest(QString email, QString password);
     Q_INVOKABLE void sendRegistrationRequest(QString name, QString surname, QString email, QString password);
@@ -42,6 +41,7 @@ private slots:
     void serverMessageRecieved(QString serverMessage);
 private:
     void setSignals();
+    void setUpDatabase();
     ServerConnectorComponent *connection;
 
 };

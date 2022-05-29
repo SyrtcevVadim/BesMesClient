@@ -7,8 +7,13 @@ Item {
 
     property alias chatName: nameChat.text
     property alias chatMessage: messageChat.text
+    property bool isSelected: false
 
     signal clicked;
+
+    onIsSelectedChanged: {
+        console.log("changed")
+    }
 
     MouseArea{
         onClicked: {
@@ -27,7 +32,7 @@ Item {
             leftMargin: 5
 
         }
-
+        z: parent.z
         width: rootitem.height - 10
         height: width
         radius: width/2
@@ -38,6 +43,7 @@ Item {
 
     Text {
         id: nameChat
+        z: parent.z
         anchors {
             top: parent.top
             topMargin: 5
@@ -52,6 +58,7 @@ Item {
 
     Text {
         id: messageChat
+        z: parent.z
         anchors {
             top: nameChat.bottom
             topMargin: 5
@@ -64,12 +71,18 @@ Item {
     }
 
     Rectangle {
+        anchors.fill: parent
+        z: parent.z-1
+        color: "#73FFC4"
+        visible: isSelected
+    }
+
+    Rectangle {
         height: 1
+        z: parent.z
         color: "#9AE4C2"
         anchors.bottom: parent.bottom
         anchors.left: parent.left
         anchors.right: parent.right
     }
-
-
 }

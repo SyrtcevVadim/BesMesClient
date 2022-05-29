@@ -97,8 +97,8 @@ void CppInterface::setSignals()
                      this,       &CppInterface::serverMessageRecieved);
 }
 
-void CppInterface::startApplication()
+void CppInterface::setUpDatabase()
 {
-    connectToServer();
-    qDebug() << "Подключаемся";
+
+
 }

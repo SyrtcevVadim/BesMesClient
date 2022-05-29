@@ -119,6 +119,6 @@ QtObject {
     function startApplication()
     {
         model.connectToServer()
-        //openChatScreen()
+        openChatScreen()
     }
 }
