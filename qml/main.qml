@@ -41,12 +41,14 @@ ApplicationWindow {
         anchors.fill: parent
         focus: true
         initialItem: startScreen
+//        initialItem: test
     }
     //статичные экраны, которые должны быть созданы во время запуска
     WelcomeScreen{
         id: startScreen
         maxContentWidth: 300
         isDebug: true
+//        visible: false
         onLoginButtonClicked: viewController.createLoginScreen()
         onRegButtonClicked: viewController.createRegistrationScreen()
         onServerButtonClicked: viewController.openServerScreen()
@@ -57,5 +59,8 @@ ApplicationWindow {
         onBackButtonClicked: mainStack.pop()
         onConnectButtonPressed: viewController.startApplication()
         onDisconnectButtonPressed: viewController.disconnectFromServer()
+    }
+    ChatScreen{
+        id: test
     }
 }

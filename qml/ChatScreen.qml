@@ -134,9 +134,6 @@ Item {
         ListModel {
             id: chatListModel
         }
-
-// Добавить архив, чтобы хранить петабайты порнухи
-//(с) Глава Департамента Разработки 03ПГ
         Rectangle {
             id: buttonmenu
             anchors.bottom: parent.bottom
@@ -144,12 +141,23 @@ Item {
             width: parent.width
             anchors.left: parent.left
             color: parent.color
-            border.color: parent.border.color
-            border.width: parent.border.width
-            Row {
-                anchors.fill: parent
+
+
+            Rectangle{
+                id: leftButton
+                anchors{
+                    left: parent.left
+                    top: parent.top
+                }
+                height: parent.height
+                width: parent.width/2
+                color: parent.color
+
                 ImageButton{
                     id: chatsButton
+                    width: parent.height
+                    height: parent.height
+                    x: (parent.width - parent.height)/2
                     source_activated: "qrc:images/chat_icon_activated.png"
                     source_deactivated: "qrc:images/chat_icon_deactivated.png"
                     onClicked: {
@@ -157,7 +165,23 @@ Item {
                         database.updateChatListModel(chatListModel)
                     }
                 }
+            }
+
+            Rectangle{
+                id: rightButton
+                anchors{
+                    right: parent.right
+                    top: parent.top
+                }
+                height: parent.height
+                width: parent.width/2
+                color: parent.color
+
                 ImageButton{
+                    width: parent.height - 10
+                    height: parent.height - 10
+                    x: (parent.width - parent.height + 10)/2
+                    y: 5
                     source_activated: "qrc:images/settings_icon_activated"
                     source_deactivated: "qrc:images/settings_icon_deactivated"
                     onClicked: {
@@ -165,6 +189,14 @@ Item {
                     }
                 }
             }
+
+            Rectangle{
+                height: 1
+                width: parent.width
+                color: "#9AE4C2"
+                anchors.top: parent.top
+            }
+
         }
     }
 

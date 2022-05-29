@@ -3,6 +3,7 @@ import QtQuick.Controls
 
 Image {
     id: root
+
     required property string source_deactivated;
     required property string source_activated;
 
@@ -12,7 +13,7 @@ Image {
 
     MouseArea {
         id: area
-        anchors.fill: parent
+        anchors.fill: root
         onClicked: root.clicked()
         onContainsPressChanged: {
             let prevWidth = root.width
