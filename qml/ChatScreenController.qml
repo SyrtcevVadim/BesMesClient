@@ -25,20 +25,20 @@ QtObject {
             finalButtonText: qsTr("Создать"),
             labelText: qsTr("Новый чат")
         };
+        var chatName;
         function chatCreationRequestCompleted(json)
         {
             let object = JSON.parse(json)
-            let chat_name = object['название_чата']
-            let chat_id = object['ид_чата']
+            let chatId = object['ид_чата']
 
-            database.addNewChat(chat_name, chat_id)
+            database.addNewChat(chatName, chatId)
             model.sendChatCreationRequestCompleted.disconnect(chatCreationRequestCompleted)
         }
 
         function submitFunction()
         {
             let array = mainStack.currentItem.getFieldsValues()
-            let chatName = array[0]
+            chatName = array[0]
             if(chatName === "")
                 return
             model.sendChatCreationRequest(chatName)

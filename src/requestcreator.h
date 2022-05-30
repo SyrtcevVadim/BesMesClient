@@ -17,17 +17,17 @@ namespace RequestCreator
 
     const QString registrationCommand {u"РЕГИСТРАЦИЯ"_qs};
 
-    const QString usersListCommand {u"СПИСОКПОЛЬЗОВАТЕЛЕЙ"_qs};
+    const QString usersListCommand {u"СПИСОК_ПОЛЬЗОВАТЕЛЕЙ"_qs};
 
-    const QString chatListCommand {u"ЧАТЛИСТ"_qs};
+    const QString chatListCommand {u"СПИСОК_ЧАТОВ_ПОЛЬЗОВАТЕЛЯ"_qs};
 
-    const QString unreadMesagesCommand {u"ЧАТСООБЩ"_qs};
+    const QString unreadMesagesCommand {u"НЕПРОЧИТАННЫЕ_СООБЩЕНИЯ"_qs};
 
-    const QString sendMessageCommand {u"ОТПРСООБЩ"_qs};
+    const QString sendMessageCommand {u"ОТПРАВИТЬ_СООБЩЕНИЕ"_qs};
 
-    const QString chatCreateCommand {u"ЧАТСОЗДАТЬ"_qs};
+    const QString chatCreateCommand {u"СОЗДАТЬ_ЧАТ"_qs};
 
-    const QString chatRemoveCommand {u"ЧАТУДАЛ"_qs};
+    const QString chatRemoveCommand {u"УДАЛИТЬ_ЧАТ"_qs};
 };
 
 
