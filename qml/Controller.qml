@@ -2,6 +2,7 @@ import QtQuick
 import "ScreenCreator.js" as SC
 
 QtObject {
+    property bool testChatScreen: true
     function openServerScreen()
     {
         mainStack.push(serverScreen)
@@ -119,7 +120,7 @@ QtObject {
         database.createDatabase()
         model.connectToServer()
         model.serverStatusChanged.connect(serverStatusChanged)
-        //openChatScreen()
+        openChatScreen()
     }
     function loginSuccess()
     {
@@ -131,7 +132,8 @@ QtObject {
             let id = database.getCurrentUserId(model.email)
             model.user_id = id;
             console.log(id)
-            openChatScreen()
+            if(testChatScreen)
+                openChatScreen()
         }
         //обновить список всех пользователей
         database.getUsers(model, callback)

@@ -1,12 +1,15 @@
 import QtQuick
+import QtQuick.Controls
 import "ScreenCreator.js" as SC
 
 QtObject {
+    required property var mainStack
+    required property var model
     function deleteFormScreen()
     {
         var item = mainStack.currentItem;
         mainStack.pop();
-        var timer = Qt.createQmlObject("import QtQuick 2.0; Timer {}", appRoot);
+        var timer = Qt.createQmlObject("import QtQuick 2.0; Timer {}", root);
         timer.interval = 500;
         timer.repeat = false;
         timer.triggered.connect(() => {item.destroy(); timer.destroy()});
@@ -17,14 +20,29 @@ QtObject {
     {
         let ScreenCreator = new SC.ScreenCreator();
         ScreenCreator.parameters = {
-            namesArray: [qsTr("Имя"), qsTr("Фамилия"), qsTr("Почта"), qsTr("Пароль")],
-            textFieldsArray: [qsTr("Введите имя"), qsTr("Введите фамилию"), qsTr("Введите почту"), qsTr("Введите пароль")],
-            finalButtonText: qsTr("Зарегистрироваться"),
-            labelText: qsTr("Регистрация")
+            namesArray: [qsTr("Название чата")],
+            textFieldsArray: [qsTr("Введите название чата")],
+            finalButtonText: qsTr("Создать"),
+            labelText: qsTr("Новый чат")
         };
+        function chatCreationRequestCompleted(json)
+        {
+            let object = JSON.parse(json)
+            let chat_name = object['название_чата']
+            let chat_id = object['ид_чата']
+
+            database.addNewChat(chat_name, chat_id)
+            model.sendChatCreationRequestCompleted.disconnect(chatCreationRequestCompleted)
+        }
+
         function submitFunction()
         {
-
+            let array = mainStack.currentItem.getFieldsValues()
+            let chatName = array[0]
+            if(chatName === "")
+                return
+            model.sendChatCreationRequest(chatName)
+            model.sendChatCreationRequestCompleted.connect(chatCreationRequestCompleted)
         }
         function callbackFunction(object){
             mainStack.push(object);

@@ -14,6 +14,7 @@ ApplicationWindow {
     menuBar: MenuBar {
         function getChatListActionReference() {return testChatListUpdate}
         function getModelReference() {return model}
+        function getMainStackReference() {return mainStack}
         Menu {
             title: "Test functions"
             Action {

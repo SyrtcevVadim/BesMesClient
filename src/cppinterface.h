@@ -36,7 +36,7 @@ signals:
     void registrationRequestCompleted(int code);
     void registrationCodeRequestCompleted(int code);
 
-    void sendChatCreationRequestCompleted(const QString name);
+    void sendChatCreationRequestCompleted(const QString jsonAnswer);
     void sendChatRemovingtRequestCompleted(const int chat_id);
     void sendChatListRequestCompleted(const QString jsonAnswer);
     void sendUserListRequestCompleted(const QString jsonAnswer);

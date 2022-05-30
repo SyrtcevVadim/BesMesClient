@@ -40,6 +40,7 @@ QtObject {
     property string test: `
     SELECT * FROM user;
     `
+    signal chatListUpdated;
     function createDatabase()
     {
         console.log("db created")
@@ -212,5 +213,18 @@ QtObject {
 
         model.sendChatListRequest()
         model.sendChatListRequestCompleted.connect(request_callback)
+    }
+
+    function addNewChat(chat_name, chat_id)
+    {
+        var db = LocalStorage.openDatabaseSync(":memory:", "1.0", "test", 1000000)
+        db.transaction(
+            function(tx) {
+                let query = `INSERT INTO chat (id, chat_name) VALUES (${chat_id}, ${chat_name});`
+                console.log(query)
+                tx.executeSql(query)
+            }
+        );
+        chatListUpdated()
     }
 }

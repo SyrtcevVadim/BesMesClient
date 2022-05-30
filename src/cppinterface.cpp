@@ -87,12 +87,11 @@ void CppInterface::serverMessageRecieved(QString serverMessage)
     }
     else if(answerType == chatListCommand)
     {
-        qDebug() << "fdfddf";
         emit sendChatListRequestCompleted(serverMessage);
     }
     else if(answerType == chatCreateCommand)
     {
-
+        emit sendChatCreationRequestCompleted(serverMessage);
     }
     else if(answerType == chatRemoveCommand)
     {

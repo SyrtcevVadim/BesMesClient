@@ -11,6 +11,7 @@ Item {
     function initComponent()
     {
         checkState()
+        controller.mainStack = ApplicationWindow.menuBar.getMainStackReference()
         ApplicationWindow.menuBar.getChatListActionReference().onTriggered.connect(updateChatListModel)
     }
     function checkState()
@@ -68,10 +69,13 @@ Item {
 
     Database {
         id: database
+        chatListUpdated: database.updateChatListModel()
     }
 
     ChatScreenController {
         id: controller
+        mainStack: ApplicationWindow.menuBar.getMainStackReference()
+        model: ApplicationWindow.menuBar.getModelReference(chatListModel)
     }
 
     Rectangle {
@@ -115,9 +119,7 @@ Item {
                 width: height
                 source_activated: "qrc:images/plus_icon_chat.png"
                 source_deactivated: "qrc:images/plus_icon_chat.png"
-                onClicked:{
-                    database.updateChatListModel(chatListModel)
-                }
+                onClicked: controller.openAddNewChatScreen()
             }
         }
 
@@ -219,6 +221,7 @@ Item {
         anchors.bottom: root.bottom
         backgroundColor: "#FFFFFF"
     }
+
 }
 
 /*##^##
