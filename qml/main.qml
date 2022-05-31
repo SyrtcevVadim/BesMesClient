@@ -15,6 +15,10 @@ ApplicationWindow {
         function getChatListActionReference() {
             return testChatListUpdate
         }
+        function getChatMessageUpdateActionReference(){
+            return testChatMessageUpdate
+        }
+
         function getModelReference() {
             return model
         }
@@ -32,6 +36,10 @@ ApplicationWindow {
                 text: "Update user list"
                 onTriggered: database.getUsers(model)
             }
+            Action {
+                id: testChatMessageUpdate
+                text: "Update current chat"
+            }
         }
         Menu {
             title: "База данных"
@@ -45,6 +53,19 @@ ApplicationWindow {
                 text: "Удалить базу данных"
                 onTriggered: database.dropDatabase()
             }
+            Action {
+                text: "Вывести таблицу chat"
+                onTriggered: database.getTableChat()
+            }
+            Action {
+                text: "Вывести таблицу user"
+                onTriggered: database.getTableUser()
+            }
+            Action {
+                text: "Вывести таблицу messages"
+                onTriggered: database.getTableMessages()
+            }
+
         }
         Menu {
             title: "Подключение"

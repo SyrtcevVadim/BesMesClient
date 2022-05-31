@@ -14,6 +14,8 @@ Item {
         controller.model = ApplicationWindow.menuBar.getModelReference()
         ApplicationWindow.menuBar.getChatListActionReference(
                     ).onTriggered.connect(getNewChatListModel)
+        ApplicationWindow.menuBar.getChatMessageUpdateActionReference(
+                    ).onTriggered.connect(onSelectedChatChanged)
 
         database.updateChatListModel(chatListModel)
     }
@@ -40,6 +42,19 @@ Item {
     {
         chatListModel.clear()
         database.updateChatListModel(chatListModel)
+    }
+
+    function updateChatMessagesModel()
+    {
+        messagesModel.clear()
+        let chatId = chatListModel.getCurrentChatId()
+        database.updateDialogMessagesModel(messagesModel, chatId, controller.model)
+    }
+
+    function onSelectedChatChanged()
+    {
+        updateChatMessagesModel()
+        chatrect.currentChatName = chatListModel.get(listView.currentIndex).name
     }
 
     states: [
@@ -142,11 +157,21 @@ Item {
                     onClicked: listView.currentIndex = index
                 }
             }
+            onCurrentItemChanged: onSelectedChatChanged()
             model: chatListModel
         }
 
         ListModel {
             id: chatListModel
+            function getCurrentChatId()
+            {
+                if(chatListModel.count === 0)
+                    return 0;
+                let chat_index = listView.currentIndex
+                let chat_id = chatListModel.get(chat_index).id
+                console.log(chat_id)
+                return chat_id;
+            }
         }
         Rectangle {
             id: buttonmenu

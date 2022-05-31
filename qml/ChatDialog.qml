@@ -53,7 +53,7 @@ Item {
             Menu {
                 id: popupMenu
                 MenuItem {
-                    text: "test1"
+                    text: "Удалить чат"
                 }
                 MenuItem {
                     text: "test2"

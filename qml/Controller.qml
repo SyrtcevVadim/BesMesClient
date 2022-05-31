@@ -9,7 +9,7 @@ QtObject {
         database.createDatabase()
         model.connectToServer()
         model.serverStatusChanged.connect(serverStatusChanged)
-        openChatScreen()
+        //openChatScreen()
     }
 
     function openServerScreen()

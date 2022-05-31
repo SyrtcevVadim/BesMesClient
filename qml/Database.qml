@@ -15,6 +15,9 @@ QtObject {
     property string dropMessageTable:`
     DROP TABLE IF EXISTS message;
     `
+    property string getMessageTable: `
+    SELECT * FROM message;
+    `
     property string createChatTable : `
     CREATE TABLE IF NOT EXISTS chat (
         id         integer PRIMARY KEY,
@@ -23,6 +26,9 @@ QtObject {
     `
     property string dropChatTable:`
     DROP TABLE IF EXISTS chat;
+    `
+    property string getChatTable: `
+    SELECT * FROM chat;
     `
     property string createUserTable: `
     CREATE TABLE IF NOT EXISTS user (
@@ -35,23 +41,25 @@ QtObject {
     property string dropUserTable:`
     DROP TABLE IF EXISTS user;
     `
+    property string getUserTable: `
+    SELECT * FROM user;
+    `
     property string getChatsList: `
     SELECT id, chat_name FROM chat;
     `
     property string getChatMessages:`
-    SELECT message.body as msg, user.name || ' ' || user.surname as full_name
+    SELECT message.body as msg, user.first_name || ' ' || user.last_name as full_name, user.id
     FROM message
     JOIN user ON message.sender_id = user.id
-    WHEN chat_id =
-    `
+    WHERE message.chat_id = `
     property string test: `
     INSERT INTO message(body, chat_id, sender_id, time) VALUES
-    ("test1", 1, 1, 1654004194),
-    ("test2", 1, 2, 1654004194),
-    ("test3", 1, 3, 1654004194),
-    ("test4", 2, 1, 1654004194),
-    ("test5", 2, 2, 1654004194),
-    ("test6", 2, 3, 1654004194);
+    ("test1", 4, 1, 1654004194),
+    ("test2", 4, 2, 1654004194),
+    ("test3", 4, 3, 1654004194),
+    ("test4", 12, 1, 1654004194),
+    ("test5", 12, 2, 1654004194),
+    ("test6", 12, 3, 1654004194);
     `
     signal chatListUpdated;
     function createDatabase()
@@ -75,6 +83,51 @@ QtObject {
                 tx.executeSql(dropMessageTable);
                 tx.executeSql(dropChatTable);
                 tx.executeSql(dropUserTable);
+            }
+        );
+    }
+
+    function getTableChat()
+    {
+        var db = LocalStorage.openDatabaseSync(":memory:", "1.0", "test", 1000000)
+        db.transaction(
+            function(tx) {
+                let result = tx.executeSql(getChatTable);
+                for(let i = 0; i < result.rows.length; i++)
+                {
+                    for(let key in result.rows.item(i))
+                        console.log(key + ': '+result.rows.item(i)[key])
+                }
+            }
+        );
+    }
+
+    function getTableUser()
+    {
+        var db = LocalStorage.openDatabaseSync(":memory:", "1.0", "test", 1000000)
+        db.transaction(
+            function(tx) {
+                let result = tx.executeSql(getUserTable);
+                for(let i = 0; i < result.rows.length; i++)
+                {
+                    for(let key in result.rows.item(i))
+                        console.log(key + ': '+result.rows.item(i)[key])
+                }
+            }
+        );
+    }
+
+    function getTableMessages()
+    {
+        var db = LocalStorage.openDatabaseSync(":memory:", "1.0", "test", 1000000)
+        db.transaction(
+            function(tx) {
+                let result = tx.executeSql(getMessageTable);
+                for(let i = 0; i < result.rows.length; i++)
+                {
+                    for(let key in result.rows.item(i))
+                        console.log(key + ': '+result.rows.item(i)[key])
+                }
             }
         );
     }
@@ -246,19 +299,27 @@ QtObject {
     function updateDialogMessagesModel(messagesmodel, chat_id, model)
     {
         var db = LocalStorage.openDatabaseSync(":memory:", "1.0", "test", 1000000)
+        console.log("update messages")
         db.transaction(
             function(tx) {
                 let current_id = model.user_id
-                let query = getChatMessages + `${chat_id};`;
-                var result = tx.executeSql(query)
+                console.log(current_id)
+                let query = getChatMessages + chat_id + ';';
+                console.log(query)
+
+                let result = tx.executeSql(query)
+                console.log("length: " + result.rows.length)
                 messagesmodel.clear()
-                for (var i = 0; i < result.rows.length; i++)
+                for (var i = result.rows.length-1; i >= 0; i--)
                 {
+                    console.log("Новое сообщение")
+                    let isSender = result.rows.item(i)['id'] == current_id
+                    console.log('Отправитель?' + isSender)
                     messagesmodel.append
                     ({
                          name: result.rows.item(i).full_name,
                          message: result.rows.item(i).msg,
-                         isSender: true
+                         isSender: isSender
                     });
                     for(let key in result.rows.item(i))
                     {
