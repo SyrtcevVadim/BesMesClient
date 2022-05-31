@@ -7,5 +7,7 @@
         <file>images/plus_icon_chat.png</file>
         <file>images/plus_icon_doc.png</file>
         <file>images/send_message_icon.png</file>
+        <file>images/menu_vertical.png</file>
+        <file>images/cancel_icon.png</file>
     </qresource>
 </RCC>

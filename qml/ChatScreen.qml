@@ -129,7 +129,7 @@ Item {
                     right: addButton.left
                 }
                 text: qsTr("Чаты")
-                font.pixelSize: 30
+                font.pixelSize: 26
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
             }
@@ -139,6 +139,8 @@ Item {
                     right: parent.right
                     top: parent.top
                     bottom: parent.bottom
+                    topMargin: 10
+                    bottomMargin: 10
                 }
                 width: height
                 source_activated: "qrc:images/plus_icon_chat.png"
@@ -240,6 +242,13 @@ Item {
                 width: parent.width
                 color: "#9AE4C2"
                 anchors.top: parent.top
+            }
+
+            Rectangle {
+                width: 1
+                height: parent.height
+                color: "#9AE4C2"
+                anchors.right: parent.right
             }
         }
     }
