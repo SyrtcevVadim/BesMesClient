@@ -28,6 +28,7 @@ public:
     Q_INVOKABLE void sendChatListRequest();
     Q_INVOKABLE void sendUserListRequest();
     Q_INVOKABLE void sendMessageRequest(const int chat_id, const QString message_text);
+    Q_INVOKABLE void sendSynchronizationRequest(const double timestamp);
 
 
 signals:
@@ -42,6 +43,7 @@ signals:
     void sendChatListRequestCompleted(const QString jsonAnswer);
     void sendUserListRequestCompleted(const QString jsonAnswer);
     void sendMessageRequestCompleted(const QString jsonAnswer);
+    void sendSynchronizationRequestCompleted(const QString jsonAnswer);
 
 
 private slots:

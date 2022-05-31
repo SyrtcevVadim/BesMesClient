@@ -16,6 +16,8 @@ Item {
                     ).onTriggered.connect(getNewChatListModel)
         ApplicationWindow.menuBar.getChatMessageUpdateActionReference(
                     ).onTriggered.connect(onSelectedChatChanged)
+        ApplicationWindow.menuBar.synchronizationActionReference(
+                    ).onTriggered.connect(controller.synchronization)
 
         database.updateChatListModel(chatListModel)
     }
@@ -55,6 +57,11 @@ Item {
     {
         updateChatMessagesModel()
         chatrect.currentChatName = chatListModel.get(listView.currentIndex).name
+    }
+
+    Timer {
+        interval: 500
+        onTriggered: controller.synchronization()
     }
 
     states: [

@@ -125,6 +125,8 @@ Item {
             source_deactivated: "qrc:images/send_message_icon"
             width: height
 
+            onClicked: sendMessageButtonClicked()
+
             anchors {
                 left: messageInput.right
                 leftMargin: 10

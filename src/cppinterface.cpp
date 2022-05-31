@@ -67,6 +67,12 @@ void CppInterface::sendMessageRequest(const int chat_id, const QString message_t
     connection->sendRequest(request);
 }
 
+void CppInterface::sendSynchronizationRequest(const double timestamp)
+{
+    QString request = RequestCreator::createSynchronizationRequest(timestamp);
+    connection->sendRequest(request);
+}
+
 void CppInterface::connectionStatusChanged(bool status)
 {
     emit serverStatusChanged((int)status);
@@ -111,6 +117,10 @@ void CppInterface::serverMessageRecieved(QString serverMessage)
     else if(answerType == sendMessageCommand)
     {
         emit sendMessageRequestCompleted(serverMessage);
+    }
+    else if(answerType == synchronizationCommand)
+    {
+        emit sendSynchronizationRequestCompleted(serverMessage);
     }
 }
 

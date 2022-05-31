@@ -13,6 +13,7 @@ namespace RequestCreator
     QString createChatListRequest();
     QString createUserListRequest();
     QString createMessageRequest(const int chat_id, const QString message_text);
+    QString createSynchronizationRequest(const double timestamp);
 
     const QString loginCommand {u"ВХОД"_qs};
 
@@ -29,6 +30,8 @@ namespace RequestCreator
     const QString chatCreateCommand {u"СОЗДАТЬ_ЧАТ"_qs};
 
     const QString chatRemoveCommand {u"УДАЛИТЬ_ЧАТ"_qs};
+
+    const QString synchronizationCommand {u"СИНХРОНИЗАЦИЯ"_qs};
 };
 
 

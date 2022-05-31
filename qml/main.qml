@@ -18,6 +18,9 @@ ApplicationWindow {
         function getChatMessageUpdateActionReference(){
             return testChatMessageUpdate
         }
+        function synchronizationActionReference(){
+            return testSynchronization
+        }
 
         function getModelReference() {
             return model
@@ -39,6 +42,10 @@ ApplicationWindow {
             Action {
                 id: testChatMessageUpdate
                 text: "Update current chat"
+            }
+            Action {
+                id: testSynchronization
+                text: "Синхронизация"
             }
         }
         Menu {

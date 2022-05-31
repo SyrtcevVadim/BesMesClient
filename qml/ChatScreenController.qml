@@ -1,5 +1,6 @@
 import QtQuick
 import QtQuick.Controls
+import QtQuick.LocalStorage
 import "ScreenCreator.js" as SC
 
 QtObject {
@@ -58,11 +59,45 @@ QtObject {
 
         function callback(json){
             let object = JSON.parse(json)
-
+            console.write(json)
         }
 
         model.sendMessageRequest(chat_id, text)
         model.sendMessageRequestCompleted(callback)
     }
 
+    function synchronization()
+    {
+        console.log("ddd")
+        database.getSynchronizationData(model)
+        function callback(data){
+            console.log(data)
+
+            var dataObject = JSON.parse(data)
+            var chatsArray = dataObject["чаты"]
+            var db = LocalStorage.openDatabaseSync(":memory:", "1.0", "test", 1000000)
+            db.transaction(
+                function(tx){
+                    for(var i = 0; i < chatsArray.length; i++)
+                    {
+                        let chat_id = chatsArray[i]['ид_чата']
+                        let messagesArray = chatsArray[i]['сообщения']
+                        for(var msg = 0; msg < messagesArray.length; msg++)
+                        {
+                            let currentMessage = messagesArray[msg]
+                            let query = "INSERT INTO message(body, chat_id, sender_id, time) VALUES (?, ?, ?, ?)"
+                            tx.executeSql(query, [currentMessage['тело_сообщения'],
+                                                  chat_id, currentMessage['ид_отправителя'],
+                                                  currentMessage['время_отправления']]);
+                        }
+                    }
+                }
+            )
+
+
+
+            database.synchronizationCompleted.disconnect(callback)
+        }
+        database.synchronizationCompleted.connect(callback)
+    }
 }

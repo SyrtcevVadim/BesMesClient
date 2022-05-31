@@ -72,3 +72,13 @@ QString RequestCreator::createMessageRequest(const int chat_id, const QString me
     QJsonDocument doc(obj);
     return QString::fromUtf8(doc.toJson());
 }
+
+QString RequestCreator::createSynchronizationRequest(const double timestamp)
+{
+    QJsonObject obj {
+        {"тип_запроса", synchronizationCommand},
+        {"временная_метка", timestamp}
+    };
+    QJsonDocument doc(obj);
+    return QString::fromUtf8(doc.toJson());
+}

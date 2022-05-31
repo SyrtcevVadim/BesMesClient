@@ -52,6 +52,9 @@ QtObject {
     FROM message
     JOIN user ON message.sender_id = user.id
     WHERE message.chat_id = `
+    property string synchronizationQuery: `
+    SELECT max(time) FROM message
+    `
     property string test: `
     INSERT INTO message(body, chat_id, sender_id, time) VALUES
     ("test1", 4, 1, 1654004194),
@@ -62,6 +65,7 @@ QtObject {
     ("test6", 12, 3, 1654004194);
     `
     signal chatListUpdated;
+    signal synchronizationCompleted(var data);
     function createDatabase()
     {
         console.log("db created")
@@ -299,22 +303,22 @@ QtObject {
     function updateDialogMessagesModel(messagesmodel, chat_id, model)
     {
         var db = LocalStorage.openDatabaseSync(":memory:", "1.0", "test", 1000000)
-        console.log("update messages")
+        //console.log("update messages")
         db.transaction(
             function(tx) {
                 let current_id = model.user_id
-                console.log(current_id)
+                //console.log(current_id)
                 let query = getChatMessages + chat_id + ';';
-                console.log(query)
+                //console.log(query)
 
                 let result = tx.executeSql(query)
-                console.log("length: " + result.rows.length)
+                //console.log("length: " + result.rows.length)
                 messagesmodel.clear()
                 for (var i = result.rows.length-1; i >= 0; i--)
                 {
-                    console.log("Новое сообщение")
+                    //console.log("Новое сообщение")
                     let isSender = result.rows.item(i)['id'] == current_id
-                    console.log('Отправитель?' + isSender)
+                    //console.log('Отправитель?' + isSender)
                     messagesmodel.append
                     ({
                          name: result.rows.item(i).full_name,
@@ -323,15 +327,31 @@ QtObject {
                     });
                     for(let key in result.rows.item(i))
                     {
-                        console.log(key + " " + result.rows.item(i)[key])
+                        //console.log(key + " " + result.rows.item(i)[key])
                     }
                 }
             }
         );
     }
 
-    function getMessages()
+    function getSynchronizationData(model)
     {
-
+        var db = LocalStorage.openDatabaseSync(":memory:", "1.0", "test", 1000000)
+        var time;
+        db.transaction(
+            function(tx) {
+                var result = tx.executeSql(synchronizationQuery)
+                time = result.rows.item(0)['max(time)']
+                if(time === null)
+                    time = 0
+            }
+        );
+        model.sendSynchronizationRequest(time)
+        function onRequestCompleted(json)
+        {
+            synchronizationCompleted(json)
+            model.sendSynchronizationRequestCompleted.disconnect(onRequestCompleted)
+        }
+        model.sendSynchronizationRequestCompleted.connect(onRequestCompleted)
     }
 }
