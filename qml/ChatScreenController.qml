@@ -51,4 +51,18 @@ QtObject {
         }
         ScreenCreator.create(root, callbackFunction)
     }
+    function sendMessage(text)
+    {
+        let chat_index = listView.currentIndex
+        let chat_id = chatListModel.get(chat_index).id
+
+        function callback(json){
+            let object = JSON.parse(json)
+
+        }
+
+        model.sendMessageRequest(chat_id, text)
+        model.sendMessageRequestCompleted(callback)
+    }
+
 }

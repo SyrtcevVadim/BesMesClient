@@ -3,6 +3,15 @@ import "ScreenCreator.js" as SC
 
 QtObject {
     property bool testChatScreen: true
+
+    function startApplication()
+    {
+        database.createDatabase()
+        model.connectToServer()
+        model.serverStatusChanged.connect(serverStatusChanged)
+        openChatScreen()
+    }
+
     function openServerScreen()
     {
         mainStack.push(serverScreen)
@@ -113,14 +122,6 @@ QtObject {
     {
         if(status === false)
             mainStack.showWindow("Статус сервера", "Произошло отключение от сервера")
-    }
-
-    function startApplication()
-    {
-        database.createDatabase()
-        model.connectToServer()
-        model.serverStatusChanged.connect(serverStatusChanged)
-        openChatScreen()
     }
     function loginSuccess()
     {

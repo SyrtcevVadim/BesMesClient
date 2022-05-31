@@ -27,6 +27,7 @@ public:
     Q_INVOKABLE void sendChatRemovingtRequest(const int chat_id);
     Q_INVOKABLE void sendChatListRequest();
     Q_INVOKABLE void sendUserListRequest();
+    Q_INVOKABLE void sendMessageRequest(const int chat_id, const QString message_text);
 
 
 signals:
@@ -40,6 +41,8 @@ signals:
     void sendChatRemovingtRequestCompleted(const int chat_id);
     void sendChatListRequestCompleted(const QString jsonAnswer);
     void sendUserListRequestCompleted(const QString jsonAnswer);
+    void sendMessageRequestCompleted(const QString jsonAnswer);
+
 
 private slots:
     void connectionStatusChanged(bool status);

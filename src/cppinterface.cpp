@@ -4,6 +4,7 @@
 CppInterface::CppInterface(QObject* parent) : QObject(parent)
 {
     connection = new ServerConnectorComponent();
+    m_user_id = 3;
     setSignals();
 }
 
@@ -60,6 +61,12 @@ void CppInterface::sendUserListRequest()
     connection->sendRequest(request);
 }
 
+void CppInterface::sendMessageRequest(const int chat_id, const QString message_text)
+{
+    QString request = RequestCreator::createMessageRequest(chat_id, message_text);
+    connection->sendRequest(request);
+}
+
 void CppInterface::connectionStatusChanged(bool status)
 {
     emit serverStatusChanged((int)status);
@@ -100,6 +107,10 @@ void CppInterface::serverMessageRecieved(QString serverMessage)
     else if(answerType == usersListCommand)
     {
         emit sendUserListRequestCompleted(serverMessage);
+    }
+    else if(answerType == sendMessageCommand)
+    {
+        emit sendMessageRequestCompleted(serverMessage);
     }
 }
 

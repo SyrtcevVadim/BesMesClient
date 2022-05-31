@@ -12,9 +12,15 @@ ApplicationWindow {
     Component.onCompleted: viewController.startApplication()
 
     menuBar: MenuBar {
-        function getChatListActionReference() {return testChatListUpdate}
-        function getModelReference() {return model}
-        function getMainStackReference() {return mainStack}
+        function getChatListActionReference() {
+            return testChatListUpdate
+        }
+        function getModelReference() {
+            return model
+        }
+        function getMainStackReference() {
+            return mainStack
+        }
         Menu {
             title: "Test functions"
             Action {
@@ -53,27 +59,27 @@ ApplicationWindow {
         id: database
     }
 
-    CppInterface{
+    CppInterface {
         id: model
-        onServerStatusChanged: (status) =>  console.log("статус сервера " + status)
+        onServerStatusChanged: status => console.log("статус сервера " + status)
     }
 
-    Style{
+    Style {
         id: style
     }
     //элемент объединяющий в себе все функции обработки событий qml
-    Controller{
+    Controller {
         id: viewController
     }
 
-    StackWindow{
+    StackWindow {
         id: mainStack
         anchors.fill: parent
         focus: true
         initialItem: startScreen
     }
     //статичные экраны, которые должны быть созданы во время запуска
-    WelcomeScreen{
+    WelcomeScreen {
         id: startScreen
         maxContentWidth: 300
         isDebug: true
@@ -82,7 +88,7 @@ ApplicationWindow {
         onRegButtonClicked: viewController.createRegistrationScreen()
         onServerButtonClicked: viewController.openServerScreen()
     }
-    ServerScreen{
+    ServerScreen {
         id: serverScreen
         visible: false
         onBackButtonClicked: mainStack.pop()
@@ -90,8 +96,8 @@ ApplicationWindow {
         onDisconnectButtonPressed: viewController.disconnectFromServer()
     }
 
+    //ChatScreen { }
     function getControllerReference() {
         return viewController
     }
-
 }

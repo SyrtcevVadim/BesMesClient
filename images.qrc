@@ -6,5 +6,6 @@
         <file>images/settings_icon_deactivated.png</file>
         <file>images/plus_icon_chat.png</file>
         <file>images/plus_icon_doc.png</file>
+        <file>images/send_message_icon.png</file>
     </qresource>
 </RCC>

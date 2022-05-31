@@ -8,47 +8,50 @@ Item {
     state: "desktop"
     Component.onCompleted: initComponent()
 
-    function initComponent()
-    {
+    function initComponent() {
         checkState()
         controller.mainStack = ApplicationWindow.menuBar.getMainStackReference()
-        ApplicationWindow.menuBar.getChatListActionReference().onTriggered.connect(updateChatListModel)
+        controller.model = ApplicationWindow.menuBar.getModelReference()
+        ApplicationWindow.menuBar.getChatListActionReference(
+                    ).onTriggered.connect(getNewChatListModel)
+
+        database.updateChatListModel(chatListModel)
     }
-    function checkState()
-    {
-        if(root.width > 600){
+    function checkState() {
+        if (root.width > 600) {
             root.state = "desktop"
-        }
-        else if(chatrect.chatActive)
-        {
+        } else if (chatrect.chatActive) {
             root.state = "mobile-chat"
-        }
-        else{
+        } else {
             root.state = "mobile-menu"
         }
     }
 
-    function updateChatListModel()
-    {
+    function getNewChatListModel() {
         let model = ApplicationWindow.menuBar.getModelReference()
 
-        function callback()
-        {
-            database.updateChatListModel(chatListModel)
+        function callback() {
+            root.updateChatListModel()
         }
         database.getChatList(model, callback)
     }
 
+    function updateChatListModel()
+    {
+        chatListModel.clear()
+        database.updateChatListModel(chatListModel)
+    }
+
     states: [
-        State{
+        State {
             name: "desktop"
             PropertyChanges {
-                target: menurect;
+                target: menurect
                 width: root.width * 0.36
                 visible: true
             }
         },
-        State{
+        State {
             name: "mobile-menu"
             PropertyChanges {
                 target: menurect
@@ -56,26 +59,25 @@ Item {
                 visible: true
             }
         },
-        State{
+        State {
             name: "mobile-chat"
             PropertyChanges {
                 target: menurect
                 width: 0
                 visible: false
             }
-
         }
     ]
 
     Database {
         id: database
-        chatListUpdated: database.updateChatListModel()
+        onChatListUpdated: root.updateChatListModel()
     }
 
     ChatScreenController {
         id: controller
         mainStack: ApplicationWindow.menuBar.getMainStackReference()
-        model: ApplicationWindow.menuBar.getModelReference(chatListModel)
+        model: ApplicationWindow.menuBar.getModelReference()
     }
 
     Rectangle {
@@ -109,7 +111,7 @@ Item {
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
             }
-            ImageButton{
+            ImageButton {
                 id: addButton
                 anchors {
                     right: parent.right
@@ -128,7 +130,7 @@ Item {
             anchors.top: titlescreen.bottom
             width: menurect.width
             anchors.bottom: buttonmenu.top
-            ScrollBar.vertical: ScrollBar{}
+            ScrollBar.vertical: ScrollBar {}
             focus: true
             delegate: ChatListItem {
                 width: listView.width
@@ -154,22 +156,21 @@ Item {
             anchors.left: parent.left
             color: parent.color
 
-
-            Rectangle{
+            Rectangle {
                 id: leftButton
-                anchors{
+                anchors {
                     left: parent.left
                     top: parent.top
                 }
                 height: parent.height
-                width: parent.width/2
+                width: parent.width / 2
                 color: parent.color
 
-                ImageButton{
+                ImageButton {
                     id: chatsButton
                     width: parent.height
                     height: parent.height
-                    x: (parent.width - parent.height)/2
+                    x: (parent.width - parent.height) / 2
                     source_activated: "qrc:images/chat_icon_activated.png"
                     source_deactivated: "qrc:images/chat_icon_deactivated.png"
                     onClicked: {
@@ -179,20 +180,20 @@ Item {
                 }
             }
 
-            Rectangle{
+            Rectangle {
                 id: rightButton
-                anchors{
+                anchors {
                     right: parent.right
                     top: parent.top
                 }
                 height: parent.height
-                width: parent.width/2
+                width: parent.width / 2
                 color: parent.color
 
-                ImageButton{
+                ImageButton {
                     width: parent.height - 10
                     height: parent.height - 10
-                    x: (parent.width - parent.height + 10)/2
+                    x: (parent.width - parent.height + 10) / 2
                     y: 5
                     source_activated: "qrc:images/settings_icon_activated"
                     source_deactivated: "qrc:images/settings_icon_deactivated"
@@ -202,26 +203,40 @@ Item {
                 }
             }
 
-            Rectangle{
+            Rectangle {
                 height: 1
                 width: parent.width
                 color: "#9AE4C2"
                 anchors.top: parent.top
             }
-
         }
     }
 
     ChatDialog {
         id: chatrect
-        property bool chatActive: true
         anchors.left: menurect.right
         anchors.right: root.right
         anchors.top: root.top
         anchors.bottom: root.bottom
         backgroundColor: "#FFFFFF"
-    }
+        currentChatModel: messagesModel
 
+        currentChatName: "Название беседы"
+        onSendMessageButtonClicked: controller.sendMessage(chatrect.currentText)
+    }
+    ListModel {
+        id: messagesModel
+        ListElement {
+            name: "Владимир Воропаев"
+            message: "Успеешь по срокам?"
+            isSender: true
+        }
+        ListElement {
+            name: "Екатерина Жужликова"
+            message: "Постараюсь, но ничего не обещаю"
+            isSender: false
+        }
+    }
 }
 
 /*##^##
@@ -230,3 +245,4 @@ Designer {
 D{i:11}
 }
 ##^##*/
+

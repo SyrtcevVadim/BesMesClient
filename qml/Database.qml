@@ -5,10 +5,11 @@ import QtQuick.Controls
 QtObject {
     property string createMessageTable: `
     CREATE TABLE IF NOT EXISTS message (
-    id         integer PRIMARY KEY AUTOINCREMENT,
+        id         integer PRIMARY KEY AUTOINCREMENT,
         body       text,
         chat_id    integer,
-        sender_id  integer
+        sender_id  integer,
+        time       integer
     );
     `
     property string dropMessageTable:`
@@ -37,8 +38,20 @@ QtObject {
     property string getChatsList: `
     SELECT id, chat_name FROM chat;
     `
+    property string getChatMessages:`
+    SELECT message.body as msg, user.name || ' ' || user.surname as full_name
+    FROM message
+    JOIN user ON message.sender_id = user.id
+    WHEN chat_id =
+    `
     property string test: `
-    SELECT * FROM user;
+    INSERT INTO message(body, chat_id, sender_id, time) VALUES
+    ("test1", 1, 1, 1654004194),
+    ("test2", 1, 2, 1654004194),
+    ("test3", 1, 3, 1654004194),
+    ("test4", 2, 1, 1654004194),
+    ("test5", 2, 2, 1654004194),
+    ("test6", 2, 3, 1654004194);
     `
     signal chatListUpdated;
     function createDatabase()
@@ -94,6 +107,8 @@ QtObject {
         var db = LocalStorage.openDatabaseSync(":memory:", "1.0", "test", 1000000)
         db.transaction(
             function(tx) {
+                tx.executeSql(dropMessageTable)
+                tx.executeSql(createMessageTable)
                 var result = tx.executeSql(test)
                 for(var key in result)
                 {
@@ -220,11 +235,42 @@ QtObject {
         var db = LocalStorage.openDatabaseSync(":memory:", "1.0", "test", 1000000)
         db.transaction(
             function(tx) {
-                let query = `INSERT INTO chat (id, chat_name) VALUES (${chat_id}, ${chat_name});`
+                let query = `INSERT INTO chat (id, chat_name) VALUES (${chat_id}, "${chat_name}");`
                 console.log(query)
                 tx.executeSql(query)
             }
         );
         chatListUpdated()
+    }
+
+    function updateDialogMessagesModel(messagesmodel, chat_id, model)
+    {
+        var db = LocalStorage.openDatabaseSync(":memory:", "1.0", "test", 1000000)
+        db.transaction(
+            function(tx) {
+                let current_id = model.user_id
+                let query = getChatMessages + `${chat_id};`;
+                var result = tx.executeSql(query)
+                messagesmodel.clear()
+                for (var i = 0; i < result.rows.length; i++)
+                {
+                    messagesmodel.append
+                    ({
+                         name: result.rows.item(i).full_name,
+                         message: result.rows.item(i).msg,
+                         isSender: true
+                    });
+                    for(let key in result.rows.item(i))
+                    {
+                        console.log(key + " " + result.rows.item(i)[key])
+                    }
+                }
+            }
+        );
+    }
+
+    function getMessages()
+    {
+
     }
 }

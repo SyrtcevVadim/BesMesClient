@@ -28,7 +28,7 @@ QString RequestCreator::createChatCreationRequest(const QString name)
 {
     QJsonObject obj{
         {"тип_запроса", chatCreateCommand},
-        {"название", name}
+        {"название_чата", name}
     };
     QJsonDocument doc(obj);
     return QString::fromUtf8(doc.toJson());
@@ -57,6 +57,17 @@ QString RequestCreator::createUserListRequest()
 {
     QJsonObject obj{
         {"тип_запроса", usersListCommand}
+    };
+    QJsonDocument doc(obj);
+    return QString::fromUtf8(doc.toJson());
+}
+
+QString RequestCreator::createMessageRequest(const int chat_id, const QString message_text)
+{
+    QJsonObject obj {
+        {"тип_запроса", sendMessageCommand},
+        {"ид_чата", chat_id},
+        {"тело_сообщения", message_text}
     };
     QJsonDocument doc(obj);
     return QString::fromUtf8(doc.toJson());
