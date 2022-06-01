@@ -1,0 +1,21 @@
+<RCC>
+    <qresource prefix="/">
+        <file>qml/Controller.qml</file>
+        <file>qml/FormScreen.qml</file>
+        <file>qml/ScreenCreator.js</file>
+        <file>qml/main.qml</file>
+        <file>qml/ServerScreen.qml</file>
+        <file>qml/Style.qml</file>
+        <file>qml/WelcomeScreen.qml</file>
+        <file>qml/ChatDialog.qml</file>
+        <file>qml/ChatDialogMessage.qml</file>
+        <file>qml/ChatListItem.qml</file>
+        <file>qml/ChatScreen.qml</file>
+        <file>qml/Notification.qml</file>
+        <file>qml/NotificationManager.qml</file>
+        <file>qml/StackWindow.qml</file>
+        <file>qml/ImageButton.qml</file>
+        <file>qml/Database.qml</file>
+        <file>qml/ChatScreenController.qml</file>
+    </qresource>
+</RCC>

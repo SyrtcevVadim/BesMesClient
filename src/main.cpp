@@ -1,28 +1,35 @@
-#include "src/besclient.h"
-
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
-#include <QQmlContext>
+#include <QSettings>
+#include <QDebug>
+#include "cppinterface.h"
 
 int main(int argc, char *argv[])
 {
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-    QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
-#endif
-
     QGuiApplication app(argc, argv);
 
+    QCoreApplication::setOrganizationName("config");
+    QCoreApplication::setApplicationName("BesMesClient");
+
+    QSettings::setDefaultFormat(QSettings::IniFormat);
+    QSettings::setPath(QSettings::IniFormat, QSettings::SystemScope, "./");
+    QSettings::setPath(QSettings::IniFormat, QSettings::UserScope, "./");
+
     QQmlApplicationEngine engine;
-    const QUrl url(QStringLiteral("qrc:/main.qml"));
+
+    engine.addImportPath("qrc:/qml/modules");
+
+    qmlRegisterType<CppInterface>("com.test.object", 1, 0, "CppInterface");
+
+    const QUrl url("qrc:/qml/main.qml");
     QObject::connect(&engine, &QQmlApplicationEngine::objectCreated,
                      &app, [url](QObject *obj, const QUrl &objUrl) {
         if (!obj && url == objUrl)
             QCoreApplication::exit(-1);
     }, Qt::QueuedConnection);
-
-    BesClient client;
-    engine.rootContext()->setContextProperty("BesClient", &client);
     engine.load(url);
+
+
 
     return app.exec();
 }
